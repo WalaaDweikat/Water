@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Almarai:wght@300&display=swap');
+
+.login{
+  display: flex;
+  align-content: center;
+  align-content: center;
+  height: 100vh;
+  background-image: url("../../img/loginImage.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+
+.loginform{
+  border-radius: 50px;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-content: center;
+  height: 500px;
+  width: 355px;
+  margin: auto;
+  box-shadow: 10px 10px 10px 10px rgba(14, 12, 12, 0.2), 0 0px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.profileImg{
+  width: 50px;
+  height: 50px;
+}
+
+
+.loginform label{
+  margin-top: 20px;
+  margin-bottom: 30px;
+  font-family: 'Almarai', sans-serif;
+  font-weight: bold;
+  letter-spacing: 2px;
+  font-size: 18px;
+}
+.loginform Input{
+  font-family: 'Almarai', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.loginform Button{
+  font-family: 'Almarai', sans-serif;
+  font-size: 15px;
+  text-align: center;
+  font-weight: 600;
+}
+.loginform a{
+  font-family: 'Almarai', sans-serif;
+  font-size: 15px;
+  color :rgb(90, 88, 88);
+  padding-left: 100px;
+}
+
+.login a:hover{
+  color:red;
+}
+
+.loginImg{
+  box-shadow: 1px 10px 10px 10px rgba(14, 12, 12, 0.2), 0 0px 20px 0 rgba(0, 0, 0, 0.19);
+  width: 100vw;
+  height: 100vh;
+}
+
+.createAcount{
+  padding-top:50px;
+}
