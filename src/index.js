@@ -4,7 +4,6 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { ConfigProvider } from "antd";
-import frFR from "antd/lib/locale/fr_FR";
 ReactDOM.render(
   <React.StrictMode>
     <ConfigProvider direction="rtl">

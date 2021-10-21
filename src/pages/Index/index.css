@@ -1,0 +1,63 @@
+@import url('https://fonts.googleapis.com/css2?family=Almarai:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@700&display=swap');
+
+.container{
+  width: 100vw;
+  height: 100vh;
+  background-image: url("../../img/154889906_3768521463227511_155617644466092987_n.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+ 
+}
+
+.title{
+  height: fit-content;
+  font-family: 'Almarai', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: auto;
+}
+
+.title h1{
+font-size: 40px;
+margin-bottom: -5px;
+}
+
+
+.singIN{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: auto;
+}
+
+
+.container Button{
+  margin-bottom: 20px;
+  font-family: 'Almarai', sans-serif;
+  font-size: 17px;
+  width: 45vw;
+  height: 45px;
+  
+}
+
+.container a{
+  color: #ee2260;
+  
+}
+
+.sp{
+  display: block;
+  font-size: 17px;
+  font-family: 'Tajawal', sans-serif;
+  align-self: flex-end;
+}
+
+
+ .container a:hover{
+   color: white;
+ }
+

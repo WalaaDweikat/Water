@@ -1,9 +1,8 @@
-import Login from "./pages/Login/login.js";
-import Register from "./pages/Register/register.js";
+import Index from "./pages/Index/index.js";
 import "./App.css";
 
 function App() {
-  return <Register />;
+  return <Index />;
 }
 
 export default App;
