@@ -1,7 +1,6 @@
 import "./register.css";
 import { Input, Button, Form } from "antd";
 import { UserOutlined, LockOutlined, MailOutlined } from "@ant-design/icons";
-
 import "antd/dist/antd.css";
 
 export default function Register() {
