@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Almarai:wght@300&display=swap');
 .b{
+  margin: auto;
   width:100vw;
   height: 100vh;
   padding-top:6%;
@@ -15,13 +16,28 @@
   align-items: center;
   align-content: center;
   margin: auto;
-  width:40%;
+  width:600px;
   height: 500px;
   border:1px solid #33B9EC;
   border-radius:30px;
   box-shadow: 0px 10px 20px 15px rgba(14, 12, 12, 0.2), 0 0px 20px 0 rgba(0, 0, 0, 0.19);
-  margin-bottom: -50px;
   
+}
+
+.rr{
+  padding-left: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: space-between;
+  padding-top: 10px;
+  width: 600px;
+
+}
+
+.back{
+  width: 30px;
+  height:30px;
+  cursor: pointer;
 }
 
 .form{
@@ -34,13 +50,12 @@
 .newUser{
   display: flex;
   flex-wrap: wrap;
-  text-align: center;
   font-family: 'Almarai', sans-serif;
   font-size: 25px;
   font-weight: bold;
   padding-bottom: 40px;
-  padding-top: 45px;
-  
+  padding-top: 45px; 
+  padding-left: 130px;
 }
 
 
@@ -54,7 +69,39 @@
   font-family: 'Almarai', sans-serif;
   font-size:15px;
   text-align: center;
-  font-weight: 600;
   align-self: center;
   
+}
+ .register Input{
+  height: "40px";
+   width: "300px";
+   border-radius: "10px";
+ }
+
+@media only screen and (max-width: 600px) {
+  .register{
+    width: 90vw;
+    height: 550px;
+  }
+
+.in{
+     width:80vw
+  }
+  
+  .rr{
+    width: 90vw;
+    flex-wrap: nowrap;
+    align-content: center;
+    text-align: center;
+  }
+
+  .newUser{
+    padding-right: 0;
+    padding-left: 20%;
+    }
+
+    .back{
+      margin-right: -50px;
+      
+    }
 }

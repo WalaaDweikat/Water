@@ -1,9 +1,13 @@
 import "./register.css";
 import { Input, Button, Form } from "antd";
 import { UserOutlined, LockOutlined, MailOutlined } from "@ant-design/icons";
+import { useHistory } from "react-router-dom";
+import BackArrow from "../../img/R.jpg";
 import "antd/dist/antd.css";
 
 export default function Register() {
+  const history = useHistory();
+
   const onFinish = (values) => {
     console.log("Success:", values);
   };
@@ -15,14 +19,19 @@ export default function Register() {
     <div className="b">
       <div className="register">
         <div className="rr">
-          <lable className="newUser">تسـجـيـل مـشـتـرك جـديـد</lable>
+          <img
+            src={BackArrow}
+            alt="backArrow"
+            className="back"
+            onClick={() => {
+              history.goBack();
+            }}
+          />
+          <div className="newUser">تسـجـيـل مـشـتـرك جـديـد</div>
         </div>
         <Form
           className="form"
           name="basic"
-          wrapperCol={{
-            span: 40,
-          }}
           initialValues={{
             remember: true,
           }}
@@ -40,9 +49,10 @@ export default function Register() {
             ]}
           >
             <Input
+              className="in"
               prefix={<UserOutlined />}
               placeholder="رقم الهوية"
-              style={{ height: "40px", width: "23vw", borderRadius: "10px" }}
+              style={{ height: "40px", width: "300px", borderRadius: "10px" }}
             />
           </Form.Item>
           <Form.Item
@@ -61,7 +71,7 @@ export default function Register() {
             <Input
               prefix={<MailOutlined />}
               placeholder="البريد الإلكتروني"
-              style={{ height: "40px", width: "23vw", borderRadius: "10px" }}
+              style={{ height: "40px", width: "300px", borderRadius: "10px" }}
             />
           </Form.Item>
           <Form.Item
@@ -75,8 +85,9 @@ export default function Register() {
             ]}
           >
             <Input.Password
+              id="password"
               prefix={<LockOutlined />}
-              style={{ height: "40px", width: "23vw", borderRadius: "10px" }}
+              style={{ height: "40px", width: "300px", borderRadius: "10px" }}
               placeholder="كلمة المرور"
             />
           </Form.Item>
@@ -92,15 +103,16 @@ export default function Register() {
             ]}
           >
             <Input.Password
+              id="confirmPassword"
               prefix={<LockOutlined />}
-              style={{ height: "40px", width: "23vw", borderRadius: "10px" }}
+              style={{ height: "40px", width: "300px", borderRadius: "10px" }}
               placeholder="تأكيد كلمة المرور"
             />
           </Form.Item>
 
           <Form.Item
             wrapperCol={{
-              span: 40,
+              span: 4,
             }}
           >
             <Button

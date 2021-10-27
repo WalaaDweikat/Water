@@ -49,6 +49,8 @@
   font-size: 15px;
   text-align: center;
   font-weight: 600;
+  background-color: #ee2260;
+  border-color: #ee2260;
 }
 .loginform a{
   font-family: 'Almarai', sans-serif;

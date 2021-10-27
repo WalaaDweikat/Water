@@ -1,8 +1,7 @@
-import Footer from "./components/Footer/index.js";
-import "./App.css";
+import Index from "./pages/Index/index.js";
 
 function App() {
-  return <Footer />;
+  return <Index />;
 }
 
 export default App;
