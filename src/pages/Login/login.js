@@ -12,7 +12,8 @@ export default function Login() {
   const history = useHistory();
 
   const onFinish = (values) => {
-    //history.push("Login/User");
+    history.push("Login/User");
+    window.location.reload();
     console.log("success:", values);
   };
 

@@ -23,7 +23,7 @@ const PrivacyModal = (props) => {
         بلـديـة جمـاعيـن
       </button>
       <Modal open={open} onClose={() => setOpen(false)} center>
-        <h2 style={{ textAlign: "right" }}>بلدية جماعين</h2>
+        <h2 style={{ textAlign: "center" }}>بلدية جماعين</h2>
         {policyText}
         {policyText}
         {policyText}
