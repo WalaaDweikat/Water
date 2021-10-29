@@ -2,6 +2,7 @@
   "name": "a",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://WalaaDweikat.github.io/Water",
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
@@ -13,6 +14,7 @@
     "@testing-library/user-event": "^12.8.3",
     "antd": "^4.16.13",
     "antd-password-input-strength": "^1.1.1",
+    "gh-pages": "^3.2.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-responsive-modal": "^6.1.0",
@@ -25,7 +27,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "extends": [
     "react-app",
