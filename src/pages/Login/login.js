@@ -23,7 +23,7 @@ export default function Login() {
 
   return (
     <Router>
-      <Route path="/Login" exact>
+      <Route path="/Water /Login" exact>
         <div className="login">
           <div className="loginform">
             <svg
@@ -127,20 +127,20 @@ export default function Login() {
                 </Button>
               </Form.Item>
             </Form>
-            <Link to="/Signup" className="createAcount">
+            <Link to="/Water/Signup" className="createAcount">
               إنشاء حساب؟
             </Link>
           </div>
         </div>
       </Route>
       <Switch>
-        <Route path="/Login/User" exact>
+        <Route path="/Water/Login/User" exact>
           <User />
         </Route>
-        <Route path="/Signup" exact>
+        <Route path="/Water/Signup" exact>
           <Register />
         </Route>
-        <Route path="/" exact>
+        <Route path="/Water/" exact>
           <Index />
         </Route>
       </Switch>

@@ -8,7 +8,7 @@ export default function Index() {
   return (
     <Router>
       <Switch>
-        <Route path="/" exact>
+        <Route path="/Water/" exact>
           <div className="container">
             <div className="title">
               <h1>بلدية جماعيــن</h1>
@@ -30,17 +30,17 @@ export default function Index() {
               </Link>
               <span className="sp">
                 ليس لديك حساب؟
-                <Link className="a" to="/Signup">
+                <Link className="a" to="/Water/Signup">
                   اصغظ هنا
                 </Link>
               </span>
             </div>
           </div>
         </Route>
-        <Route path="/Login">
+        <Route path="/Water/Login">
           <Login />
         </Route>
-        <Route path="/Signup">
+        <Route path="/Water/Signup">
           <Register />
         </Route>
       </Switch>
