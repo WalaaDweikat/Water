@@ -15,7 +15,7 @@ export default function Index() {
               <h2>قسم المياه</h2>
             </div>
             <div className="singIN">
-              <Link to="/Login">
+              <Link to="/Water/Login">
                 <Button
                   type="primary"
                   style={{
