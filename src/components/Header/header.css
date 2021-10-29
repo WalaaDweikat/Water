@@ -1,8 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@700&display=swap');
+
 .logo {
   float: right;
-  width: 70px;
+  width: 100px;
   height: 60px;
-  margin-right: -30px;
+  margin-right: -10px;
 }
 
 .logoHeader{
@@ -14,4 +16,11 @@
   -webkit-border-radius: 50%;
   -o-border-radius: 50%;
  
+}
+
+
+.item{
+  font-family: 'Tajawal', sans-serif;
+  font-weight: lighter;
+
 }

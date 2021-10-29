@@ -9,7 +9,6 @@
   background-repeat: no-repeat;
 }
 .register{
- 
   background-color: white;
   display: flex;
   flex-direction: column;
@@ -21,9 +20,7 @@
   border:1px solid #33B9EC;
   border-radius:30px;
   box-shadow: 0px 10px 20px 15px rgba(14, 12, 12, 0.2), 0 0px 20px 0 rgba(0, 0, 0, 0.19);
-  
 }
-
 .rr{
   padding-left: 10px;
   display: flex;
@@ -31,22 +28,18 @@
   align-items: space-between;
   padding-top: 10px;
   width: 600px;
-
 }
-
 .back{
   width: 30px;
   height:30px;
   cursor: pointer;
 }
-
 .form{
   display: flex;
   flex-direction: column;
   align-content: center;
   align-items: center;
 }
-
 .newUser{
   display: flex;
   flex-wrap: wrap;
@@ -57,14 +50,11 @@
   padding-top: 45px; 
   padding-left: 130px;
 }
-
-
 .register Input{
   font-family: 'Almarai', sans-serif;
   font-size: 15px;
   font-weight: 600;
 }
-
 .register Button{
   font-family: 'Almarai', sans-serif;
   font-size:15px;

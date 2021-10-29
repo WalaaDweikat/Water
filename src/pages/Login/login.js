@@ -23,7 +23,7 @@ export default function Login() {
 
   return (
     <Router>
-      <Route path="/Water /Login" exact>
+      <Route path="/Water/Login" exact>
         <div className="login">
           <div className="loginform">
             <svg

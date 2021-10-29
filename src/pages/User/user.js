@@ -2,10 +2,7 @@ import "./user.css";
 import { Layout } from "antd";
 import Header from "../../components/Header/header.js";
 import Footer from "../../components/Footer/footer.js";
-import { Button } from "antd";
-import { UserOutlined } from "@ant-design/icons";
-import "antd/dist/antd.css";
-
+import UserHome from "../../components/UserHome/userHome.js";
 function App() {
   const { Content } = Layout;
 
@@ -16,11 +13,8 @@ function App() {
         menuItems={["الرئيسية", "البيانات", "الشكاوي", "معاملاتي", "خدماتي"]}
       />
       <Content>
-        <Button typr="primary" icone={<UserOutlined />} shape="round">
-          بياناتي
-        </Button>
+        <UserHome />
       </Content>
-
       <Footer />
     </Layout>
   );
