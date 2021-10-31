@@ -1,7 +1,8 @@
 import "./index.css";
 import { Button } from "antd";
 import Login from "../Login/login.js";
-import Register from "../Register/register";
+import User from "../../pages/User/user.js";
+import NewAccount from "../NewAccount/newAccount.js";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 export default function Index() {
@@ -41,7 +42,10 @@ export default function Index() {
           <Login />
         </Route>
         <Route path="/Water/Signup">
-          <Register />
+          <NewAccount />
+        </Route>
+        <Route path="/Water/User/Home">
+          <User />
         </Route>
       </Switch>
     </Router>

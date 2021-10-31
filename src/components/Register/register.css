@@ -1,20 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Almarai:wght@300&display=swap');
-.b{
-  margin: auto;
-  width:100vw;
-  height: 100vh;
-  padding-top:6%;
-  background-image: url("../../img/loginImage.jpg");
-  background-size: cover;
-  background-repeat: no-repeat;
-}
+
 .register{
   background-color: white;
   display: flex;
   flex-direction: column;
   align-items: center;
   align-content: center;
-  margin: auto;
   width:600px;
   height: 500px;
   border:1px solid #33B9EC;
@@ -47,7 +38,7 @@
   font-size: 25px;
   font-weight: bold;
   padding-bottom: 40px;
-  padding-top: 45px; 
+  padding-top: 40px; 
   padding-left: 130px;
 }
 .register Input{
@@ -58,26 +49,22 @@
 .register Button{
   font-family: 'Almarai', sans-serif;
   font-size:15px;
+  border-radius: 10px;
   text-align: center;
-  align-self: center;
-  
+  align-self: center;  
 }
  .register Input{
   height: "40px";
-   width: "300px";
-   border-radius: "10px";
+  border-radius: "10px";
  }
 
 @media only screen and (max-width: 600px) {
   .register{
     width: 90vw;
-    height: 550px;
+    height: 600px;
   }
 
-.in{
-     width:80vw
-  }
-  
+
   .rr{
     width: 90vw;
     flex-wrap: nowrap;
@@ -87,7 +74,7 @@
 
   .newUser{
     padding-right: 0;
-    padding-left: 20%;
+    padding-left: 17%;
     }
 
     .back{

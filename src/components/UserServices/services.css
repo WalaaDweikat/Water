@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@700&display=swap');
 
-.userHomeContainer{
+.userServicesContainer{
  
   padding-right: calc((100vw - 700px) /2);
   padding-left: calc((100vw - 700px) /2);
@@ -16,7 +16,7 @@
 
 }
 
-.userHomeContainer Button{
+.userServicesContainer Button{
   width: 130px;
   height: 150px;
   font-family: 'Tajawal', sans-serif;

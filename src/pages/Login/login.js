@@ -2,7 +2,7 @@ import "./login.css";
 import "antd/dist/antd.css";
 import profile from "../../img/Profile.jpg";
 import User from "../User/user.js";
-import Register from "../Register/register";
+import NewAccount from "../NewAccount/newAccount.js";
 import Index from "../Index";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { Form, Input, Button } from "antd";
@@ -12,7 +12,7 @@ export default function Login() {
   const history = useHistory();
 
   const onFinish = (values) => {
-    history.push("Login/User");
+    history.push("/Water/User/Home");
     window.location.reload();
     console.log("success:", values);
   };
@@ -114,6 +114,9 @@ export default function Login() {
                 }}
               >
                 <Button
+                  onKeyPress={(e) => {
+                    if (e.key === "Enter") onFinish();
+                  }}
                   type="primary"
                   htmlType="submit"
                   style={{
@@ -134,11 +137,11 @@ export default function Login() {
         </div>
       </Route>
       <Switch>
-        <Route path="/Water/Login/User" exact>
+        <Route path="/Water/User/Home">
           <User />
         </Route>
         <Route path="/Water/Signup" exact>
-          <Register />
+          <NewAccount />
         </Route>
         <Route path="/Water/" exact>
           <Index />

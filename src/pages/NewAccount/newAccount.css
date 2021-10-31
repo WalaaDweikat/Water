@@ -1,0 +1,12 @@
+.b{
+  display:flex;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  width:100vw;
+  height: 100vh;
+  background-image: url("../../img/loginImage.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  
+}

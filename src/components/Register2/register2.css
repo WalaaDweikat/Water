@@ -1,0 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Almarai:wght@300&display=swap');
+.select{
+  border-radius: 10px;
+  font-size: 15px;
+  font-family: 'Almarai', sans-serif;
+  font-weight: 600;
+}
+Form.Item label{
+  font-size: 15px;
+  font-weight: 600px;
+}
