@@ -9,14 +9,14 @@ export default function Index() {
   return (
     <Router>
       <Switch>
-        <Route path="/Water/" exact>
+        <Route path="/water/" exact>
           <div className="container">
             <div className="title">
               <h1>بلدية جماعيــن</h1>
               <h2>قسم المياه</h2>
             </div>
             <div className="singIN">
-              <Link to="/Water/Login">
+              <Link to="/water/login">
                 <Button
                   type="primary"
                   style={{
@@ -31,20 +31,29 @@ export default function Index() {
               </Link>
               <span className="sp">
                 ليس لديك حساب؟
-                <Link className="a" to="/Water/Signup">
+                <Link className="a" to="/water/signup">
                   اصغظ هنا
                 </Link>
               </span>
             </div>
           </div>
         </Route>
-        <Route path="/Water/Login">
+        <Route path="/water/login">
           <Login />
         </Route>
-        <Route path="/Water/Signup">
+        <Route path="/water/signup">
           <NewAccount />
         </Route>
-        <Route path="/Water/User/Home">
+        <Route path="/water/user/home">
+          <User />
+        </Route>
+        <Route path="/water/user/services">
+          <User />
+        </Route>
+        <Route path="/water/user/profile">
+          <User />
+        </Route>
+        <Route path="/water/user/complaints">
           <User />
         </Route>
       </Switch>

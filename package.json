@@ -2,7 +2,7 @@
   "name": "a",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://WalaaDweikat.github.io/Water/",
+  "homepage": "https://WalaaDweikat.github.io/water/",
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.36",

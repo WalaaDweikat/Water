@@ -1,19 +1,12 @@
 import "./register.css";
 import { Input, Button, Form } from "antd";
-import { PasswordInput } from "antd-password-input-strength";
-import {
-  UserOutlined,
-  LockOutlined,
-  MailOutlined,
-  ConsoleSqlOutlined,
-} from "@ant-design/icons";
+import { UserOutlined, LockOutlined, MailOutlined } from "@ant-design/icons";
 import { useHistory } from "react-router-dom";
 import { useState, useEffect } from "react";
 import BackArrow from "../../img/R.jpg";
 import "antd/dist/antd.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Register2 from "../Register2/register2";
-import { passwordStrength } from "check-password-strength";
 
 export default function Register() {
   const history = useHistory();
@@ -21,7 +14,7 @@ export default function Register() {
   const [pass, setPass] = useState();
   const [confirmPass, setConfirmPass] = useState();
   const onFinish = (values) => {
-    history.push("/Water/Signup/Cont");
+    history.push("/water/signup/cont");
     window.location.reload();
     console.log("Success:", values);
   };
@@ -38,7 +31,7 @@ export default function Register() {
   return (
     <Router>
       <Switch>
-        <Route path="/Water/Signup/" exact>
+        <Route path="/water/signup/" exact>
           <div className="register">
             <div className="rr">
               <img
@@ -174,7 +167,7 @@ export default function Register() {
             </Form>
           </div>
         </Route>
-        <Route path="/Water/Signup/Cont">
+        <Route path="/water/signup/cont">
           <Register2 />
         </Route>
       </Switch>

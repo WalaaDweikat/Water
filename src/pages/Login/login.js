@@ -12,7 +12,7 @@ export default function Login() {
   const history = useHistory();
 
   const onFinish = (values) => {
-    history.push("/Water/User/Home");
+    history.push("/water/user/home");
     window.location.reload();
     console.log("success:", values);
   };
@@ -24,7 +24,7 @@ export default function Login() {
   return (
     <Router>
       <Switch>
-        <Route path="/Water/Login" exact>
+        <Route path="/water/login" exact>
           <div className="login">
             <div className="loginform">
               <svg
@@ -131,19 +131,19 @@ export default function Login() {
                   </Button>
                 </Form.Item>
               </Form>
-              <Link to="/Water/Signup" className="createAcount">
+              <Link to="/water/signup" className="createAcount">
                 إنشاء حساب؟
               </Link>
             </div>
           </div>
         </Route>
-        <Route path="/Water/User" url="/Water/User/Services">
+        <Route path="/water/user/home">
           <User />
         </Route>
-        <Route path="/Water/Signup" exact>
+        <Route path="/water/signup" exact>
           <NewAccount />
         </Route>
-        <Route path="/Water/" exact>
+        <Route path="/water/" exact>
           <Index />
         </Route>
       </Switch>
