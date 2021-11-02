@@ -1,15 +1,25 @@
 import "./register.css";
 import { Input, Button, Form } from "antd";
-import { UserOutlined, LockOutlined, MailOutlined } from "@ant-design/icons";
+import { PasswordInput } from "antd-password-input-strength";
+import {
+  UserOutlined,
+  LockOutlined,
+  MailOutlined,
+  ConsoleSqlOutlined,
+} from "@ant-design/icons";
 import { useHistory } from "react-router-dom";
+import { useState, useEffect } from "react";
 import BackArrow from "../../img/R.jpg";
 import "antd/dist/antd.css";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Register2 from "../Register2/register2";
+import { passwordStrength } from "check-password-strength";
 
 export default function Register() {
   const history = useHistory();
-
+  const [match, setMatch] = useState(false);
+  const [pass, setPass] = useState();
+  const [confirmPass, setConfirmPass] = useState();
   const onFinish = (values) => {
     history.push("/Water/Signup/Cont");
     window.location.reload();
@@ -19,10 +29,15 @@ export default function Register() {
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
+  useEffect(() => {
+    if (pass === confirmPass) {
+      setMatch(pass);
+    } else setMatch(pass + confirmPass);
+  }, [pass, confirmPass]);
 
   return (
     <Router>
-      <switch>
+      <Switch>
         <Route path="/Water/Signup/" exact>
           <div className="register">
             <div className="rr">
@@ -48,16 +63,23 @@ export default function Register() {
               autoComplete="off"
             >
               <Form.Item
-                name="username"
+                name="number"
                 rules={[
                   {
                     required: true,
                     message: "أدخل رقم هويتك",
                   },
+                  {
+                    pattern: /^(?:\d*)$/,
+                    message: "يرجى إدخال أرقام فقط",
+                  },
+                  {
+                    pattern: /^[\d]{9}$/,
+                    message: "أدخل رقم من 9 خانات",
+                  },
                 ]}
               >
                 <Input
-                  className="in"
                   prefix={<UserOutlined />}
                   placeholder="رقم الهوية"
                   style={{ height: "40px", borderRadius: "10px" }}
@@ -88,28 +110,41 @@ export default function Register() {
                   {
                     required: true,
                     message: "أدخل كلمة المرور",
-                    // validator: validatePassword,
+                  },
+                  {
+                    pattern:
+                      "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{10,})",
+                    message: "Weak Password",
                   },
                 ]}
               >
                 <Input.Password
+                  onChange={(e) => {
+                    setPass(e.target.value);
+                  }}
                   id="password"
                   prefix={<LockOutlined />}
                   style={{ height: "40px", borderRadius: "10px" }}
                   placeholder="كلمة المرور"
                 />
               </Form.Item>
-
               <Form.Item
                 name="confirmPassword"
                 rules={[
                   {
                     required: true,
-                    message: "أكد كلمة المرور",
+                    message: "يرجى تأكيد كلمة المرور",
+                  },
+                  {
+                    pattern: match,
+                    message: "كلمتا المرور غير متطابقتين",
                   },
                 ]}
               >
                 <Input.Password
+                  onChange={(e) => {
+                    setConfirmPass(e.target.value);
+                  }}
                   id="confirmPassword"
                   prefix={<LockOutlined />}
                   style={{ height: "40px", borderRadius: "10px" }}
@@ -142,7 +177,7 @@ export default function Register() {
         <Route path="/Water/Signup/Cont">
           <Register2 />
         </Route>
-      </switch>
+      </Switch>
     </Router>
   );
 }
