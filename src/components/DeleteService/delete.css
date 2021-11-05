@@ -1,0 +1,9 @@
+.deleteForm{
+ height: calc(100vh - 215                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           px);
+ margin-top: 150px;
+ padding-right: 100px;
+}
+
+.deleteForm label{
+  padding-top:10px;
+}

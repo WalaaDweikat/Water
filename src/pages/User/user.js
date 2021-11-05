@@ -1,11 +1,12 @@
 import "./user.css";
 import "./userHome.css";
+import "./services.css";
 import "antd/dist/antd.css";
 import Footer from "../../components/Footer/footer.js";
-import UserServices from "../../components/UserServices/services.js";
 import Logo from "../../img/256888_109854515773613_2567514_o.jpg";
 import Login from "../Login/login.js";
 import Profile from "../../components/Profile/profile.js";
+import DeleteService from "../../components/DeleteService/delete.js";
 import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import { useHistory } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -15,6 +16,9 @@ import {
   faUser,
   faClipboardList,
   faClone,
+  faPlus,
+  faRetweet,
+  faTimesCircle,
 } from "@fortawesome/free-solid-svg-icons";
 
 function User() {
@@ -86,7 +90,26 @@ function User() {
           </Header>
           <Content>
             <Route path="/water/user/services">
-              <UserServices />
+              <div className="userServicesContainer">
+                <Link to="/water/user/new_service">
+                  <Button type="primary">
+                    <FontAwesomeIcon icon={faPlus} className="icon" />
+                    طلب اشتراك
+                  </Button>
+                </Link>
+                <Link to="/water/user/service_transfer">
+                  <Button type="primary">
+                    <FontAwesomeIcon icon={faRetweet} className="icon" />
+                    نقل اشتراك
+                  </Button>
+                </Link>
+                <Link to="/water/user/delete_service">
+                  <Button type="primary">
+                    <FontAwesomeIcon icon={faTimesCircle} className="icon" />
+                    حذف اشتراك
+                  </Button>
+                </Link>
+              </div>
             </Route>
             <Route path="/water/user/service_transfer">
               <p>service_transfer</p>
@@ -95,7 +118,7 @@ function User() {
               <p>new_service</p>
             </Route>
             <Route path="/water/user/delete_service">
-              <p>delete_service</p>
+              <DeleteService />
             </Route>
             <Route path="/water/user/transactions">
               <p>transactions</p>

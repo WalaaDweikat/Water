@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Almarai:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@500&display=swap');
+
 .profileContainer{
   display: flex;
   flex-direction:column;
@@ -10,6 +13,8 @@
   margin-left: 40vw;
   margin-right: 0;
   margin-bottom: 50px;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 15px;
 
 }
 
@@ -28,4 +33,22 @@
   flex-direction: column;
   height: 70px;
   width: 20vw;
+}
+
+.t{
+  font-family: 'Almarai', sans-serif;
+  font-size: 17px;
+  font-weight: bolder;
+}
+
+@media only screen and (max-width: 600px) {
+  .labelandinput{
+   
+    width: 60vw;
+    padding-right: 40px;
+  }
+
+  .t{
+    padding-bottom: 20px;
+  }
 }

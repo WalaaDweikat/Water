@@ -1,13 +1,13 @@
 import "./profile.css";
 import "antd/dist/antd.css";
 
-import { Form, Input, Button, Checkbox } from "antd";
+import { Input, Button } from "antd";
 
 export default function Profile() {
   return (
     <div className="profileContainer">
       <div className="sec">
-        <h2>حسابي</h2>
+        <div className="t">حسابي</div>
         <div className="info">
           <div className="labelandinput">
             <label for="username">اسمي الكامل</label>
@@ -19,7 +19,7 @@ export default function Profile() {
           </div>
           <div className="labelandinput">
             <label for="phone_number">رقم الجوال</label>
-            <Input id="phone_number" />
+            <Input type="number" id="phone_number" />
           </div>
           <div className="labelandinput">
             <label for="email">البريد الإلكتروني</label>
@@ -29,7 +29,7 @@ export default function Profile() {
       </div>
 
       <div className="sec">
-        <h2>معلوماتي</h2>
+        <div className="t">معلوماتي</div>
         <div className="info">
           <div className="labelandinput">
             <label for="username">عنواني</label>
@@ -37,13 +37,13 @@ export default function Profile() {
           </div>
           <div className="labelandinput">
             <label for="idNumber">عدد أفراد أسرتي</label>
-            <Input id="idNumber" />
+            <Input type="number" id="idNumber" />
           </div>
         </div>
       </div>
 
       <div className="sec">
-        <h2>تغيير كلمة المرور</h2>
+        <div className="t">تغيير كلمة المرور</div>
         <div className="info">
           <div className="labelandinput">
             <label for="old_pass">كلمة المرور القديمة</label>
