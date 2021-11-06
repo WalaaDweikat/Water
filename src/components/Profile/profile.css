@@ -18,6 +18,21 @@
 
 }
 
+.profileContainer Input{
+  font-family: 'Tajawal', sans-serif;
+  font-size: 15px;
+}
+
+.profileContainer Button{
+  font-size: 15px;
+  font-family: 'Tajawal', sans-serif;
+  background-color: #ee2260;
+  border-color: #ee2260;
+  border-radius: 20px;
+  width: 150px;
+}
+
+
 .sec{
   margin-top: 20px;
   margin-bottom: 50px;
@@ -43,9 +58,15 @@
 
 @media only screen and (max-width: 600px) {
   .labelandinput{
-   
-    width: 60vw;
-    padding-right: 40px;
+    width:100% ;
+  }
+
+  .profileContainer Input{
+    width: 100%;
+  }
+
+  .sec{
+    width:100% ;
   }
 
   .t{

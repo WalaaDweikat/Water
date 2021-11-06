@@ -1,0 +1,43 @@
+
+.comForm
+{
+ height:calc(100vh ) ;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+ margin-top: 150px;
+ padding-right: 5%;
+}
+
+
+.comForm label{
+  padding-top:10px;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 15px;
+}
+
+.comForm Button{
+  font-family: 'Tajawal', sans-serif;
+  font-size: 15px;
+  border-radius: 20px;
+  width: 100px;
+  height: 35px;
+  background-color: #ee2260;
+  border-color: #ee2260;
+  height: 35px;
+}
+
+.comForm Input{
+  font-family: 'Tajawal', sans-serif;
+  font-size: 15px;
+}
+
+.comForm TextArea{
+  font-family: 'Tajawal', sans-serif;
+  font-size: 15px;
+}
+
+
+@media only screen and (max-width: 600px) {
+  .comForm
+    {
+       margin-right: 0;
+    }
+}

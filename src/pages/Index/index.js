@@ -3,7 +3,6 @@ import { Button } from "antd";
 import Login from "../Login/login.js";
 import User from "../../pages/User/user.js";
 import NewAccount from "../NewAccount/newAccount.js";
-import DeleteService from "../../components/DeleteService/delete.js";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 export default function Index() {
@@ -58,7 +57,13 @@ export default function Index() {
           <User />
         </Route>
         <Route path="/water/user/delete_service">
-          <DeleteService />
+          <User />
+        </Route>
+        <Route path="/water/user/service_transfer">
+          <User />
+        </Route>
+        <Route path="/water/user/new_service">
+          <User />
         </Route>
       </Switch>
     </Router>

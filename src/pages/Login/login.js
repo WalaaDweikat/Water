@@ -3,7 +3,6 @@ import "antd/dist/antd.css";
 import profile from "../../img/Profile.jpg";
 import User from "../User/user.js";
 import NewAccount from "../NewAccount/newAccount.js";
-import DeleteService from "../../components/DeleteService/delete.js";
 import Index from "../Index";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { Form, Input, Button } from "antd";

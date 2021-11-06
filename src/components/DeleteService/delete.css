@@ -1,9 +1,30 @@
-.deleteForm{
- height: calc(100vh - 215                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           px);
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@700&display=swap');
+
+.deleteForm
+{
+ height:calc(100vh - 215px) ;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
  margin-top: 150px;
- padding-right: 100px;
+ padding-right: 5%;
 }
 
 .deleteForm label{
   padding-top:10px;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 15px;
+}
+
+.deleteForm Button{
+  font-family: 'Tajawal', sans-serif;
+  font-size: 15px;
+  border-radius: 20px;
+  width: 100px;
+  height: 35px;
+  background-color: #ee2260;
+  border-color: #ee2260;
+  height: 35px;
+}
+
+.deleteForm Input{
+  font-family: 'Tajawal', sans-serif;
+  font-size: 15px;
 }

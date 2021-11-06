@@ -56,12 +56,12 @@ export default function DeleteService() {
 
       <Form.Item
         wrapperCol={{
-          offset: 2,
+          offset: 3,
           span: 16,
         }}
       >
         <Button type="primary" htmlType="submit" style={{ marginTop: "20px" }}>
-          Submit
+          حذف
         </Button>
       </Form.Item>
     </Form>

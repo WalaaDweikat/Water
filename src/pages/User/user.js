@@ -7,6 +7,7 @@ import Logo from "../../img/256888_109854515773613_2567514_o.jpg";
 import Login from "../Login/login.js";
 import Profile from "../../components/Profile/profile.js";
 import DeleteService from "../../components/DeleteService/delete.js";
+import Complaints from "../../components/Complaints/complaints.js";
 import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import { useHistory } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -152,7 +153,7 @@ function User() {
               </div>
             </Route>
             <Route path="/water/user/complaints">
-              <p>complaints</p>
+              <Complaints />
             </Route>
             <Route path="/water/user/profile">
               <Profile />
