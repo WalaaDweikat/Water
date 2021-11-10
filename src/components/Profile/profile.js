@@ -19,7 +19,7 @@ export default function Profile() {
           </div>
           <div className="labelandinput">
             <label for="phone_number">رقم الجوال</label>
-            <Input type="number" id="phone_number" />
+            <Input id="phone_number" />
           </div>
           <div className="labelandinput">
             <label for="email">البريد الإلكتروني</label>

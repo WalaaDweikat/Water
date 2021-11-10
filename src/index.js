@@ -4,6 +4,8 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { ConfigProvider } from "antd";
+import "leaflet/dist/leaflet.css";
+
 ReactDOM.render(
   <React.StrictMode>
     <ConfigProvider direction="rtl">

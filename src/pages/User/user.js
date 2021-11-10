@@ -8,6 +8,8 @@ import Login from "../Login/login.js";
 import Profile from "../../components/Profile/profile.js";
 import DeleteService from "../../components/DeleteService/delete.js";
 import Complaints from "../../components/Complaints/complaints.js";
+import TransferService from "../../components/TransferService/transfer.js";
+import NewService from "../../components/New_Service/new.js";
 import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import { useHistory } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -113,10 +115,10 @@ function User() {
               </div>
             </Route>
             <Route path="/water/user/service_transfer">
-              <p>service_transfer</p>
+              <TransferService />
             </Route>
             <Route path="/water/user/new_service">
-              <p>new_service</p>
+              <NewService />
             </Route>
             <Route path="/water/user/delete_service">
               <DeleteService />

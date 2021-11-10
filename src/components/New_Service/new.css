@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@700&display=swap');
+
+.newFrom
+{
+ height:calc(100vh - 215px) ;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+ margin-top: 150px;
+ padding-right: 5%;
+}
+
+.newFrom label{
+  padding-top:10px;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 15px;
+}
+
+.newFrom Button{
+  font-family: 'Tajawal', sans-serif;
+  font-size: 15px;
+  border-radius: 20px;
+  width: 200px;
+  height: 35px;
+  background-color: #ee2260;
+  border-color: #ee2260;
+  color:white;
+  height: 35px;
+}
+

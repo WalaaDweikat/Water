@@ -1,11 +1,13 @@
-import "./index.css";
+import "./main.css";
+import "antd/dist/antd.css";
 import { Button } from "antd";
 import Login from "../Login/login.js";
-import User from "../../pages/User/user.js";
+import User from "../User/user.js";
 import NewAccount from "../NewAccount/newAccount.js";
+import Admin from "../Admin/admin.js";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
-export default function Index() {
+export default function Main() {
   return (
     <Router>
       <Switch>
@@ -47,6 +49,9 @@ export default function Index() {
         <Route path="/water/user/home">
           <User />
         </Route>
+        <Route path="/water/admin/home">
+          <Admin />
+        </Route>
         <Route path="/water/user/services">
           <User />
         </Route>
@@ -64,6 +69,12 @@ export default function Index() {
         </Route>
         <Route path="/water/user/new_service">
           <User />
+        </Route>
+        <Route path="/water/admin/tanks">
+          <Admin />
+        </Route>
+        <Route path="/water/admin/water_plans">
+          <Admin />
         </Route>
       </Switch>
     </Router>

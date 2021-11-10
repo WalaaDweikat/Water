@@ -2,8 +2,9 @@ import "./login.css";
 import "antd/dist/antd.css";
 import profile from "../../img/Profile.jpg";
 import User from "../User/user.js";
+import Admin from "../Admin/admin.js";
 import NewAccount from "../NewAccount/newAccount.js";
-import Index from "../Index";
+import Main from "../Main/main.js";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { Form, Input, Button } from "antd";
 import { useHistory } from "react-router-dom";
@@ -12,7 +13,7 @@ export default function Login() {
   const history = useHistory();
 
   const onFinish = (values) => {
-    history.push("/water/user/home");
+    history.push("/water/admin/home");
     window.location.reload();
     console.log("success:", values);
   };
@@ -140,11 +141,14 @@ export default function Login() {
         <Route path="/water/user">
           <User />
         </Route>
+        <Route path="/water/admin">
+          <Admin />
+        </Route>
         <Route path="/water/signup" exact>
           <NewAccount />
         </Route>
         <Route path="/water/" exact>
-          <Index />
+          <Main />
         </Route>
       </Switch>
     </Router>

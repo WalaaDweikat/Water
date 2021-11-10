@@ -3,27 +3,25 @@ import "antd/dist/antd.css";
 import Footer from "../../components/Footer/footer.js";
 import Logo from "../../img/256888_109854515773613_2567514_o.jpg";
 import Login from "../Login/login.js";
+import Tanks from "../../components/Tanks/tanks.js";
+import WaterPlans from "../../components/WaterPlans/plans.js";
 import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import { useHistory } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Layout, Menu, Button } from "antd";
 import {
   faComment,
-  faUser,
-  faClipboardList,
-  faClone,
-  faPlus,
-  faRetweet,
-  faTimesCircle,
+  faArchive,
+  faUsers,
+  faBorderNone,
 } from "@fortawesome/free-solid-svg-icons";
 
-function User() {
+function Admin() {
   const { Content } = Layout;
   const { Header } = Layout;
-  const { SubMenu } = Menu;
   const history = useHistory();
   const selectMenu = (e) => {
-    let path = `/water/user/${e.target.id}`;
+    let path = `/water/admin/${e.target.id}`;
     document.getElementById("menu").defaultSelectedKeys = [path];
     console.log(e.target.id);
     console.log(document.getElementById("menu").defaultSelectedKeys);
@@ -53,29 +51,17 @@ function User() {
               <Menu.Item className="item" key="/water/admin/home">
                 <Link to="/water/admin/home">الرئيسية</Link>
               </Menu.Item>
-              <Menu.Item className="item" key="/water/admin/profile">
-                <Link to="/water/admin/profile">بياناتي</Link>
+              <Menu.Item className="item" key="/water/admin/tanks">
+                <Link to="/water/admin/tanks">الخزانات</Link>
               </Menu.Item>
-              <Menu.Item className="item" key="/water/admin/transactions">
-                <Link to="/water/admin/transactions">معاملاتي</Link>
+              <Menu.Item className="item" key="/water/admin/water_plans">
+                <Link to="/water/admin/water_plans">شبكات المياه</Link>
               </Menu.Item>
-              <SubMenu
-                key="water/admin/services"
-                className="item"
-                title="خدماتي"
-              >
-                <Menu.Item key="/water/admin/new_service">
-                  <Link to="/water/admin/new_service">طلب اشتراك</Link>
-                </Menu.Item>
-                <Menu.Item key="/water/admin/service_transfer">
-                  <Link to="/water/admin/service_transfer">نقل اشتراك</Link>
-                </Menu.Item>
-                <Menu.Item key="/water/admin/delete_service">
-                  <Link to="/water/admin/delete_service">إزالةاشتراك</Link>
-                </Menu.Item>
-              </SubMenu>
               <Menu.Item className="item" key="/water/admin/complaints">
                 <Link to="/water/admin/complaints"> الشكاوي</Link>
+              </Menu.Item>
+              <Menu.Item className="item" key="/water/admin/employees">
+                <Link to="/water/admin/employees"> الموظفيين</Link>
               </Menu.Item>
               <Menu.Item key="out" className="out">
                 <Button type="primary" onClick={singout}>
@@ -85,14 +71,41 @@ function User() {
             </Menu>
           </Header>
           <Content>
-            <Route path="/water/admin/services"></Route>
-            <Route path="/water/admin/service_transfer"></Route>
-            <Route path="/water/admin/new_service"></Route>
-            <Route path="/water/admin/delete_service"></Route>
-            <Route path="/water/admin/transactions"></Route>
-            <Route path="/water/admin/home"></Route>
+            <Route path="/water/admin/tanks">
+              <Tanks />
+            </Route>
+            <Route path="/water/admin/home">
+              <div className="userHomeContainer">
+                <Link to="/water/admin/employees">
+                  <Button type="primary" id="employees" onClick={selectMenu}>
+                    <FontAwesomeIcon icon={faUsers} className="icon" />
+                    الموظفيين
+                  </Button>
+                </Link>
+                <Link to="/water/admin/complaints">
+                  <Button type="primary" id="complaints" onClick={selectMenu}>
+                    <FontAwesomeIcon icon={faComment} className="icon" />
+                    الشكاوي
+                  </Button>
+                </Link>
+                <Link to="/water/admin/water_plans">
+                  <Button type="primary" id="water_plans" onClick={selectMenu}>
+                    <FontAwesomeIcon icon={faBorderNone} className="icon" />
+                    شبكات المياه
+                  </Button>
+                </Link>
+                <Link to="/water/admin/tanks">
+                  <Button type="primary" id="tanks" onClick={selectMenu}>
+                    <FontAwesomeIcon icon={faArchive} className="icon" />
+                    الخزانات
+                  </Button>
+                </Link>
+              </div>
+            </Route>
             <Route path="/water/admin/complaints"></Route>
-            <Route path="/water/admin/profile"></Route>
+            <Route path="/water/admin/water_plans">
+              <WaterPlans />
+            </Route>
             <Route path="/water/admin/login">
               <Login />
             </Route>
@@ -104,4 +117,4 @@ function User() {
   );
 }
 
-export default User;
+export default Admin;
