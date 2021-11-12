@@ -5,6 +5,7 @@ import Logo from "../../img/256888_109854515773613_2567514_o.jpg";
 import Login from "../Login/login.js";
 import Tanks from "../../components/Tanks/tanks.js";
 import WaterPlans from "../../components/WaterPlans/plans.js";
+import NewTank from "../../components/NewTank/newTank.js";
 import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import { useHistory } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -63,6 +64,9 @@ function Admin() {
               <Menu.Item className="item" key="/water/admin/employees">
                 <Link to="/water/admin/employees"> الموظفيين</Link>
               </Menu.Item>
+              <Menu.Item className="item" key="/water/admin/mhbes">
+                <Link to="/water/admin/mhbes"> المحابس</Link>
+              </Menu.Item>
               <Menu.Item key="out" className="out">
                 <Button type="primary" onClick={singout}>
                   تسجيل الخروج
@@ -72,7 +76,9 @@ function Admin() {
           </Header>
           <Content>
             <Route path="/water/admin/tanks">
-              <Tanks />
+              <div className="tanksContainer">
+                <Tanks />
+              </div>
             </Route>
             <Route path="/water/admin/home">
               <div className="userHomeContainer">
@@ -98,6 +104,12 @@ function Admin() {
                   <Button type="primary" id="tanks" onClick={selectMenu}>
                     <FontAwesomeIcon icon={faArchive} className="icon" />
                     الخزانات
+                  </Button>
+                </Link>
+                <Link to="/water/admin/mhbes">
+                  <Button type="primary" id="mhbes" onClick={selectMenu}>
+                    <FontAwesomeIcon icon={faArchive} className="icon" />
+                    المحابس
                   </Button>
                 </Link>
               </div>

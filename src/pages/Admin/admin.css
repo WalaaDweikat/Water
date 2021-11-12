@@ -27,9 +27,23 @@
   font-size: 16px;
 }
 
+.tanksContainer{
+  margin-top: 100px;
+  width: 80vw;
+  margin-left: 10vw;
+  margin-right: 10vw;
+  height: calc(100vh - 165px);
+}
 
 
-
+@media only screen and (max-width: 600px) {
+  .tanksContainer{
+    height: 600px;
+    width: 100vw;
+    margin-left: 0px;
+    margin-right: 0;
+  }
+}
 
 
 

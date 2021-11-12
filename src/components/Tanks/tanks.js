@@ -1,178 +1,219 @@
-import "./tanks.css";
+import React, { useContext, useState, useEffect, useRef } from "react";
 import "antd/dist/antd.css";
-import { Table, Input, InputNumber, Popconfirm, Form, Typography } from "antd";
-import { useState } from "react";
-const originData = [];
+import { Table, Input, Button, Popconfirm, Form } from "antd";
+import NewTank from "../NewTank/newTank.js";
+const EditableContext = React.createContext(null);
 
-for (let i = 0; i < 5; i++) {
-  originData.push({
-    index: i.toString(),
-    capacity: `Edrward ${i}`,
-    address: `London Park no. ${i}`,
-  });
-}
-
-const EditableCell = ({
-  editing,
-  dataIndex,
-  title,
-  inputType,
-  record,
-  index,
-  children,
-  ...restProps
-}) => {
-  const inputNode = inputType === "number" ? <InputNumber /> : <Input />;
+const EditableRow = ({ index, ...props }) => {
+  const [form] = Form.useForm();
   return (
-    <td {...restProps}>
-      {editing ? (
-        <Form.Item
-          name={dataIndex}
-          style={{
-            margin: 0,
-          }}
-          rules={[
-            {
-              required: true,
-              message: `Please Input ${title}!`,
-            },
-          ]}
-        >
-          {inputNode}
-        </Form.Item>
-      ) : (
-        children
-      )}
-    </td>
+    <Form form={form} component={false}>
+      <EditableContext.Provider value={form}>
+        <tr {...props} />
+      </EditableContext.Provider>
+    </Form>
   );
 };
 
-export default function Tanks() {
-  const [form] = Form.useForm();
-  const [data, setData] = useState(originData);
-  const [editingKey, setEditingKey] = useState("");
+const EditableCell = ({
+  title,
+  editable,
+  children,
+  dataIndex,
+  record,
+  handleSave,
+  ...restProps
+}) => {
+  const [editing, setEditing] = useState(false);
+  const inputRef = useRef(null);
+  const form = useContext(EditableContext);
+  useEffect(() => {
+    if (editing) {
+      inputRef.current.focus();
+    }
+  }, [editing]);
 
-  const isEditing = (record) => record.key === editingKey;
-
-  const edit = (record) => {
+  const toggleEdit = () => {
+    setEditing(!editing);
     form.setFieldsValue({
-      name: "",
-      age: "",
-      address: "",
-      ...record,
+      [dataIndex]: record[dataIndex],
     });
-    setEditingKey(record.key);
   };
 
-  const cancel = () => {
-    setEditingKey("");
-  };
-
-  const save = async (key) => {
+  const save = async () => {
     try {
-      const row = await form.validateFields();
-      const newData = [...data];
-      const index = newData.findIndex((item) => key === item.key);
-
-      if (index > -1) {
-        const item = newData[index];
-        newData.splice(index, 1, { ...item, ...row });
-        setData(newData);
-        setEditingKey("");
-      } else {
-        newData.push(row);
-        setData(newData);
-        setEditingKey("");
-      }
+      const values = await form.validateFields();
+      toggleEdit();
+      handleSave({ ...record, ...values });
     } catch (errInfo) {
-      console.log("Validate Failed:", errInfo);
+      console.log("Save failed:", errInfo);
     }
   };
 
-  const columns = [
-    {
-      title: "رقم الخزان",
-      dataIndex: "index",
-      width: "10%",
-      editable: true,
-    },
-    {
-      title: "السعة",
-      dataIndex: "capacity",
-      width: "30%",
-      editable: true,
-    },
-    {
-      title: "العنوان",
-      dataIndex: "address",
-      width: "50%",
-      editable: true,
-    },
-    {
-      title: "تعديل",
-      dataIndex: "operation",
-      render: (_, record) => {
-        const editable = isEditing(record);
-        return editable ? (
-          <span>
-            <a
-              href="javascript:;"
-              onClick={() => save(record.key)}
-              style={{
-                marginRight: 8,
-                marginLeft: 8,
-              }}
-            >
-              حفظ
-            </a>
-            <Popconfirm title="هل أنت متأكد من الإلغاء؟" onConfirm={cancel}>
-              <a> إلغاء</a>
-            </Popconfirm>
-          </span>
-        ) : (
-          <Typography.Link
-            disabled={editingKey !== ""}
-            onClick={() => edit(record)}
-          >
-            تعديل
-          </Typography.Link>
-        );
-      },
-    },
-  ];
-  const mergedColumns = columns.map((col) => {
-    if (!col.editable) {
-      return col;
-    }
+  let childNode = children;
 
-    return {
-      ...col,
-      onCell: (record) => ({
-        record,
-        inputType: col.dataIndex === "age" ? "number" : "text",
-        dataIndex: col.dataIndex,
-        title: col.title,
-        editing: isEditing(record),
-      }),
-    };
-  });
-  return (
-    <Form form={form} component={false}>
-      <Table
-        bordered
-        className="tankTable"
-        components={{
-          body: {
-            cell: EditableCell,
+  if (editable) {
+    childNode = editing ? (
+      <Form.Item
+        style={{
+          margin: 0,
+        }}
+        name={dataIndex}
+        rules={[
+          {
+            required: true,
+            message: ` قم بتعبئة ${title}`,
           },
+        ]}
+      >
+        <Input ref={inputRef} onPressEnter={save} onBlur={save} />
+      </Form.Item>
+    ) : (
+      <div
+        className="editable-cell-value-wrap"
+        style={{
+          paddingRight: 24,
         }}
-        dataSource={data}
-        columns={mergedColumns}
-        rowClassName="editable-row"
-        pagination={{
-          onChange: cancel,
-        }}
-      />
-    </Form>
-  );
+        onClick={toggleEdit}
+      >
+        {children}
+      </div>
+    );
+  }
+
+  return <td {...restProps}>{childNode}</td>;
+};
+class Tanks extends React.Component {
+  constructor(props) {
+    super(props);
+    this.columns = [
+      {
+        title: "رقم الخزان",
+        dataIndex: "index",
+        width: "10%",
+        editable: false,
+      },
+      {
+        title: "سعة الخزان",
+        dataIndex: "capacity",
+        editable: true,
+        width: "25%",
+      },
+      {
+        title: "العنوان",
+        dataIndex: "address",
+        editable: true,
+      },
+      {
+        title: "العملية",
+        dataIndex: "operation",
+        render: (_, record) =>
+          this.state.dataSource.length >= 1 ? (
+            <Popconfirm
+              title="هل أنت متأكد من الحذف"
+              onConfirm={() => this.handleDelete(record.key)}
+            >
+              <a>حذف</a>
+            </Popconfirm>
+          ) : null,
+      },
+    ];
+    this.state = {
+      dataSource: [
+        {
+          key: "0",
+          index: "Edward King 0",
+          capacity: "32",
+          address: "London, Park Lane no. 0",
+        },
+        {
+          key: "1",
+          index: "Edward King 1",
+          capacity: "32",
+          address: "London, Park Lane no. 1",
+        },
+      ],
+      count: 2,
+    };
+  }
+
+  handleDelete = (key) => {
+    const dataSource = [...this.state.dataSource];
+    this.setState({
+      dataSource: dataSource.filter((item) => item.key !== key),
+    });
+  };
+  handleAdd = () => {
+    const { count, dataSource } = this.state;
+    const newData = {
+      key: count,
+      index: count,
+      capacity: `أدخل السعة`,
+      address: `أدخل العنوان `,
+    };
+    this.setState({
+      dataSource: [...dataSource, newData],
+      count: count + 1,
+    });
+  };
+  handleSave = (row) => {
+    const newData = [...this.state.dataSource];
+    const index = newData.findIndex((item) => row.key === item.key);
+    const item = newData[index];
+    newData.splice(index, 1, { ...item, ...row });
+    this.setState({
+      dataSource: newData,
+    });
+  };
+
+  render() {
+    const { dataSource } = this.state;
+    const components = {
+      body: {
+        row: EditableRow,
+        cell: EditableCell,
+      },
+    };
+    const columns = this.columns.map((col) => {
+      if (!col.editable) {
+        return col;
+      }
+
+      return {
+        ...col,
+        onCell: (record) => ({
+          record,
+          editable: col.editable,
+          dataIndex: col.dataIndex,
+          title: col.title,
+          handleSave: this.handleSave,
+        }),
+      };
+    });
+    return (
+      <div>
+        <Button
+          onClick={this.handleAdd}
+          type="primary"
+          style={{
+            marginBottom: 16,
+          }}
+        >
+          أضف خزان جديد
+        </Button>
+        <Table
+          bordered
+          components={components}
+          rowClassName={() => "editable-row"}
+          bordered
+          dataSource={dataSource}
+          columns={columns}
+          pagination={{ pageSize: 4 }}
+        />
+        <NewTank />
+      </div>
+    );
+  }
 }
+
+export default Tanks;
