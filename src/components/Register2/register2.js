@@ -4,7 +4,6 @@ import { EnvironmentFilled } from "@ant-design/icons";
 import { useHistory } from "react-router-dom";
 import BackArrow from "../../img/R.jpg";
 import "antd/dist/antd.css";
-
 export default function Register2() {
   const { Option } = Select;
   const history = useHistory();

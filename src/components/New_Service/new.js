@@ -1,7 +1,6 @@
 import "./new.css";
-import { Upload, message, Button, Form, Input } from "antd";
+import { Upload, message, Button, Form } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
-
 export default function NewService() {
   const onFinish = (values) => {
     console.log("Success:", values);

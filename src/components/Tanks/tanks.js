@@ -1,9 +1,10 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
-import "antd/dist/antd.css";
 import { Table, Input, Button, Popconfirm, Form } from "antd";
-import NewTank from "../NewTank/newTank.js";
+import { Modal } from "react-responsive-modal";
+import "antd/dist/antd.css";
+import "./tanks.css";
+import "react-responsive-modal/styles.css";
 const EditableContext = React.createContext(null);
-
 const EditableRow = ({ index, ...props }) => {
   const [form] = Form.useForm();
   return (
@@ -122,33 +123,43 @@ class Tanks extends React.Component {
       dataSource: [
         {
           key: "0",
-          index: "Edward King 0",
+          index: "1",
           capacity: "32",
           address: "London, Park Lane no. 0",
         },
         {
           key: "1",
-          index: "Edward King 1",
+          index: "2",
           capacity: "32",
           address: "London, Park Lane no. 1",
         },
       ],
       count: 2,
+      open: false,
     };
   }
+  onFinish = (values) => {
+    console.log("Success:", values);
+    let capacity = document.getElementById("cap").value;
+    this.handleAdd(capacity);
+    this.handleClose();
+  };
 
+  onFinishFailed = (errorInfo) => {
+    console.log("Failed:", errorInfo);
+  };
   handleDelete = (key) => {
     const dataSource = [...this.state.dataSource];
     this.setState({
       dataSource: dataSource.filter((item) => item.key !== key),
     });
   };
-  handleAdd = () => {
+  handleAdd = (capacity) => {
     const { count, dataSource } = this.state;
     const newData = {
       key: count,
       index: count,
-      capacity: `أدخل السعة`,
+      capacity: { capacity },
       address: `أدخل العنوان `,
     };
     this.setState({
@@ -165,7 +176,18 @@ class Tanks extends React.Component {
       dataSource: newData,
     });
   };
-
+  handleOpen() {
+    this.setState({
+      dataSource: [...this.state.dataSource],
+      open: true,
+    });
+  }
+  handleClose() {
+    this.setState({
+      dataSource: [...this.state.dataSource],
+      open: false,
+    });
+  }
   render() {
     const { dataSource } = this.state;
     const components = {
@@ -191,26 +213,93 @@ class Tanks extends React.Component {
       };
     });
     return (
-      <div>
-        <Button
-          onClick={this.handleAdd}
-          type="primary"
-          style={{
-            marginBottom: 16,
-          }}
-        >
-          أضف خزان جديد
-        </Button>
+      <div className="newTank">
         <Table
           bordered
           components={components}
           rowClassName={() => "editable-row"}
-          bordered
           dataSource={dataSource}
           columns={columns}
-          pagination={{ pageSize: 4 }}
+          pagination={{ pageSize: 3 }}
         />
-        <NewTank />
+        <>
+          <Button
+            type="primary"
+            onClick={() => this.handleOpen()}
+            style={{ borderRadius: "20px" }}
+          >
+            أضف خزان جديد
+          </Button>
+          <Modal
+            open={this.state.open}
+            onClose={() => this.handleClose()}
+            center
+          >
+            <div className="newTankForm">
+              <h2 className="headerNewTank">إضافة خزان</h2>.
+              <Form
+                className="newTankForm"
+                name="basic"
+                labelCol={{
+                  span: 8,
+                }}
+                wrapperCol={{
+                  span: 20,
+                }}
+                initialValues={{
+                  remember: true,
+                }}
+                onFinish={this.onFinish}
+                onFinishFailed={this.onFinishFailed}
+                autoComplete="off"
+              >
+                <Form.Item
+                  label="السعة"
+                  name="cap"
+                  rules={[
+                    {
+                      required: true,
+                      message: "أدخل سعة الخزان",
+                    },
+                    {
+                      pattern: /^[+-]?([0-9]+\.?[0-9]*|\.[0-9]+)$/,
+                      message: "يرجى إدخال قيمة صالحة",
+                    },
+                  ]}
+                >
+                  <Input id="cap" style={{ borderRadius: "20px" }} />
+                </Form.Item>
+
+                <Form.Item name="location">
+                  <Button
+                    style={{
+                      background: "#ee2260",
+                      borderColor: "#ee2260",
+                      color: "white",
+                      borderRadius: "20px",
+                    }}
+                  >
+                    تحديد موقع الخزان
+                  </Button>
+                </Form.Item>
+
+                <Form.Item
+                  wrapperCol={{
+                    span: 16,
+                  }}
+                >
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    style={{ borderRadius: "20px" }}
+                  >
+                    إضافة
+                  </Button>
+                </Form.Item>
+              </Form>
+            </div>
+          </Modal>
+        </>
       </div>
     );
   }

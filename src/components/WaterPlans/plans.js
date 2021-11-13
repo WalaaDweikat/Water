@@ -1,4 +1,3 @@
-import React, { Component } from "react";
 import "./plans.css";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 

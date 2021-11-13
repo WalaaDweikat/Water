@@ -28,11 +28,11 @@
 }
 
 .tanksContainer{
-  margin-top: 100px;
+  margin-top: 25vh;
   width: 80vw;
   margin-left: 10vw;
   margin-right: 10vw;
-  height: calc(100vh - 165px);
+  height: calc(100vh - 220px);
 }
 
 
@@ -43,7 +43,29 @@
     margin-left: 0px;
     margin-right: 0;
   }
+
+ 
 }
+
+@media only screen and (max-width: 300px) {
+  .tanksContainer{
+    height: 600px;
+    margin-left: 0px;
+    margin-right: 0;
+    width:100vw;
+    overflow: visible;
+    overflow: scroll;
+  }
+}
+
+@media only screen and (max-width: 400px) {
+
+  .aaa{
+    margin-top: 20px;
+    height: 1000px;
+  }
+}
+
 
 
 

@@ -1,8 +1,6 @@
 import "./profile.css";
 import "antd/dist/antd.css";
-
 import { Input, Button } from "antd";
-
 export default function Profile() {
   return (
     <div className="profileContainer">

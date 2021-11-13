@@ -42,56 +42,52 @@ function User() {
 
   return (
     <Router>
-      <Switch>
-        <Layout className="userContainer">
-          <Header
-            className="header"
-            style={{ position: "fixed", zIndex: 1, width: "100%" }}
+      <Layout className="userContainer">
+        <Header
+          className="header"
+          style={{ position: "fixed", zIndex: 1, width: "100%" }}
+        >
+          <div className="logo">
+            <img src={Logo} alt="logo" className="logoHeader" />
+          </div>
+          <Menu
+            theme="dark"
+            mode="horizontal"
+            defaultSelectedKeys={["/water/user/home"]}
+            id="menu"
           >
-            <div className="logo">
-              <img src={Logo} alt="logo" className="logoHeader" />
-            </div>
-            <Menu
-              theme="dark"
-              mode="horizontal"
-              defaultSelectedKeys={["/water/user/home"]}
-              id="menu"
-            >
-              <Menu.Item className="item" key="/water/user/home">
-                <Link to="/water/user/home">الرئيسية</Link>
+            <Menu.Item className="item" key="/water/user/home">
+              <Link to="/water/user/home">الرئيسية</Link>
+            </Menu.Item>
+            <Menu.Item className="item" key="/water/user/profile">
+              <Link to="/water/user/profile">بياناتي</Link>
+            </Menu.Item>
+            <Menu.Item className="item" key="/water/user/transactions">
+              <Link to="/water/user/transactions">معاملاتي</Link>
+            </Menu.Item>
+            <SubMenu key="water/user/services" className="item" title="خدماتي">
+              <Menu.Item key="/water/user/new_service">
+                <Link to="/water/user/new_service">طلب اشتراك</Link>
               </Menu.Item>
-              <Menu.Item className="item" key="/water/user/profile">
-                <Link to="/water/user/profile">بياناتي</Link>
+              <Menu.Item key="/water/user/service_transfer">
+                <Link to="/water/user/service_transfer">نقل اشتراك</Link>
               </Menu.Item>
-              <Menu.Item className="item" key="/water/user/transactions">
-                <Link to="/water/user/transactions">معاملاتي</Link>
+              <Menu.Item key="/water/user/delete_service">
+                <Link to="/water/user/delete_service">إزالةاشتراك</Link>
               </Menu.Item>
-              <SubMenu
-                key="water/user/services"
-                className="item"
-                title="خدماتي"
-              >
-                <Menu.Item key="/water/user/new_service">
-                  <Link to="/water/user/new_service">طلب اشتراك</Link>
-                </Menu.Item>
-                <Menu.Item key="/water/user/service_transfer">
-                  <Link to="/water/user/service_transfer">نقل اشتراك</Link>
-                </Menu.Item>
-                <Menu.Item key="/water/user/delete_service">
-                  <Link to="/water/user/delete_service">إزالةاشتراك</Link>
-                </Menu.Item>
-              </SubMenu>
-              <Menu.Item className="item" key="/water/user/complaints">
-                <Link to="/water/user/complaints"> الشكاوي</Link>
-              </Menu.Item>
-              <Menu.Item key="out" className="out">
-                <Button type="primary" onClick={singout}>
-                  تسجيل الخروج
-                </Button>
-              </Menu.Item>
-            </Menu>
-          </Header>
-          <Content>
+            </SubMenu>
+            <Menu.Item className="item" key="/water/user/complaints">
+              <Link to="/water/user/complaints"> الشكاوي</Link>
+            </Menu.Item>
+            <Menu.Item key="out" className="out">
+              <Button type="primary" onClick={singout}>
+                تسجيل الخروج
+              </Button>
+            </Menu.Item>
+          </Menu>
+        </Header>
+        <Content>
+          <Switch>
             <Route path="/water/user/services">
               <div className="userServicesContainer">
                 <Link to="/water/user/new_service">
@@ -163,10 +159,10 @@ function User() {
             <Route path="/water/user/login">
               <Login />
             </Route>
-          </Content>
-          <Footer />
-        </Layout>
-      </Switch>
+          </Switch>
+        </Content>
+        <Footer />
+      </Layout>
     </Router>
   );
 }
