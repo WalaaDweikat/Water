@@ -76,6 +76,15 @@ export default function Main() {
         <Route path="/water/admin/water_plans">
           <Admin />
         </Route>
+        <Route path="/water/admin/complaints">
+          <Admin />
+        </Route>
+        <Route path="/water/admin/employees">
+          <Admin />
+        </Route>
+        <Route path="/water/admin/mhbes">
+          <Admin />
+        </Route>
       </Switch>
     </Router>
   );

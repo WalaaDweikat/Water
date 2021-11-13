@@ -21,9 +21,9 @@ function Admin() {
   const { Header } = Layout;
   const history = useHistory();
   const selectMenu = (e) => {
-    let path = `/water/admin/${e.target.id}`;
+    let path = e.target.to;
+    console.log(path);
     document.getElementById("menu").defaultSelectedKeys = [path];
-    console.log(e.target.id);
     console.log(document.getElementById("menu").defaultSelectedKeys);
   };
   const singout = () => {
@@ -81,39 +81,41 @@ function Admin() {
             </Route>
             <Route path="/water/admin/home">
               <div className="userHomeContainer aaa">
-                <Link to="/water/admin/employees">
-                  <Button type="primary" id="employees" onClick={selectMenu}>
+                <Link to="/water/admin/employees" onClick={selectMenu}>
+                  <Button type="primary" id="employees">
                     <FontAwesomeIcon icon={faUsers} className="icon" />
                     الموظفيين
                   </Button>
                 </Link>
-                <Link to="/water/admin/complaints">
-                  <Button type="primary" id="complaints" onClick={selectMenu}>
+                <Link to="/water/admin/complaints" onClick={selectMenu}>
+                  <Button type="primary" id="complaints">
                     <FontAwesomeIcon icon={faComment} className="icon" />
                     الشكاوي
                   </Button>
                 </Link>
-                <Link to="/water/admin/water_plans">
-                  <Button type="primary" id="water_plans" onClick={selectMenu}>
+                <Link to="/water/admin/water_plans" onClick={selectMenu}>
+                  <Button type="primary" id="water_plans">
                     <FontAwesomeIcon icon={faBorderNone} className="icon" />
                     شبكات المياه
                   </Button>
                 </Link>
-                <Link to="/water/admin/tanks">
-                  <Button type="primary" id="tanks" onClick={selectMenu}>
+                <Link to="/water/admin/tanks" onClick={selectMenu}>
+                  <Button type="primary" id="tanks">
                     <FontAwesomeIcon icon={faArchive} className="icon" />
                     الخزانات
                   </Button>
                 </Link>
-                <Link to="/water/admin/mhbes">
-                  <Button type="primary" id="mhbes" onClick={selectMenu}>
+                <Link to="/water/admin/mhbes" onClick={selectMenu}>
+                  <Button type="primary" id="mhbes">
                     <FontAwesomeIcon icon={faArchive} className="icon" />
                     المحابس
                   </Button>
                 </Link>
               </div>
             </Route>
+            <Route path="/water/admin/employees"></Route>
             <Route path="/water/admin/complaints"></Route>
+            <Route path="/water/admin/mhbes"></Route>
             <Route path="/water/admin/water_plans">
               <WaterPlans />
             </Route>

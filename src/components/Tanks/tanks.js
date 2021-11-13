@@ -9,7 +9,7 @@ const EditableRow = ({ index, ...props }) => {
   const [form] = Form.useForm();
   return (
     <Form form={form} component={false}>
-      <EditableContext.Provider value={form}>
+      <EditableContext.Provider value={form} style={{ background: "red" }}>
         <tr {...props} />
       </EditableContext.Provider>
     </Form>
@@ -91,14 +91,14 @@ class Tanks extends React.Component {
       {
         title: "رقم الخزان",
         dataIndex: "index",
-        width: "10%",
+        width: "3%",
         editable: false,
       },
       {
         title: "سعة الخزان",
         dataIndex: "capacity",
         editable: true,
-        width: "25%",
+        width: "10%",
       },
       {
         title: "العنوان",
@@ -108,6 +108,8 @@ class Tanks extends React.Component {
       {
         title: "العملية",
         dataIndex: "operation",
+        width: "10%",
+
         render: (_, record) =>
           this.state.dataSource.length >= 1 ? (
             <Popconfirm
@@ -209,6 +211,7 @@ class Tanks extends React.Component {
           dataIndex: col.dataIndex,
           title: col.title,
           handleSave: this.handleSave,
+          style: { color: "#a590ff", fontWeight: "bold", fontSize: "17px" },
         }),
       };
     });
@@ -221,6 +224,7 @@ class Tanks extends React.Component {
           dataSource={dataSource}
           columns={columns}
           pagination={{ pageSize: 3 }}
+          scroll={{ x: "150px" }}
         />
         <>
           <Button
