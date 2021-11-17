@@ -1,6 +1,5 @@
-import "./transfer.css";
 import "antd/dist/antd.css";
-import { Form, Input, Button } from "antd";
+import { Form, Input, Button, Select } from "antd";
 
 export default function TransferService() {
   const onFinish = (values) => {
@@ -22,7 +21,7 @@ export default function TransferService() {
         span: 8,
       }}
       initialValues={{
-        remember: true,
+        remember: false,
       }}
       onFinish={onFinish}
       onFinishFailed={onFinishFailed}
@@ -34,11 +33,11 @@ export default function TransferService() {
         rules={[
           {
             required: true,
-            message: "قم بإدخال رقم الخدمة ",
+            message: "قم باختيار رقم الخدمة ",
           },
         ]}
       >
-        <Input />
+        <Select />
       </Form.Item>
 
       <Form.Item
@@ -74,7 +73,7 @@ export default function TransferService() {
         }}
       >
         <Button type="primary" htmlType="submit" style={{ marginTop: "20px" }}>
-          حذف
+          إرسال
         </Button>
       </Form.Item>
     </Form>

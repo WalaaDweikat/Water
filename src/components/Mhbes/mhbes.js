@@ -2,9 +2,8 @@ import React, { useContext, useState, useEffect, useRef } from "react";
 import { Table, Input, Button, Popconfirm, Form } from "antd";
 import { Modal } from "react-responsive-modal";
 import "antd/dist/antd.css";
-import "./tanks.css";
+import "../Tanks/tanks.css";
 import "react-responsive-modal/styles.css";
-import Mhbes from "../Mhbes/mhbes.js";
 const EditableContext = React.createContext(null);
 const EditableRow = ({ index, ...props }) => {
   const [form] = Form.useForm();
@@ -85,42 +84,22 @@ const EditableCell = ({
 
   return <td {...restProps}>{childNode}</td>;
 };
-class Tanks extends React.Component {
+class Mhbes extends React.Component {
   constructor(props) {
     super(props);
     this.columns = [
       {
-        title: "رقم الخزان",
-        dataIndex: "index",
+        title: "رقم المحبس",
+        dataIndex: "mhbes_number",
         width: "2%",
         editable: false,
       },
       {
-        title: "سعة الخزان",
-        dataIndex: "capacity",
-        editable: true,
-        width: "10%",
-      },
-      {
         title: "العنوان",
-        dataIndex: "address",
+        dataIndex: "m_address",
         editable: true,
       },
-      {
-        title: "عرض المحابس",
-        dataIndex: "mhbes",
-        width: "10%",
 
-        render: (_, record) =>
-          this.state.dataSource.length >= 1 ? (
-            <Popconfirm
-              title="سيتم عرض المحابس المرنبطة بالخزان"
-              onConfirm={() => this.handleShow(record)}
-            >
-              <Button> عرض</Button>
-            </Popconfirm>
-          ) : null,
-      },
       {
         title: "حذف",
         dataIndex: "operation",
@@ -138,24 +117,9 @@ class Tanks extends React.Component {
       },
     ];
     this.state = {
-      dataSource: [
-        {
-          id: "0",
-          key: "0",
-          index: "1",
-          capacity: "32",
-          address: "London, Park Lane no. 0",
-        },
-        {
-          key: "1",
-          index: "2",
-          capacity: "32",
-          address: "London, Park Lane no. 1",
-        },
-      ],
+      dataSource: [],
       count: 2,
       open: false,
-      open2: false,
     };
   }
   onFinish = (values) => {
@@ -174,12 +138,7 @@ class Tanks extends React.Component {
       dataSource: dataSource.filter((item) => item.key !== key),
     });
   };
-  handleShow = (record) => {
-    this.setState({
-      dataSource: [...this.state.dataSource],
-      open2: true,
-    });
-  };
+
   handleAdd = (capacity) => {
     const { count, dataSource } = this.state;
     const newData = {
@@ -212,10 +171,8 @@ class Tanks extends React.Component {
     this.setState({
       dataSource: [...this.state.dataSource],
       open: false,
-      open2: false,
     });
   }
-
   render() {
     const { dataSource } = this.state;
     const components = {
@@ -254,7 +211,7 @@ class Tanks extends React.Component {
         <Button
           type="primary"
           onClick={() => this.handleOpen()}
-          style={{ borderRadius: "20px", marginTop: "-30px" }}
+          style={{ borderRadius: "20px" }}
         >
           أضف خزان جديد
         </Button>
@@ -323,18 +280,9 @@ class Tanks extends React.Component {
             </Form>
           </div>
         </Modal>
-        <Modal
-          style={{ width: "100vw" }}
-          open={this.state.open2}
-          onClose={() => this.handleClose()}
-          center
-          sty
-        >
-          <Mhbes />
-        </Modal>
       </div>
     );
   }
 }
 
-export default Tanks;
+export default Mhbes;

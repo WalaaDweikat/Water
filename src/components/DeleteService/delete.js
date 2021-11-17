@@ -1,5 +1,5 @@
 import "./delete.css";
-import { Form, Input, Button } from "antd";
+import { Form, Input, Button, Select } from "antd";
 
 export default function DeleteService() {
   const onFinish = (values) => {
@@ -22,7 +22,7 @@ export default function DeleteService() {
         span: 8,
       }}
       initialValues={{
-        remember: true,
+        remember: false,
       }}
       onFinish={onFinish}
       onFinishFailed={onFinishFailed}
@@ -34,11 +34,11 @@ export default function DeleteService() {
         rules={[
           {
             required: true,
-            message: "قم بإدخال رقم الخدمة لحذفها",
+            message: "قم باختيار رقم الخدمة لحذفها",
           },
         ]}
       >
-        <Input />
+        <Select />
       </Form.Item>
 
       <Form.Item

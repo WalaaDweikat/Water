@@ -2,9 +2,9 @@ import React, { useContext, useState, useEffect, useRef } from "react";
 import { Table, Input, Button, Popconfirm, Form } from "antd";
 import { Modal } from "react-responsive-modal";
 import "antd/dist/antd.css";
-import "./tanks.css";
+import "../Tanks/tanks.css";
+import "./employees.css";
 import "react-responsive-modal/styles.css";
-import Mhbes from "../Mhbes/mhbes.js";
 const EditableContext = React.createContext(null);
 const EditableRow = ({ index, ...props }) => {
   const [form] = Form.useForm();
@@ -75,6 +75,7 @@ const EditableCell = ({
         className="editable-cell-value-wrap"
         style={{
           paddingRight: 24,
+          fontSize: "15px",
         }}
         onClick={toggleEdit}
       >
@@ -85,20 +86,20 @@ const EditableCell = ({
 
   return <td {...restProps}>{childNode}</td>;
 };
-class Tanks extends React.Component {
+class Employees extends React.Component {
   constructor(props) {
     super(props);
     this.columns = [
       {
-        title: "رقم الخزان",
-        dataIndex: "index",
-        width: "2%",
+        title: "اسم الموطف",
+        dataIndex: "name",
+        width: "10%",
         editable: false,
       },
       {
-        title: "سعة الخزان",
-        dataIndex: "capacity",
-        editable: true,
+        title: "رقم الهوية",
+        dataIndex: "id",
+        editable: false,
         width: "10%",
       },
       {
@@ -107,22 +108,7 @@ class Tanks extends React.Component {
         editable: true,
       },
       {
-        title: "عرض المحابس",
-        dataIndex: "mhbes",
-        width: "10%",
-
-        render: (_, record) =>
-          this.state.dataSource.length >= 1 ? (
-            <Popconfirm
-              title="سيتم عرض المحابس المرنبطة بالخزان"
-              onConfirm={() => this.handleShow(record)}
-            >
-              <Button> عرض</Button>
-            </Popconfirm>
-          ) : null,
-      },
-      {
-        title: "حذف",
+        title: "العملية",
         dataIndex: "operation",
         width: "10%",
 
@@ -140,16 +126,9 @@ class Tanks extends React.Component {
     this.state = {
       dataSource: [
         {
-          id: "0",
-          key: "0",
-          index: "1",
-          capacity: "32",
-          address: "London, Park Lane no. 0",
-        },
-        {
           key: "1",
-          index: "2",
-          capacity: "32",
+          name: "2",
+          id: "32",
           address: "London, Park Lane no. 1",
         },
       ],
@@ -160,9 +139,15 @@ class Tanks extends React.Component {
   }
   onFinish = (values) => {
     console.log("Success:", values);
-    let capacity = document.getElementById("cap").value;
-    this.handleAdd(capacity);
+    let employeeName = document.getElementById("name").value;
+    let address = document.getElementById("address").value;
+    let id = document.getElementById("id").value;
+    this.handleAdd(employeeName, address, id);
     this.handleClose();
+    this.setState({
+      dataSource: [...this.state.dataSource],
+      open2: true,
+    });
   };
 
   onFinishFailed = (errorInfo) => {
@@ -174,19 +159,14 @@ class Tanks extends React.Component {
       dataSource: dataSource.filter((item) => item.key !== key),
     });
   };
-  handleShow = (record) => {
-    this.setState({
-      dataSource: [...this.state.dataSource],
-      open2: true,
-    });
-  };
-  handleAdd = (capacity) => {
+  handleAdd = (employeeName, address, id) => {
     const { count, dataSource } = this.state;
     const newData = {
       key: count,
-      index: count,
-      capacity: { capacity },
-      address: `أدخل العنوان `,
+      name: employeeName,
+      employeeName: employeeName,
+      address: address,
+      id: id,
     };
     this.setState({
       dataSource: [...dataSource, newData],
@@ -212,10 +192,8 @@ class Tanks extends React.Component {
     this.setState({
       dataSource: [...this.state.dataSource],
       open: false,
-      open2: false,
     });
   }
-
   render() {
     const { dataSource } = this.state;
     const components = {
@@ -251,90 +229,120 @@ class Tanks extends React.Component {
           pagination={{ pageSize: 3 }}
           scroll={{ x: "150px" }}
         />
-        <Button
-          type="primary"
-          onClick={() => this.handleOpen()}
-          style={{ borderRadius: "20px", marginTop: "-30px" }}
-        >
-          أضف خزان جديد
-        </Button>
-        <Modal open={this.state.open} onClose={() => this.handleClose()} center>
-          <div className="newTankForm">
-            <h2 className="headerNewTank">إضافة خزان</h2>.
-            <Form
-              className="newTankForm"
-              name="basic"
-              labelCol={{
-                span: 8,
-              }}
-              wrapperCol={{
-                span: 20,
-              }}
-              initialValues={{
-                remember: false,
-              }}
-              onFinish={this.onFinish}
-              onFinishFailed={this.onFinishFailed}
-              autoComplete="off"
-            >
-              <Form.Item
-                label="السعة"
-                name="cap"
-                rules={[
-                  {
-                    required: true,
-                    message: "أدخل سعة الخزان",
-                  },
-                  {
-                    pattern: /^[+-]?([0-9]+\.?[0-9]*|\.[0-9]+)$/,
-                    message: "يرجى إدخال قيمة صالحة",
-                  },
-                ]}
-              >
-                <Input id="cap" style={{ borderRadius: "20px" }} />
-              </Form.Item>
+        <>
+          <Button
+            type="primary"
+            onClick={() => this.handleOpen()}
+            style={{ borderRadius: "20px", marginTop: "-30px" }}
+          >
+            أضف موظف جديد
+          </Button>
 
-              <Form.Item name="location">
-                <Button
-                  style={{
-                    background: "#ee2260",
-                    borderColor: "#ee2260",
-                    color: "white",
-                    borderRadius: "20px",
+          <Modal
+            open={this.state.open}
+            onClose={() => this.handleClose()}
+            center
+          >
+            <div className="newTankForm">
+              <h2 className="headerNewTank">إضافة خزان</h2>.
+              <Form
+                layout="vertical"
+                className="newTankForm"
+                name="basic"
+                labelCol={{
+                  span: 70,
+                }}
+                wrapperCol={{
+                  span: 70,
+                }}
+                initialValues={{
+                  remember: false,
+                }}
+                onFinish={this.onFinish}
+                onFinishFailed={this.onFinishFailed}
+                autoComplete="off"
+              >
+                <Form.Item
+                  label="الاسم"
+                  name="name"
+                  rules={[
+                    {
+                      required: true,
+                      message: "أدخل اسم الموظف",
+                    },
+                  ]}
+                >
+                  <Input id="name" style={{ borderRadius: "10px" }} />
+                </Form.Item>
+
+                <Form.Item
+                  label="رقم الهوية"
+                  name="id"
+                  rules={[
+                    {
+                      required: true,
+                      message: "أدخل رقم هويتك",
+                    },
+                    {
+                      pattern: /^(?:\d*)$/,
+                      message: "يرجى إدخال أرقام فقط",
+                    },
+                    {
+                      pattern: /^[\d]{9}$/,
+                      message: "أدخل رقم من 9 خانات",
+                    },
+                  ]}
+                >
+                  <Input id="id" style={{ borderRadius: "10px" }} />
+                </Form.Item>
+                <Form.Item
+                  label="العنوان"
+                  name="adderess"
+                  rules={[
+                    {
+                      required: true,
+                      message: "أدخل العنوان",
+                    },
+                  ]}
+                >
+                  <Input id="address" style={{ borderRadius: "10px" }} />
+                </Form.Item>
+                <Form.Item
+                  wrapperCol={{
+                    span: 16,
                   }}
                 >
-                  تحديد موقع الخزان
-                </Button>
-              </Form.Item>
-
-              <Form.Item
-                wrapperCol={{
-                  span: 16,
-                }}
-              >
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  style={{ borderRadius: "20px" }}
-                >
-                  إضافة
-                </Button>
-              </Form.Item>
-            </Form>
-          </div>
-        </Modal>
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    style={{ borderRadius: "20px" }}
+                  >
+                    إضافة
+                  </Button>
+                </Form.Item>
+              </Form>
+            </div>
+          </Modal>
+        </>
         <Modal
-          style={{ width: "100vw" }}
           open={this.state.open2}
-          onClose={() => this.handleClose()}
+          onClose={() => {
+            this.setState({
+              dataSource: [...this.state.dataSource],
+              open2: false,
+            });
+          }}
           center
-          sty
         >
-          <Mhbes />
+          <div className="theEmployeeNewAccount" id="newAccount">
+            <div>معلومات حساب الموظف الجديد </div>
+            <div>اسم المستخدم</div>
+            <div>كلمة المرور</div>
+          </div>
         </Modal>
       </div>
     );
   }
 }
 
-export default Tanks;
+export default Employees;

@@ -59,6 +59,26 @@ export default function Complaints() {
       >
         <Input />
       </Form.Item>
+      <div className="comAddress">
+        <Form.Item
+          label="عنوان الشكوى"
+          name="complaintAddress"
+          rules={[
+            {
+              required: true,
+              message: "حدد عنوان الشكوى",
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+        <Button
+          style={{ marginTop: "-20px", marginBottom: "20px", height: "30px" }}
+        >
+          اضغط هنا{" "}
+        </Button>
+      </div>
+
       <Form.Item
         label="الوصف"
         name="desc"

@@ -49,7 +49,6 @@ export default function NewService() {
     <Form
       className="newFrom"
       layout="vertical"
-      name="basic"
       labelCol={{
         span: 5,
       }}
@@ -57,7 +56,7 @@ export default function NewService() {
         span: 8,
       }}
       initialValues={{
-        remember: true,
+        remember: false,
       }}
       onFinish={onFinish}
       onFinishFailed={onFinishFailed}
@@ -94,7 +93,7 @@ export default function NewService() {
           <Button className="uploadFileButton" icon={<UploadOutlined />}>
             أرفق الملف
           </Button>
-        </Upload>{" "}
+        </Upload>
       </Form.Item>
 
       <Form.Item
@@ -112,7 +111,7 @@ export default function NewService() {
             borderColor: "rgb(24,144,255)",
           }}
         >
-          أرسل
+          إرسال
         </Button>
       </Form.Item>
     </Form>

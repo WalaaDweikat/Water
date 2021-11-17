@@ -1,8 +1,7 @@
 
 .comForm
 {
- height:calc(100vh ) ;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
- margin-top: 150px;
+ height:calc(125vh ) ;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
  padding-right: 5%;
 }
 
@@ -32,6 +31,12 @@
 .comForm TextArea{
   font-family: 'Tajawal', sans-serif;
   font-size: 15px;
+}
+
+.comAddress{
+  display: flex;
+  justify-content: right;
+  flex-direction: column;
 }
 
 

@@ -85,6 +85,9 @@ export default function Main() {
         <Route path="/water/admin/mhbes">
           <Admin />
         </Route>
+        <Route path="/water/user/bills">
+          <User />
+        </Route>
       </Switch>
     </Router>
   );

@@ -56,7 +56,7 @@ export default function Register() {
               autoComplete="off"
             >
               <Form.Item
-                name="number"
+                name="id"
                 rules={[
                   {
                     required: true,
@@ -95,6 +95,7 @@ export default function Register() {
                   prefix={<MailOutlined />}
                   placeholder="البريد الإلكتروني"
                   style={{ height: "40px", borderRadius: "10px" }}
+                  type="email"
                 />
               </Form.Item>
               <Form.Item
