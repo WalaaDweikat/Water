@@ -1,8 +1,17 @@
 import "./profile.css";
 import "antd/dist/antd.css";
-import Line from "../../img/line.PNG";
-import { Form, Input, Button, Select } from "antd";
+import NewUserTank from "../../components/NewUserTank/newUserTank.js";
+import { useState, useEffect } from "react";
+import { Form, Input, Button, Select, Tabs } from "antd";
+const { TabPane } = Tabs;
 export default function Profile() {
+  const [count, setCount] = useState(1);
+  const [w, setW] = useState(window.innerWidth);
+  const [position, setPosition] = useState("top");
+
+  window.addEventListener("resize", () => {
+    setW(window.innerWidth);
+  });
   const onFinish = (values) => {
     console.log("Success:", values);
   };
@@ -10,111 +19,309 @@ export default function Profile() {
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
+  useEffect(() => {
+    if (w < 350) {
+      setPosition("right");
+    } else {
+      setPosition("top");
+    }
+  }, [w]);
   return (
-    <div className="profileContainer">
-      <Form
-        className="sec"
-        layout="vertical"
-        name="basic"
-        wrapperCol={{
-          span: 100,
-        }}
-        initialValues={{
-          remember: false,
-        }}
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
-        autoComplete="off"
-      >
-        <div>
-          <div className="t">معلومات شخصية</div>
-          <div className="info">
-            <div className="labelandinput">
-              <label>الاسم الرباعي</label>
-              <Input id="username" disabled />
-            </div>
-            <div className="labelandinput">
-              <label>العنوان</label>
+    <Tabs
+      defaultActiveKey="1"
+      className="profileContainer"
+      tabPosition={position}
+    >
+      <TabPane tab="معلوماتي" key="1">
+        <div className="sec">
+          <div>
+            <div className="t">معلومات شخصية</div>
+            <Form
+              layout="vertical"
+              wrapperCol={{
+                span: 100,
+              }}
+              labelCol={{ span: 100 }}
+              initialValues={{
+                remember: false,
+              }}
+              onFinish={onFinish}
+              onFinishFailed={onFinishFailed}
+              autoComplete="off"
+              className="info"
+            >
+              <Form.Item label="الاسم الرباعي" name="userName">
+                <Input id="username" disabled />
+              </Form.Item>
               <Form.Item
-                name="password"
+                label="المدينة "
+                name="address"
                 rules={[
                   {
                     required: true,
-                    message: "قم بإدخال كلمة المرور",
+                    message: "قم بإدخال المدينة",
                   },
                 ]}
               >
-                <Input id="address" />
+                <Select id="city" />
               </Form.Item>
-            </div>
-            <div className="labelandinput">
-              <label>رقم الهاتف المحمول</label>
-              <Input id="phone_number" />
-            </div>
-          </div>
-        </div>
-        <div className="a">
-          <div className="t">معلومات الحساب</div>
-          <div className="info">
-            <div className="labelandinput">
-              <label>رقم الهوية</label>
-              <Input id="idNumber" disabled />
-            </div>
-            <div className="labelandinput">
-              <label>البريد الإلكتروني</label>
-              <Input type="email" id="email" />
-            </div>
-          </div>
-        </div>
-      </Form>
-      <div className="sec">
-        <div>
-          <div className="t">
-            <img src={Line} style={{ width: "50vw" }} />
-            <br />
-            معلومات الخدمة
-          </div>
-          <div className="info">
-            <div className="labelandinput">
-              <label>رقم الخدمة</label>
-              <Select id="idNumber" />
-            </div>
-            <div className="labelandinput">
-              <label>عدد الأفراد</label>
-              <Input type="number" id="members_number" />
-            </div>
-            <div className="labelandinput">
-              <label>عدد النقاط</label>
-              <Input type="number" id="points_number" />
-            </div>
-          </div>
-        </div>
-      </div>
+              <Form.Item
+                label="التجمع"
+                name="area"
+                rules={[
+                  {
+                    required: true,
+                    message: "قم بإدخال التجمع ",
+                  },
+                ]}
+              >
+                <Select id="area" />
+              </Form.Item>
+              <Form.Item
+                label="الشارع"
+                name="street"
+                rules={[
+                  {
+                    required: true,
+                    message: "قم بإدخال الشارع",
+                  },
+                ]}
+              >
+                <Input id="street" />
+              </Form.Item>
+              <Form.Item
+                label="رقم الهاتف المحمول"
+                name="phone_number"
+                rules={[
+                  {
+                    required: true,
+                    message: "قم بإدخال رقم الهاتف المحمول",
+                  },
+                  {
+                    pattern: /^(?:\d*)$/,
+                    message: "يرجى إدخال أرقام فقط",
+                  },
+                ]}
+              >
+                <Input id="phone_number" />
+              </Form.Item>
 
-      <div className="sec">
-        <div>
-          <div className="t">
-            <img src={Line} style={{ width: "50vw" }} />
-            <br />
-            تغيير كلمة المرور
+              <Form.Item>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  style={{
+                    borderRadius: "10px",
+                    marginTop: "10px",
+                    backgroundColor: "#ee2260",
+                    borderColor: "#ee2260",
+                  }}
+                >
+                  حفظ
+                </Button>
+              </Form.Item>
+            </Form>
           </div>
-          <div className="info">
-            <div className="labelandinput">
-              <label>كلمة المرور القديمة</label>
-              <Input id="old_pass" type="password" />
-            </div>
-            <div className="labelandinput">
-              <label>كلمة المرور الجديدة</label>
-              <Input id="new_pass" type="password" />
-            </div>
-            <div className="labelandinput">
-              <label>تأكيد كلمة المرور</label>
-              <Input id="confpass" type="password" />
+
+          <div>
+            <div className="t">معلومات الحساب</div>
+            <Form
+              className="info"
+              layout="vertical"
+              wrapperCol={{
+                span: 100,
+              }}
+              labelCol={{ span: 100 }}
+              initialValues={{
+                remember: false,
+              }}
+              onFinish={onFinish}
+              onFinishFailed={onFinishFailed}
+              autoComplete="off"
+            >
+              <Form.Item label="رقم الهوية(اسم المستخدم)">
+                <Input id="idNumber" disabled />
+              </Form.Item>
+              <Form.Item
+                name="email"
+                label="البريد الإلكتروني"
+                rules={[
+                  {
+                    type: "email",
+                    message: "يرجى إدخال بريد إلكتروني صالح",
+                  },
+                  {
+                    required: true,
+                    message: "أدخل بريك الإلكتروني",
+                  },
+                ]}
+              >
+                <Input id="email" />
+              </Form.Item>
+              <Form.Item>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  style={{
+                    borderRadius: "10px",
+                    marginTop: "10px",
+                    backgroundColor: "#ee2260",
+                    borderColor: "#ee2260",
+                  }}
+                >
+                  حفظ
+                </Button>
+              </Form.Item>
+            </Form>
+          </div>
+        </div>
+      </TabPane>
+      <TabPane tab="معلومات الخدمة" key="2">
+        <div className="sec a">
+          <div>
+            <div className="t">معلومات الخدمة</div>
+            <Form
+              layout="vertical"
+              className="info"
+              wrapperCol={{
+                span: 100,
+              }}
+              initialValues={{
+                remember: false,
+              }}
+              onFinish={onFinish}
+              onFinishFailed={onFinishFailed}
+              autoComplete="off"
+            >
+              <Form.Item
+                label="رقم الخدمة"
+                name="service_number"
+                rules={[
+                  {
+                    required: true,
+                    message: "اختر رقم الخدمة",
+                  },
+                ]}
+              >
+                <Select />
+              </Form.Item>
+
+              <Form.Item
+                label="عنوان الخدمة"
+                name="service_address"
+                rules={[
+                  {
+                    required: true,
+                    message: "أدخل عنوان الخدمة",
+                  },
+                ]}
+              >
+                <Input id="service_address" />
+              </Form.Item>
+              <Form.Item
+                label="عدد الأفراد"
+                name="members_number"
+                rules={[
+                  {
+                    required: true,
+                    message: "أدخل عدد الأفراد",
+                  },
+                ]}
+              >
+                <Input type="number" id="members_number" />
+              </Form.Item>
+              <Form.Item label="عدد نقاط الخدمة " name="points">
+                <Input type="number" id="points" disabled />
+              </Form.Item>
+              <Form.Item
+                wrapperCol={{
+                  span: 4,
+                }}
+              >
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  style={{
+                    borderRadius: "10px",
+                    marginTop: "30px",
+                    backgroundColor: "#ee2260",
+                    borderColor: "#ee2260",
+                  }}
+                >
+                  حفظ
+                </Button>
+              </Form.Item>
+            </Form>
+          </div>
+          <div>
+            <div className="ta">
+              <NewUserTank />
             </div>
           </div>
         </div>
-      </div>
-      <Button type="primary">حفظ التغييرات</Button>
-    </div>
+      </TabPane>
+
+      <TabPane tab="تغيير كلمة المرور" key="3">
+        <div className="sec ">
+          <Form
+            layout="vertical"
+            className="info"
+            wrapperCol={{
+              span: 100,
+            }}
+            initialValues={{
+              remember: false,
+            }}
+            onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
+            autoComplete="off"
+          >
+            <div className="t">تغيير كلمة المرور</div>
+            <Form.Item
+              label="كلمة المرور القديمة"
+              name="old_password"
+              rules={[
+                {
+                  required: true,
+                  message: "أدخل كلمة المرور",
+                },
+              ]}
+            >
+              <Input.Password id="old_pass" />
+            </Form.Item>
+            <Form.Item
+              label="كلمة المرور الجديدة"
+              name="new_password"
+              rules={[
+                {
+                  required: true,
+                  message: "أدخل كلمة المرور",
+                },
+              ]}
+            >
+              <Input.Password id="new_pass" />
+            </Form.Item>
+            <Form.Item
+              wrapperCol={{
+                span: 4,
+              }}
+            >
+              <Button
+                type="primary"
+                htmlType="submit"
+                style={{
+                  borderRadius: "10px",
+                  marginTop: "30px",
+                  backgroundColor: "#ee2260",
+                  borderColor: "#ee2260",
+                }}
+              >
+                حفظ
+              </Button>
+            </Form.Item>
+          </Form>
+        </div>
+      </TabPane>
+    </Tabs>
   );
 }

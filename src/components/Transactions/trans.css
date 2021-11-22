@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@500&display=swap');
+
+.transContainer{
+  margin-top: 150px;
+  height: calc(100vh - 215px);
+  font-family: 'Tajawal', sans-serif;
+}
+
+.collapse{
+width: 60vw;
+margin-left: 20vw;
+margin-right: 20vw;
+height: 40vh;
+overflow: scroll;
+background-color: transparent;
+}
+
+.panel{
+  margin-top: 5px;
+  border:2px solid white;
+  font-size:15px;
+}
+
+@media only screen and (max-width:500px) {
+
+  .collapse{
+    width: 70vw;
+    margin-left: 15vw;
+    margin-right: 15vw;
+    }
+}

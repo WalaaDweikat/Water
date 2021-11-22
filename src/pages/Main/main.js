@@ -1,94 +1,224 @@
 import "./main.css";
 import "antd/dist/antd.css";
-import { Button } from "antd";
+import { Layout, Menu, Carousel } from "antd";
+import Logo from "../../img/256888_109854515773613_2567514_o.jpg";
 import Login from "../Login/login.js";
 import User from "../User/user.js";
 import NewAccount from "../NewAccount/newAccount.js";
 import Admin from "../Admin/admin.js";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import Footer from "../../components/Footer/footer.js";
+import img1 from "../../img/loginImage.jpg";
+import img2 from "../../img/893647_441162895976105_631260900_o.jpg";
+import img3 from "../../img/154889906_3768521463227511_155617644466092987_n.jpg";
 
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import OfficerCom from "../../components/OfficerCom/officierCom";
+import CollectionOfficer from "../CollectionOfficer/officer";
 export default function Main() {
+  const contentStyle = {
+    height: "100vh",
+    color: "#fff",
+    lineHeight: "160px",
+    textAlign: "center",
+    background: "#364d79",
+  };
+  const { Content } = Layout;
+  const { Header } = Layout;
+
   return (
     <Router>
-      <Switch>
-        <Route path="/water/" exact>
-          <div className="container">
-            <div className="title">
-              <h1>بلدية جماعيــن</h1>
-              <h2>قسم المياه</h2>
-            </div>
-            <div className="singIN">
-              <Link to="/water/login">
-                <Button
-                  type="primary"
-                  style={{
-                    backgroundColor: "#ee2260",
-                    border: "1px solid #ee22602",
-                    color: "white",
-                    borderRadius: "50px",
-                  }}
-                >
-                  تــــســــجــــيــــل الدخـــــول
-                </Button>
-              </Link>
-              <span className="sp">
-                ليس لديك حساب؟
-                <Link className="a" to="/water/signup">
-                  اصغظ هنا
-                </Link>
-              </span>
-            </div>
-          </div>
-        </Route>
-        <Route path="/water/login">
-          <Login />
-        </Route>
-        <Route path="/water/signup">
-          <NewAccount />
-        </Route>
-        <Route path="/water/user/home">
-          <User />
-        </Route>
-        <Route path="/water/admin/home">
-          <Admin />
-        </Route>
-        <Route path="/water/user/services">
-          <User />
-        </Route>
-        <Route path="/water/user/profile">
-          <User />
-        </Route>
-        <Route path="/water/user/complaints">
-          <User />
-        </Route>
-        <Route path="/water/user/delete_service">
-          <User />
-        </Route>
-        <Route path="/water/user/service_transfer">
-          <User />
-        </Route>
-        <Route path="/water/user/new_service">
-          <User />
-        </Route>
-        <Route path="/water/admin/tanks">
-          <Admin />
-        </Route>
-        <Route path="/water/admin/water_plans">
-          <Admin />
-        </Route>
-        <Route path="/water/admin/complaints">
-          <Admin />
-        </Route>
-        <Route path="/water/admin/employees">
-          <Admin />
-        </Route>
-        <Route path="/water/admin/mhbes">
-          <Admin />
-        </Route>
-        <Route path="/water/user/bills">
-          <User />
-        </Route>
-      </Switch>
+      <Layout className="userContainer">
+        <Content>
+          <Switch>
+            <Route path="/water/" exact>
+              <Header
+                className="header"
+                style={{ position: "fixed", zIndex: 1, width: "100%" }}
+              >
+                <div className="logo">
+                  <img src={Logo} alt="logo" className="logoHeader" />
+                </div>
+                <Menu theme="dark" mode="horizontal" defaultSelectedKeys={[1]}>
+                  <Menu.Item key="out" className="out">
+                    <a href="/water/login">تسجيل الدخول</a>
+                  </Menu.Item>
+                  <Menu.Item key="in" className="out">
+                    <a href="/water/signup">إنشاء حساب</a>
+                  </Menu.Item>
+                </Menu>
+              </Header>
+              <div className="mainPageContent">
+                <Carousel effect="fade" className="car" dotPosition="right">
+                  <div>
+                    <div style={contentStyle}>
+                      <h1
+                        style={{
+                          position: "relative",
+                          top: "200px",
+                          height: "0",
+                        }}
+                      >
+                        بلديــة جماعيـــن
+                      </h1>
+                      <h2
+                        style={{
+                          position: "relative",
+                          top: "230px",
+                          height: "0",
+                        }}
+                      >
+                        قسم المياه
+                      </h2>
+                      <img
+                        alt=""
+                        src={img2}
+                        style={{
+                          width: "100vw",
+                          height: "100vh",
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <div style={contentStyle}>
+                      <img
+                        alt=""
+                        src={img1}
+                        style={{
+                          width: "100vw",
+                          height: "100vh",
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <div style={contentStyle}>
+                      <img
+                        alt=""
+                        src={img3}
+                        style={{
+                          width: "100vw",
+                          height: "100vh",
+                        }}
+                      />
+                    </div>
+                  </div>
+                </Carousel>
+                <div className="news">
+                  <div className="news1">
+                    <div className="img">
+                      <img
+                        alt=""
+                        src={img1}
+                        style={{ width: "30vw", height: "30vw" }}
+                      />
+                    </div>
+                    <div>
+                      <h1>header1</h1>
+                      <pre>
+                        Text in a pre element is displayed in a fixed-width
+                        font, and it preserves both spaces and line breaks
+                      </pre>
+                    </div>
+                  </div>
+
+                  <div className="news1">
+                    <div className="img">
+                      <img
+                        alt=""
+                        src={img1}
+                        style={{ width: "30vw", height: "30vw" }}
+                      />
+                    </div>
+                    <div>
+                      <h1>header1</h1>
+                      <pre>
+                        Text in a pre element is displayed in a fixed-width
+                        font, and it preserves both spaces and line breaks
+                      </pre>
+                    </div>
+                  </div>
+
+                  <div className="news1">
+                    <div className="img">
+                      <img
+                        alt=""
+                        src={img1}
+                        style={{ width: "30vw", height: "30vw" }}
+                      />
+                    </div>
+                    <div>
+                      <h1>header1</h1>
+                      <pre>
+                        Text in a pre element is displayed in a fixed-width
+                        font, and it preserves both spaces and line breaks
+                      </pre>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <Footer />
+            </Route>
+            <Route path="/water/login">
+              <Login />
+            </Route>
+            <Route path="/water/signup">
+              <NewAccount />
+            </Route>
+            <Route path="/water/user/home">
+              <User />
+            </Route>
+            <Route path="/water/admin/home">
+              <Admin />
+            </Route>
+            <Route path="/water/user/services">
+              <User />
+            </Route>
+            <Route path="/water/user/profile">
+              <User />
+            </Route>
+            <Route path="/water/user/complaints">
+              <User />
+            </Route>
+            <Route path="/water/user/delete_service">
+              <User />
+            </Route>
+            <Route path="/water/user/service_transfer">
+              <User />
+            </Route>
+            <Route path="/water/user/new_service">
+              <User />
+            </Route>
+            <Route path="/water/admin/tanks">
+              <Admin />
+            </Route>
+            <Route path="/water/admin/water_plans">
+              <Admin />
+            </Route>
+            <Route path="/water/admin/complaints">
+              <Admin />
+            </Route>
+            <Route path="/water/admin/employees">
+              <Admin />
+            </Route>
+            <Route path="/water/admin/mhbes">
+              <Admin />
+            </Route>
+            <Route path="/water/user/bills">
+              <User />
+            </Route>
+            <Route path="/water/user/transactions">
+              <User />
+            </Route>
+            <Route path="/water/user/points">
+              <User />
+            </Route>
+            <Route path="/water/collection_officer/complaints">
+              <CollectionOfficer />
+            </Route>
+          </Switch>
+        </Content>
+      </Layout>
     </Router>
   );
 }

@@ -1,12 +1,10 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
-import { Table, Input, Button, Popconfirm, Form, Select } from "antd";
+import { Table, Input, Button, Popconfirm, Form } from "antd";
 import { Modal } from "react-responsive-modal";
 import "antd/dist/antd.css";
-import "./tanks.css";
+import "./newUserTank.css";
 import "react-responsive-modal/styles.css";
 import Mhbes from "../Mhbes/mhbes.js";
-const { Option } = Select;
-const { Search } = Input;
 const EditableContext = React.createContext(null);
 const EditableRow = ({ index, ...props }) => {
   const [form] = Form.useForm();
@@ -87,41 +85,20 @@ const EditableCell = ({
 
   return <td {...restProps}>{childNode}</td>;
 };
-class Tanks extends React.Component {
+class NewUserTank extends React.Component {
   constructor(props) {
     super(props);
     this.columns = [
       {
         title: "رقم الخزان",
         dataIndex: "index",
-        width: "2%",
+        width: "10%",
         editable: false,
       },
       {
         title: "سعة الخزان",
         dataIndex: "capacity",
         editable: true,
-        width: "10%",
-      },
-      {
-        title: "العنوان",
-        dataIndex: "address",
-        editable: true,
-      },
-      {
-        title: "عرض المحابس",
-        dataIndex: "mhbes",
-        width: "10%",
-
-        render: (_, record) =>
-          this.state.dataSource.length >= 1 ? (
-            <Popconfirm
-              title="سيتم عرض المحابس المرنبطة بالخزان"
-              onConfirm={() => this.handleShow(record)}
-            >
-              <Button> عرض</Button>
-            </Popconfirm>
-          ) : null,
       },
       {
         title: "حذف",
@@ -140,24 +117,9 @@ class Tanks extends React.Component {
       },
     ];
     this.state = {
-      dataSource: [
-        {
-          id: "0",
-          key: "0",
-          index: "1",
-          capacity: "32",
-          address: "London, Park Lane no. 0",
-        },
-        {
-          key: "1",
-          index: "2",
-          capacity: "32",
-          address: "London, Park Lane no. 1",
-        },
-      ],
-      count: 2,
+      dataSource: [],
+      count: 1,
       open: false,
-      open2: false,
     };
   }
   onFinish = (values) => {
@@ -176,19 +138,13 @@ class Tanks extends React.Component {
       dataSource: dataSource.filter((item) => item.key !== key),
     });
   };
-  handleShow = (record) => {
-    this.setState({
-      dataSource: [...this.state.dataSource],
-      open2: true,
-    });
-  };
+
   handleAdd = (capacity) => {
     const { count, dataSource } = this.state;
     const newData = {
       key: count,
       index: count,
       capacity: capacity,
-      address: `أدخل العنوان `,
     };
     this.setState({
       dataSource: [...dataSource, newData],
@@ -214,7 +170,6 @@ class Tanks extends React.Component {
     this.setState({
       dataSource: [...this.state.dataSource],
       open: false,
-      open2: false,
     });
   }
 
@@ -243,31 +198,23 @@ class Tanks extends React.Component {
       };
     });
     return (
-      <div className="newTank">
-        <div className="search">
-          <Select placeholder="البحث بناء على" style={{ width: "130px" }}>
-            <Option value="capacity">السعة</Option>
-            <Option value="address">العنوان</Option>
-          </Select>
-          <Search
-            placeholder="أدخل نص البحث"
-            enterButton
-            style={{ width: "290px", marginRight: "5px" }}
+      <div className="newUserTank">
+        <div>
+          <Table
+            bordered
+            components={components}
+            rowClassName={() => "editable-row"}
+            dataSource={dataSource}
+            columns={columns}
+            pagination={{ pageSize: 3 }}
+            scroll={{ x: "150px" }}
           />
         </div>
-        <Table
-          bordered
-          components={components}
-          rowClassName={() => "editable-row"}
-          dataSource={dataSource}
-          columns={columns}
-          pagination={{ pageSize: 3 }}
-          scroll={{ x: "150px" }}
-        />
+
         <Button
           type="primary"
           onClick={() => this.handleOpen()}
-          style={{ borderRadius: "20px", marginTop: "-30px" }}
+          style={{ borderRadius: "10px", marginTop: "30px" }}
         >
           أضف خزان جديد
         </Button>
@@ -307,19 +254,6 @@ class Tanks extends React.Component {
                 <Input id="cap" style={{ borderRadius: "20px" }} />
               </Form.Item>
 
-              <Form.Item name="location">
-                <Button
-                  style={{
-                    background: "#ee2260",
-                    borderColor: "#ee2260",
-                    color: "white",
-                    borderRadius: "20px",
-                  }}
-                >
-                  تحديد موقع الخزان
-                </Button>
-              </Form.Item>
-
               <Form.Item
                 wrapperCol={{
                   span: 16,
@@ -336,18 +270,9 @@ class Tanks extends React.Component {
             </Form>
           </div>
         </Modal>
-        <Modal
-          style={{ width: "100vw" }}
-          open={this.state.open2}
-          onClose={() => this.handleClose()}
-          center
-          sty
-        >
-          <Mhbes />
-        </Modal>
       </div>
     );
   }
 }
 
-export default Tanks;
+export default NewUserTank;

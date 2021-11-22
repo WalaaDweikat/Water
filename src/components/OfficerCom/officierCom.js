@@ -1,10 +1,11 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
-import { Table, Input, Button, Popconfirm, Form } from "antd";
-import { Modal } from "react-responsive-modal";
+import { Table, Input, Form, Select, Popconfirm } from "antd";
 import "antd/dist/antd.css";
-import "../Tanks/tanks.css";
 import "react-responsive-modal/styles.css";
 const EditableContext = React.createContext(null);
+const { Search } = Input;
+const { Option } = Select;
+
 const EditableRow = ({ index, ...props }) => {
   const [form] = Form.useForm();
   return (
@@ -74,6 +75,7 @@ const EditableCell = ({
         className="editable-cell-value-wrap"
         style={{
           paddingRight: 24,
+          fontSize: "15px",
         }}
         onClick={toggleEdit}
       >
@@ -84,24 +86,42 @@ const EditableCell = ({
 
   return <td {...restProps}>{childNode}</td>;
 };
-class Mhbes extends React.Component {
+class OfficerCom extends React.Component {
   constructor(props) {
     super(props);
     this.columns = [
       {
-        title: "رقم المحبس",
+        title: "رقم الشكوى",
         dataIndex: "index",
-        width: "2%",
         editable: false,
+        width: "5%",
       },
       {
-        title: "العنوان",
-        dataIndex: "address",
-        editable: true,
+        title: "موضوع الشكوى",
+        dataIndex: "subject",
+        editable: false,
+        width: "20%",
       },
-
       {
-        title: "حذف",
+        title: "الوصف",
+        dataIndex: "des",
+        editable: false,
+        width: "25%",
+      },
+      {
+        title: "صاحب الشكوى",
+        dataIndex: "name",
+        editable: false,
+        width: "25%",
+      },
+      {
+        title: "رقم الهوية",
+        dataIndex: "id",
+        editable: false,
+        width: "25%",
+      },
+      {
+        title: "العملية",
         dataIndex: "operation",
         width: "10%",
 
@@ -118,60 +138,14 @@ class Mhbes extends React.Component {
     ];
     this.state = {
       dataSource: [],
-      count: 2,
-      open: false,
     };
   }
-  onFinish = (values) => {
-    console.log("Success:", values);
-    let capacity = document.getElementById("cap").value;
-    this.handleAdd(capacity);
-    this.handleClose();
-  };
-
-  onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
-  };
   handleDelete = (key) => {
     const dataSource = [...this.state.dataSource];
     this.setState({
       dataSource: dataSource.filter((item) => item.key !== key),
     });
   };
-
-  handleAdd = (capacity) => {
-    const { count, dataSource } = this.state;
-    const newData = {
-      key: count,
-      index: count,
-      address: `أدخل العنوان `,
-    };
-    this.setState({
-      dataSource: [...dataSource, newData],
-      count: count + 1,
-    });
-  };
-  handleSave = (row) => {
-    const newData = [...this.state.dataSource];
-    const index = newData.findIndex((item) => row.key === item.key);
-    const item = newData[index];
-    newData.splice(index, 1, { ...item, ...row });
-    this.setState({
-      dataSource: newData,
-    });
-  };
-  handleOpen() {
-    this.setState({
-      dataSource: [...this.state.dataSource],
-      open: true,
-    });
-  }
-  handleClose() {
-    this.setState({
-      dataSource: [...this.state.dataSource],
-      open: false,
-    });
-  }
   render() {
     const { dataSource } = this.state;
     const components = {
@@ -196,8 +170,23 @@ class Mhbes extends React.Component {
         }),
       };
     });
+    const onSearch = (value) => console.log(value);
+
     return (
       <div className="newTank">
+        <div className="search">
+          <Select placeholder="البحث بناء على" style={{ width: "130px" }}>
+            <Option value="ال">الاسم</Option>
+            <Option value="رقم الهوية">رقم الهوية</Option>
+          </Select>
+          <Search
+            placeholder="أدخل نص البحث"
+            onSearch={onSearch}
+            enterButton
+            style={{ width: "290px", marginRight: "5px" }}
+          />
+        </div>
+
         <Table
           bordered
           components={components}
@@ -207,64 +196,9 @@ class Mhbes extends React.Component {
           pagination={{ pageSize: 3 }}
           scroll={{ x: "150px" }}
         />
-        <Button
-          type="primary"
-          onClick={() => this.handleOpen()}
-          style={{ borderRadius: "20px" }}
-        >
-          أضف محبس جديد
-        </Button>
-        <Modal open={this.state.open} onClose={() => this.handleClose()} center>
-          <div className="newTankForm">
-            <h2 className="headerNewTank">إضافة خزان</h2>.
-            <Form
-              className="newTankForm"
-              name="basic"
-              labelCol={{
-                span: 8,
-              }}
-              wrapperCol={{
-                span: 20,
-              }}
-              initialValues={{
-                remember: false,
-              }}
-              onFinish={this.onFinish}
-              onFinishFailed={this.onFinishFailed}
-              autoComplete="off"
-            >
-              <Form.Item
-                label="العنوان"
-                name="address"
-                rules={[
-                  {
-                    required: true,
-                    message: "حدد عنوان المحبس",
-                  },
-                ]}
-              >
-                <Input id="cap" style={{ borderRadius: "20px" }} />
-              </Form.Item>
-
-              <Form.Item
-                wrapperCol={{
-                  span: 16,
-                }}
-              >
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  style={{ borderRadius: "20px" }}
-                >
-                  إضافة
-                </Button>
-              </Form.Item>
-            </Form>
-          </div>
-        </Modal>
       </div>
     );
   }
 }
 
-export default Mhbes;
+export default OfficerCom;

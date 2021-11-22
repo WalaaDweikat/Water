@@ -21,7 +21,7 @@ export default function Register2() {
 
   return (
     <div className="register">
-      <div className="rr">
+      <div className="rr" style={{ marginTop: "50px" }}>
         <img
           src={BackArrow}
           alt="backArrow"
@@ -30,10 +30,10 @@ export default function Register2() {
             history.goBack();
           }}
         />
-        <div className="newUser">تسـجـيـل مـشـتـرك جـديـد</div>
       </div>
       <Form
         name="basic"
+        style={{ marginTop: "20px" }}
         wrapperCol={{ span: 40 }}
         initialValues={{ remember: true }}
         onFinish={onFinish}
@@ -67,11 +67,11 @@ export default function Register2() {
               height: "40px",
             }}
           >
-            احصـــل على عنــوانــي
+            عنوان الخدمة
           </Button>
         </Form.Item>
         <Form.Item
-          label="أدخل عدد أفراد الأسرة"
+          label="أدخل عدد أفرادالخدمة"
           name="family members"
           rules={[{ required: true, message: "أدخل عدد أفراد الأسرة" }]}
         >

@@ -11,6 +11,8 @@ import Complaints from "../../components/Complaints/complaints.js";
 import TransferService from "../../components/TransferService/transfer.js";
 import NewService from "../../components/New_Service/new.js";
 import Bills from "../../components/Bills/bills.js";
+import Transactions from "../../components/Transactions/transaction.js";
+import Points from "../../components/Points/points.js";
 import {
   BrowserRouter as Router,
   Route,
@@ -18,7 +20,7 @@ import {
   Switch,
   useHistory,
 } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Layout, Menu, Button } from "antd";
 import {
@@ -30,6 +32,7 @@ import {
   faRetweet,
   faTimesCircle,
   faFileInvoiceDollar,
+  faDollarSign,
 } from "@fortawesome/free-solid-svg-icons";
 function User() {
   const [Id, setId] = useState(window.location.pathname);
@@ -83,6 +86,9 @@ function User() {
             <Menu.Item className="item" key="/water/user/bills">
               <Link to="/water/user/bills"> الفواتير</Link>
             </Menu.Item>
+            <Menu.Item className="item" key="/water/user/points">
+              <Link to="/water/user/points"> نقاطي</Link>
+            </Menu.Item>
             <Menu.Item key="out" className="out">
               <Button type="primary" onClick={singout}>
                 تسجيل الخروج
@@ -133,7 +139,7 @@ function User() {
               </div>
             </Route>
             <Route path="/water/user/transactions">
-              <p>transactions</p>
+              <Transactions />
             </Route>
             <Route path="/water/user/home">
               <div className="userHomeContainer ">
@@ -192,6 +198,17 @@ function User() {
                     الفواتير
                   </Button>
                 </Link>
+                <Link to="/water/user/points">
+                  <Button
+                    type="primary"
+                    id="/water/user/points"
+                    icon={
+                      <FontAwesomeIcon icon={faDollarSign} className="icon" />
+                    }
+                  >
+                    نقاطي
+                  </Button>
+                </Link>
               </div>
             </Route>
             <Route path="/water/user/complaints">
@@ -210,6 +227,12 @@ function User() {
               <div className="services">
                 <div className="headerServices">الفواتير</div>
                 <Bills />
+              </div>
+            </Route>
+            <Route path="/water/user/points">
+              <div className="services">
+                <div className="headerServices">نقاطي</div>
+                <Points />
               </div>
             </Route>
           </Switch>

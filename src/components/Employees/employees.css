@@ -6,3 +6,11 @@
   align-content: center;
 
 }
+
+.search{
+  width: 100vw;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content:baseline;
+  flex-wrap: wrap;
+}

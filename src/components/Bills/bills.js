@@ -17,12 +17,11 @@ export default function Bills() {
   return (
     <Form
       className="billForm"
-      layout="vertical"
       labelCol={{
-        span: 5,
+        span: 100,
       }}
       wrapperCol={{
-        span: 16,
+        span: 100,
       }}
       initialValues={{
         remember: false,
@@ -31,19 +30,23 @@ export default function Bills() {
       onFinishFailed={onFinishFailed}
       autoComplete="off"
     >
-      <Form.Item
-        label="تاريخ الفاتورة"
-        name="billDate"
-        rules={[
-          {
-            required: true,
-            message: "قم بإدخال تاريخ الفاتورة",
-          },
-        ]}
-      >
-        <DatePicker onChange={onChange} />
+      <Form.Item label="الشهر" name="billMonth">
+        <DatePicker onChange={onChange} picker="month" />
       </Form.Item>
 
+      <Form.Item label="السنة" name="billYear">
+        <DatePicker onChange={onChange} picker="year" />
+      </Form.Item>
+      <Form.Item
+        wrapperCol={{
+          offset: 0,
+          span: 16,
+        }}
+      >
+        <Button type="primary" htmlType="submit" style={{ marginTop: "20px" }}>
+          عرض
+        </Button>
+      </Form.Item>
       <Form.Item
         wrapperCol={{
           offset: 0,

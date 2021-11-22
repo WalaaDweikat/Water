@@ -1,11 +1,11 @@
 import "./register.css";
+import "antd/dist/antd.css";
 import { Input, Button, Form } from "antd";
 import { UserOutlined, LockOutlined, MailOutlined } from "@ant-design/icons";
 import { useHistory } from "react-router-dom";
 import { useState, useEffect } from "react";
-import BackArrow from "../../img/R.jpg";
-import "antd/dist/antd.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import BackArrow from "../../img/R.jpg";
 import Register2 from "../Register2/register2";
 
 export default function Register() {
@@ -34,6 +34,7 @@ export default function Register() {
         <Route path="/water/signup/" exact>
           <div className="register">
             <div className="rr">
+              <div className="newUser">تسـجـيـل مـشـتـرك جـديـد</div>
               <img
                 src={BackArrow}
                 alt="backArrow"
@@ -42,7 +43,6 @@ export default function Register() {
                   history.goBack();
                 }}
               />
-              <div className="newUser">تسـجـيـل مـشـتـرك جـديـد</div>
             </div>
             <Form
               wrapperCol={{ span: 40 }}
@@ -104,11 +104,6 @@ export default function Register() {
                   {
                     required: true,
                     message: "أدخل كلمة المرور",
-                  },
-                  {
-                    pattern:
-                      "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{10,})",
-                    message: "Weak Password",
                   },
                 ]}
               >

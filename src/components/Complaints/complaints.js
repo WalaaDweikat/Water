@@ -72,11 +72,6 @@ export default function Complaints() {
         >
           <Input />
         </Form.Item>
-        <Button
-          style={{ marginTop: "-20px", marginBottom: "20px", height: "30px" }}
-        >
-          اضغط هنا{" "}
-        </Button>
       </div>
 
       <Form.Item
@@ -100,7 +95,7 @@ export default function Complaints() {
             onChange={onChange}
             onPreview={onPreview}
           >
-            {fileList.length < 2 && "+ إدراج"}
+            {fileList.length < 1 && "+ إدراج"}
           </Upload>
         </ImgCrop>
       </Form.Item>

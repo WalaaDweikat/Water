@@ -6,6 +6,8 @@ import Login from "../Login/login.js";
 import Tanks from "../../components/Tanks/tanks.js";
 import Employees from "../../components/Employees/employees.js";
 import WaterPlans from "../../components/WaterPlans/plans.js";
+import ComAdmin from "../../components/ComAdmin/comAd.js";
+
 import {
   BrowserRouter as Router,
   Route,
@@ -146,7 +148,22 @@ function Admin() {
                 <Employees />
               </div>
             </Route>
-            <Route path="/water/admin/complaints"></Route>
+            <Route path="/water/admin/complaints">
+              <div className="tanksContainer">
+                <h2
+                  style={{
+                    textAlign: "center",
+                    marginBottom: "30px",
+                    marginTop: "-50px",
+                    color: "#ee2260",
+                    fontWeight: "bold",
+                  }}
+                >
+                  الشكاوي
+                </h2>
+                <ComAdmin />
+              </div>
+            </Route>
             <Route path="/water/admin/water_plans">
               <WaterPlans />
             </Route>

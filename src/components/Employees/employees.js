@@ -1,11 +1,17 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
-import { Table, Input, Button, Popconfirm, Form } from "antd";
+import { Table, Input, Button, Popconfirm, Form, Select } from "antd";
 import { Modal } from "react-responsive-modal";
 import "antd/dist/antd.css";
 import "../Tanks/tanks.css";
 import "./employees.css";
 import "react-responsive-modal/styles.css";
+import { tsImportEqualsDeclaration } from "@babel/types";
 const EditableContext = React.createContext(null);
+const { Search } = Input;
+const { Option } = Select;
+function handleChange(value) {
+  console.log(`selected ${value}`);
+}
 const EditableRow = ({ index, ...props }) => {
   const [form] = Form.useForm();
   return (
@@ -108,6 +114,11 @@ class Employees extends React.Component {
         editable: true,
       },
       {
+        title: "الوظيفة",
+        dataIndex: "job",
+        editable: false,
+      },
+      {
         title: "العملية",
         dataIndex: "operation",
         width: "10%",
@@ -135,6 +146,7 @@ class Employees extends React.Component {
       count: 2,
       open: false,
       open2: false,
+      job: "",
     };
   }
   onFinish = (values) => {
@@ -153,6 +165,7 @@ class Employees extends React.Component {
   onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
+
   handleDelete = (key) => {
     const dataSource = [...this.state.dataSource];
     this.setState({
@@ -167,6 +180,7 @@ class Employees extends React.Component {
       employeeName: employeeName,
       address: address,
       id: id,
+      job: this.state.job,
     };
     this.setState({
       dataSource: [...dataSource, newData],
@@ -218,8 +232,25 @@ class Employees extends React.Component {
         }),
       };
     });
+    const onSearch = (value) => console.log(value);
+
     return (
       <div className="newTank">
+        <div className="search">
+          <Select placeholder="البحث بناء على" style={{ width: "130px" }}>
+            <Option value="name">الاسم</Option>
+            <Option value="address">العنوان</Option>
+            <Option value="id">رقم الهوية</Option>
+            <Option value="job">الوظيفة</Option>
+          </Select>
+          <Search
+            placeholder="أدخل نص البحث"
+            onSearch={onSearch}
+            enterButton
+            style={{ width: "290px", marginRight: "5px" }}
+          />
+        </div>
+
         <Table
           bordered
           components={components}
@@ -262,6 +293,31 @@ class Employees extends React.Component {
                 onFinishFailed={this.onFinishFailed}
                 autoComplete="off"
               >
+                <Form.Item
+                  label="الوظيفة"
+                  name="job"
+                  rules={[
+                    {
+                      required: true,
+                      message: "اختر الوظيفة",
+                    },
+                  ]}
+                >
+                  <Select
+                    placeholder="اختر الوظيفة"
+                    style={{ width: "170px" }}
+                    onChange={(value) => {
+                      this.setState({
+                        dataSource: [...this.state.dataSource],
+                        job: value,
+                      });
+                      console.log(value);
+                    }}
+                  >
+                    <Option value="فني مياه">فني مياه</Option>
+                    <Option value="عامل صيانة">عامل صيانة</Option>
+                  </Select>
+                </Form.Item>
                 <Form.Item
                   label="الاسم"
                   name="name"
@@ -307,6 +363,7 @@ class Employees extends React.Component {
                 >
                   <Input id="address" style={{ borderRadius: "10px" }} />
                 </Form.Item>
+
                 <Form.Item
                   wrapperCol={{
                     span: 16,

@@ -2,8 +2,8 @@
 
 .userHomeContainer{
  
-  padding-right: calc((100vw - 700px) /2);
-  padding-left: calc((100vw - 700px) /2);
+  padding-right: calc((100vw - 850px) /2);
+  padding-left: calc((100vw - 850px) /2);
   width: 100vw;
   height: calc(100vh - 65px);
   display: flex;
@@ -42,4 +42,12 @@
     margin-top: 50px;
     height: 100vh;
   }
+}
+
+
+@media only screen and (max-width: 250px) {
+.userHomeContainer{
+ 
+  height: 200vh
+}
 }
