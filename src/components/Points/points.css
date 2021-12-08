@@ -1,0 +1,53 @@
+.pointsContanier{
+  display: flex;
+  width: 100vw;
+  margin-top: 130px;
+  align-items: center;
+  align-content: center;
+  justify-content: space-around;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 15px;
+  height: 130vh;
+}
+
+
+.helpUs{
+  display: flex;
+  flex-direction:column ;
+  width: 100vw;
+  padding-right: 5%;
+
+  
+}
+
+
+
+.helpUs label{
+  font-family: 'Tajawal', sans-serif;
+}
+
+.helpUs Button{
+  font-family: 'Tajawal', sans-serif;
+  font-size: 15px;
+  border-radius: 20px;
+  background-color: #ee2260;
+  border-color: #ee2260;
+}
+
+.helpUs Input{
+  font-family: 'Tajawal', sans-serif;
+}
+
+
+
+
+@media only screen and (max-width:600px) {
+  .pointsContanier{
+    flex-direction: column;
+    height: fit-content;
+    margin-bottom: 70px;
+  }
+  .helpUs{
+    padding-right: 0;
+  }
+}

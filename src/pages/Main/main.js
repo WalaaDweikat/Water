@@ -10,10 +10,9 @@ import Footer from "../../components/Footer/footer.js";
 import img1 from "../../img/loginImage.jpg";
 import img2 from "../../img/893647_441162895976105_631260900_o.jpg";
 import img3 from "../../img/154889906_3768521463227511_155617644466092987_n.jpg";
-
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import OfficerCom from "../../components/OfficerCom/officierCom";
-import CollectionOfficer from "../CollectionOfficer/officer";
+import WaterTechnician from "../WaterTechnician/tech";
+import WaterEngineer from "../WaterEngineer/tech";
 export default function Main() {
   const contentStyle = {
     height: "100vh",
@@ -213,8 +212,17 @@ export default function Main() {
             <Route path="/water/user/points">
               <User />
             </Route>
-            <Route path="/water/collection_officer/complaints">
-              <CollectionOfficer />
+            <Route path="/water/water_technician/complaints">
+              <WaterTechnician />
+            </Route>
+            <Route path="/water/water_technician/profile">
+              <WaterTechnician />
+            </Route>
+            <Route path="/water/water_engineer/water_plans">
+              <WaterEngineer />
+            </Route>
+            <Route path="/water/water_engineer/profile">
+              <WaterEngineer />
             </Route>
           </Switch>
         </Content>

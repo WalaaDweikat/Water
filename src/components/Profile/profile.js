@@ -1,31 +1,123 @@
 import "./profile.css";
 import "antd/dist/antd.css";
+import axios from "axios";
+import { Modal } from "react-responsive-modal";
+import LocationMap from "../LocationMap/location.js";
 import NewUserTank from "../../components/NewUserTank/newUserTank.js";
 import { useState, useEffect } from "react";
-import { Form, Input, Button, Select, Tabs } from "antd";
+import { Form, Input, Button, Select, Tabs, message } from "antd";
 const { TabPane } = Tabs;
+const { Option } = Select;
 export default function Profile() {
-  const [count, setCount] = useState(1);
+  localStorage.setItem("changed", 0);
+  const [lat, setLat] = useState("");
+  const [lng, setLng] = useState("");
+  const [S_number, setS] = useState("");
+  const [open, setOpen] = useState(false);
+  const [services, setServices] = useState([]);
   const [w, setW] = useState(window.innerWidth);
   const [position, setPosition] = useState("top");
+  const getAccountInfo = async () => {
+    const axios = require("axios");
+    return await axios.get("http://192.168.0.108:5000//water/users/UserBy", {
+      params: { username: localStorage.getItem("username") },
+    });
+  };
+  const getPersonalInfo = async () => {
+    const axios = require("axios");
+    return await axios.get(
+      "http://192.168.0.108:5000//water/citizens/search_id_number",
+      {
+        params: { id_number: localStorage.getItem("username") },
+      }
+    );
+  };
+  const getServices = async () => {
+    const axios = require("axios");
+    return await axios.get(
+      "http://192.168.0.108:5000//water/services/getServicesByid_number",
+      {
+        params: { id_number: localStorage.getItem("username") },
+      }
+    );
+  };
+
+  getAccountInfo().then((res) => {
+    document.getElementById("idNumber").placeholder = res.data.username;
+    document.getElementById("email").placeholder = res.data.email;
+  });
+
+  getPersonalInfo().then((res) => {
+    const name =
+      res.data[0].first_name +
+      " " +
+      res.data[0].middle_name +
+      " " +
+      res.data[0].last_name;
+    document.getElementById("username").placeholder = name;
+    document.getElementById("area").placeholder = res.data[0].area;
+    document.getElementById("region").placeholder = res.data[0].region;
+    document.getElementById("street").placeholder = res.data[0].street;
+    document.getElementById("mobile_number").placeholder =
+      "0" + res.data[0].mobile_number;
+  });
+
+  const handleChange = (value) => {
+    services.map((option) => {
+      if (option.service_number === value) {
+        setS(option.service_number);
+        document.getElementById("service_address").placeholder =
+          option.longitude + "," + option.latitude;
+        document.getElementById("members_number").placeholder =
+          option.family_number;
+        document.getElementById("points").placeholder = option.points;
+        document.getElementById("height").placeholder = option.height;
+        return true;
+      }
+      return true;
+    });
+  };
+
+  const success = () => {
+    message.success({
+      content: "تم تغيير كلمة المرور بنجاح ",
+      style: {
+        marginTop: "30vh",
+      },
+      duration: 1,
+    });
+  };
+
+  const error = () => {
+    message.error({
+      content: "كلمة مرور خاطئة",
+      style: {
+        marginTop: "30vh",
+      },
+      duration: 1,
+    });
+  };
 
   window.addEventListener("resize", () => {
     setW(window.innerWidth);
   });
-  const onFinish = (values) => {
-    console.log("Success:", values);
-  };
 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
+
   useEffect(() => {
     if (w < 350) {
       setPosition("right");
     } else {
       setPosition("top");
     }
-  }, [w]);
+
+    getServices().then((res) => {
+      setServices(res.data);
+    });
+  }, [w, S_number]);
+
   return (
     <Tabs
       defaultActiveKey="1"
@@ -43,9 +135,54 @@ export default function Profile() {
               }}
               labelCol={{ span: 100 }}
               initialValues={{
-                remember: false,
+                remember: true,
               }}
-              onFinish={onFinish}
+              onFinish={(values) => {
+                let area = values.area;
+                let region = values.region;
+                let street = values.street;
+                let mobile_number = values.mobile_number;
+
+                if (area === undefined)
+                  area = document.getElementById("area").placeholder;
+                if (region === undefined)
+                  region = document.getElementById("region").placeholder;
+                if (street === undefined)
+                  street = document.getElementById("street").placeholder;
+                if (mobile_number === undefined)
+                  mobile_number =
+                    document.getElementById("mobile_number").placeholder;
+
+                const bodyFormData = new FormData();
+                bodyFormData.append(
+                  "id_number",
+                  localStorage.getItem("username")
+                );
+                bodyFormData.append("area", area);
+                bodyFormData.append("region", region);
+                bodyFormData.append("street", street);
+                bodyFormData.append("mobile_number", mobile_number);
+                axios({
+                  method: "put",
+                  url: "http://192.168.0.108:5000//water/citizens/updateInfo/all",
+                  data: bodyFormData,
+                  headers: {
+                    "Content-Type": "multipart/form-data",
+                  },
+                })
+                  .then((response) => {
+                    if (response.data === "Updated") {
+                      document.getElementById("area").placeholder = area;
+                      document.getElementById("region").placeholder = region;
+                      document.getElementById("street").placeholder = street;
+                      document.getElementById("mobile_number").placeholder =
+                        mobile_number;
+                    }
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                  });
+              }}
               onFinishFailed={onFinishFailed}
               autoComplete="off"
               className="info"
@@ -55,34 +192,34 @@ export default function Profile() {
               </Form.Item>
               <Form.Item
                 label="المدينة "
-                name="address"
+                name="area"
                 rules={[
                   {
-                    required: true,
+                    required: false,
                     message: "قم بإدخال المدينة",
                   },
                 ]}
               >
-                <Select id="city" />
+                <Input id="area" />
               </Form.Item>
               <Form.Item
                 label="التجمع"
-                name="area"
+                name="region"
                 rules={[
                   {
-                    required: true,
+                    required: false,
                     message: "قم بإدخال التجمع ",
                   },
                 ]}
               >
-                <Select id="area" />
+                <Input id="region" />
               </Form.Item>
               <Form.Item
                 label="الشارع"
                 name="street"
                 rules={[
                   {
-                    required: true,
+                    required: false,
                     message: "قم بإدخال الشارع",
                   },
                 ]}
@@ -91,10 +228,10 @@ export default function Profile() {
               </Form.Item>
               <Form.Item
                 label="رقم الهاتف المحمول"
-                name="phone_number"
+                name="mobile_number"
                 rules={[
                   {
-                    required: true,
+                    required: false,
                     message: "قم بإدخال رقم الهاتف المحمول",
                   },
                   {
@@ -103,7 +240,7 @@ export default function Profile() {
                   },
                 ]}
               >
-                <Input id="phone_number" />
+                <Input id="mobile_number" />
               </Form.Item>
 
               <Form.Item>
@@ -135,7 +272,34 @@ export default function Profile() {
               initialValues={{
                 remember: false,
               }}
-              onFinish={onFinish}
+              onFinish={(values) => {
+                let email = values.email;
+
+                if (email === undefined)
+                  email = document.getElementById("email").placeholder;
+                const bodyFormData = new FormData();
+                bodyFormData.append(
+                  "username",
+                  localStorage.getItem("username")
+                );
+                bodyFormData.append("email", email);
+                axios({
+                  method: "put",
+                  url: "http://192.168.0.108:5000///water/users/updateEmail",
+                  headers: {
+                    "Content-Type": "multipart/form-data",
+                  },
+                  data: bodyFormData,
+                })
+                  .then((response) => {
+                    if (response.data === "Updated") {
+                      document.getElementById("email").placeholder = email;
+                    }
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                  });
+              }}
               onFinishFailed={onFinishFailed}
               autoComplete="off"
             >
@@ -151,7 +315,7 @@ export default function Profile() {
                     message: "يرجى إدخال بريد إلكتروني صالح",
                   },
                   {
-                    required: true,
+                    required: false,
                     message: "أدخل بريك الإلكتروني",
                   },
                 ]}
@@ -183,27 +347,99 @@ export default function Profile() {
             <Form
               layout="vertical"
               className="info"
+              id="info"
               wrapperCol={{
                 span: 100,
               }}
               initialValues={{
                 remember: false,
               }}
-              onFinish={onFinish}
+              onFinish={(values) => {
+                let services_select = values.services_select;
+                if (services_select !== undefined) {
+                  let latt = lat;
+                  let lngg = lng;
+                  let members_number = values.members_number;
+                  let height = values.height;
+
+                  if (latt === "") {
+                    const a = document
+                      .getElementById("service_address")
+                      .placeholder.split(",");
+                    latt = a[0];
+                    lngg = a[1];
+                  }
+                  if (members_number === "" || members_number === undefined) {
+                    members_number =
+                      document.getElementById("members_number").placeholder;
+                  }
+                  if (height === "" || height === undefined) {
+                    height = document.getElementById("height").placeholder;
+                  }
+                  const bodyFormData = new FormData();
+                  bodyFormData.append(
+                    "family_number",
+                    parseInt(members_number)
+                  );
+                  bodyFormData.append("height", parseFloat(height));
+                  bodyFormData.append("latitude", latt);
+                  bodyFormData.append("longitude", lngg);
+                  bodyFormData.append(
+                    "service_number",
+                    parseInt(services_select)
+                  );
+
+                  axios({
+                    method: "put",
+                    url: "http://192.168.0.108:5000//water/services/updateServiceInfo",
+                    data: bodyFormData,
+                    headers: {
+                      "Content-Type": "multipart/form-data",
+                    },
+                  })
+                    .then((response) => {
+                      if (response.data === "Updated") {
+                        document.getElementById("service_address").placeholder =
+                          latt + "," + lngg;
+                        document.getElementById("members_number").placeholder =
+                          members_number;
+                        document.getElementById("height").placeholder = height;
+                      }
+                    })
+                    .catch((error) => {
+                      console.log(error);
+                    });
+                }
+              }}
               onFinishFailed={onFinishFailed}
               autoComplete="off"
             >
               <Form.Item
                 label="رقم الخدمة"
-                name="service_number"
+                name="services_select"
                 rules={[
                   {
-                    required: true,
+                    required: false,
                     message: "اختر رقم الخدمة",
                   },
                 ]}
               >
-                <Select />
+                <Select
+                  onChange={handleChange}
+                  placeholder="اختر خدمة"
+                  id="services_select"
+                >
+                  {services.map((option) => {
+                    return (
+                      <Option
+                        key={option.service_number}
+                        value={option.service_number}
+                      >
+                        {option.service_number}
+                      </Option>
+                    );
+                  })}
+                </Select>
               </Form.Item>
 
               <Form.Item
@@ -211,25 +447,44 @@ export default function Profile() {
                 name="service_address"
                 rules={[
                   {
-                    required: true,
+                    required: false,
                     message: "أدخل عنوان الخدمة",
                   },
                 ]}
               >
-                <Input id="service_address" />
+                <Input
+                  id="service_address"
+                  onClick={() => {
+                    setOpen(true);
+                  }}
+                />
               </Form.Item>
               <Form.Item
                 label="عدد الأفراد"
                 name="members_number"
                 rules={[
                   {
-                    required: true,
+                    required: false,
                     message: "أدخل عدد الأفراد",
                   },
                 ]}
               >
-                <Input type="number" id="members_number" />
+                <Input type="number" id="members_number" min={1} />
               </Form.Item>
+
+              <Form.Item
+                label="ارتفاع المنطقة"
+                name="height"
+                rules={[
+                  {
+                    pattern: /^[+-]?([0-9]+\.?[0-9]*|\.[0-9]+)$/,
+                    message: "يرجى إدخال قيمة صالحة",
+                  },
+                ]}
+              >
+                <Input id="height" />
+              </Form.Item>
+
               <Form.Item label="عدد نقاط الخدمة " name="points">
                 <Input type="number" id="points" disabled />
               </Form.Item>
@@ -255,7 +510,7 @@ export default function Profile() {
           </div>
           <div>
             <div className="ta">
-              <NewUserTank />
+              <NewUserTank service_number={S_number} />
             </div>
           </div>
         </div>
@@ -272,14 +527,37 @@ export default function Profile() {
             initialValues={{
               remember: false,
             }}
-            onFinish={onFinish}
+            onFinish={(values) => {
+              let old_pass = values.old_pass;
+              let new_pass = values.new_pass;
+
+              const bodyFormData = new FormData();
+              bodyFormData.append("username", localStorage.getItem("username"));
+              bodyFormData.append("newPassword", new_pass);
+              bodyFormData.append("oldPassword", old_pass);
+              axios({
+                method: "put",
+                url: "http://192.168.0.108:5000///water/users/changePass",
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                },
+                data: bodyFormData,
+              })
+                .then((response) => {
+                  if (response.data === "password changed") success();
+                  else if (response.data === "wrong password") error();
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
+            }}
             onFinishFailed={onFinishFailed}
             autoComplete="off"
           >
             <div className="t">تغيير كلمة المرور</div>
             <Form.Item
               label="كلمة المرور القديمة"
-              name="old_password"
+              name="old_pass"
               rules={[
                 {
                   required: true,
@@ -291,7 +569,7 @@ export default function Profile() {
             </Form.Item>
             <Form.Item
               label="كلمة المرور الجديدة"
-              name="new_password"
+              name="new_pass"
               rules={[
                 {
                   required: true,
@@ -322,6 +600,24 @@ export default function Profile() {
           </Form>
         </div>
       </TabPane>
+      <Modal
+        open={open}
+        onClose={() => {
+          setOpen(false);
+          const a = localStorage.getItem("lat");
+          const b = localStorage.getItem("lng");
+          if (a !== null && localStorage.getItem("changed") === "1") {
+            setLat(a);
+            setLng(b);
+            document.getElementById("service_address").placeholder =
+              a + "," + b;
+            localStorage.setItem("changed", 0);
+          }
+        }}
+        center
+      >
+        <LocationMap />
+      </Modal>
     </Tabs>
   );
 }

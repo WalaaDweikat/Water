@@ -5,13 +5,15 @@ import "antd/dist/antd.css";
 import "../Tanks/tanks.css";
 import "./employees.css";
 import "react-responsive-modal/styles.css";
-import { tsImportEqualsDeclaration } from "@babel/types";
+import LocationMap from "../LocationMap/location.js";
 const EditableContext = React.createContext(null);
 const { Search } = Input;
 const { Option } = Select;
+
 function handleChange(value) {
   console.log(`selected ${value}`);
 }
+
 const EditableRow = ({ index, ...props }) => {
   const [form] = Form.useForm();
   return (
@@ -111,7 +113,7 @@ class Employees extends React.Component {
       {
         title: "العنوان",
         dataIndex: "address",
-        editable: true,
+        editable: false,
       },
       {
         title: "الوظيفة",
@@ -146,7 +148,9 @@ class Employees extends React.Component {
       count: 2,
       open: false,
       open2: false,
+      open3: false,
       job: "",
+      location: "",
     };
   }
   onFinish = (values) => {
@@ -208,6 +212,12 @@ class Employees extends React.Component {
       open: false,
     });
   }
+  setLoction = () => {
+    this.setState({
+      dataSource: [...this.state.dataSource],
+      open3: true,
+    });
+  };
   render() {
     const { dataSource } = this.state;
     const components = {
@@ -275,7 +285,7 @@ class Employees extends React.Component {
             center
           >
             <div className="newTankForm">
-              <h2 className="headerNewTank">إضافة خزان</h2>.
+              <h2 className="headerNewTank">إضافة موظف</h2>.
               <Form
                 layout="vertical"
                 className="newTankForm"
@@ -361,7 +371,12 @@ class Employees extends React.Component {
                     },
                   ]}
                 >
-                  <Input id="address" style={{ borderRadius: "10px" }} />
+                  <Input
+                    style={{ borderRadius: "10px" }}
+                    onClick={this.setLoction}
+                    id="EmAdd"
+                    value={this.state.location}
+                  />
                 </Form.Item>
 
                 <Form.Item
@@ -396,6 +411,21 @@ class Employees extends React.Component {
             <div>اسم المستخدم</div>
             <div>كلمة المرور</div>
           </div>
+        </Modal>
+        <Modal
+          open={this.state.open3}
+          onClose={() => {
+            const a = document.getElementById("EmAdd").value;
+            this.setState({
+              dataSource: [...this.state.dataSource],
+              open3: false,
+              location: a,
+            });
+            console.log(a);
+          }}
+          center
+        >
+          <LocationMap />
         </Modal>
       </div>
     );

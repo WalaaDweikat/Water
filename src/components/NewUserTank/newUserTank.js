@@ -4,7 +4,6 @@ import { Modal } from "react-responsive-modal";
 import "antd/dist/antd.css";
 import "./newUserTank.css";
 import "react-responsive-modal/styles.css";
-import Mhbes from "../Mhbes/mhbes.js";
 const EditableContext = React.createContext(null);
 const EditableRow = ({ index, ...props }) => {
   const [form] = Form.useForm();
@@ -120,7 +119,39 @@ class NewUserTank extends React.Component {
       dataSource: [],
       count: 1,
       open: false,
+      service_number: props.service_number,
     };
+  }
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      service_number: nextProps.service_number,
+    });
+
+    if (this.state.service_number !== "") {
+      this.getTanks(parseInt(this.state.service_number)).then((res) => {
+        const tanks = [];
+        let i = 0;
+        for (; i < res.data.length; i++) {
+          const a = {
+            key: i + 1,
+            index: i + 1,
+            capacity: res.data[i].capacity,
+          };
+          tanks.push(a);
+        }
+        this.setState({ dataSource: tanks, count: i + 1 });
+      });
+    }
+  }
+
+  async getTanks(aa) {
+    const axios = require("axios");
+    return await axios.get(
+      "http://192.168.0.108:5000//water/citizens_tanks/search_service_number",
+      {
+        params: { service_number: aa },
+      }
+    );
   }
   onFinish = (values) => {
     console.log("Success:", values);
@@ -136,6 +167,7 @@ class NewUserTank extends React.Component {
     const dataSource = [...this.state.dataSource];
     this.setState({
       dataSource: dataSource.filter((item) => item.key !== key),
+      count: this.state.count - 1,
     });
   };
 

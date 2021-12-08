@@ -89,7 +89,6 @@ export default function Complaints() {
       <Form.Item label="أدرج صورة ">
         <ImgCrop rotate>
           <Upload
-            action=""
             listType="picture-card"
             fileList={fileList}
             onChange={onChange}

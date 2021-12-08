@@ -86,7 +86,7 @@ const EditableCell = ({
 
   return <td {...restProps}>{childNode}</td>;
 };
-class OfficerCom extends React.Component {
+class WaterTechCom extends React.Component {
   constructor(props) {
     super(props);
     this.columns = [
@@ -201,4 +201,4 @@ class OfficerCom extends React.Component {
   }
 }
 
-export default OfficerCom;
+export default WaterTechCom;

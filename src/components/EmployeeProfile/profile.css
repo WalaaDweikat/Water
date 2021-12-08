@@ -84,9 +84,6 @@
   }
 }
 
-.profileContainer Input::-webkit-input-placeholder {
-  color: black !important;
-  }
 
 @media only screen and (max-width:350px) {
   

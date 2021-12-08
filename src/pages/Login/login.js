@@ -6,16 +6,42 @@ import Admin from "../Admin/admin.js";
 import NewAccount from "../NewAccount/newAccount.js";
 import Main from "../Main/main.js";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import { Form, Input, Button } from "antd";
+import { Form, Input, Button, message } from "antd";
 import { useHistory } from "react-router-dom";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { useState } from "react";
 export default function Login() {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const history = useHistory();
 
-  const onFinish = (values) => {
-    history.push("/water/admin/home");
-    window.location.reload();
-    console.log("success:", values);
+  const error = () => {
+    message.error({
+      content: "كلمة مرور خاطئة",
+      style: {
+        marginTop: "30vh",
+      },
+      duration: 1,
+    });
+  };
+  const onFinish = async (values) => {
+    const axios = require("axios");
+    const res = await axios.get("http://192.168.0.108:5000//water/login", {
+      params: { username: username, password: password },
+    });
+
+    console.log(res.data);
+    if (res.data === 0) {
+      //admin
+      localStorage.setItem("username", username);
+      history.push("/water/admin/home");
+      window.location.reload();
+    } else if (res.data === -1) {
+      //user
+      localStorage.setItem("username", username);
+      history.push("/water/user/home");
+      window.location.reload();
+    } else error();
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -86,9 +112,13 @@ export default function Login() {
                   ]}
                 >
                   <Input
+                    onChange={(e) => {
+                      setUsername(e.target.value);
+                    }}
                     prefix={<UserOutlined />}
                     style={{ height: "40px", borderRadius: "50px" }}
                     placeholder="اسم المستخدم"
+                    id="username"
                   />
                 </Form.Item>
 
@@ -102,9 +132,13 @@ export default function Login() {
                   ]}
                 >
                   <Input.Password
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                    }}
                     prefix={<LockOutlined />}
                     style={{ height: "40px", borderRadius: "50px" }}
                     placeholder="كلمة المرور"
+                    id="password"
                   />
                 </Form.Item>
                 <a href="https://www.google.com"> هل نسيت كلمة السر؟</a>
@@ -143,6 +177,12 @@ export default function Login() {
         </Route>
         <Route path="/water/admin">
           <Admin />
+        </Route>
+        <Route path="/water/water_technician">
+          <User />
+        </Route>
+        <Route path="/water/water_engineer">
+          <User />
         </Route>
         <Route path="/water/signup" exact>
           <NewAccount />

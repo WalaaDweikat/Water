@@ -2,7 +2,7 @@
 
 .newFrom
 {
- height:calc(100vh - 200px);    
+ height:calc(100vh - 100px);    
  padding-right: 5%;
 }
 
@@ -21,3 +21,6 @@
   height: 35px;
 }
 
+.newFrom Input::-webkit-input-placeholder {
+  color: black !important;
+  }

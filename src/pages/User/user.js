@@ -34,17 +34,18 @@ import {
   faFileInvoiceDollar,
   faDollarSign,
 } from "@fortawesome/free-solid-svg-icons";
-function User() {
+
+function User(props) {
   const [Id, setId] = useState(window.location.pathname);
   const { Content } = Layout;
   const { Header } = Layout;
   const { SubMenu } = Menu;
   const history = useHistory();
   const singout = () => {
+    localStorage.removeItem("username");
     history.push("/water/login");
     window.location.reload();
   };
-
   window.addEventListener("click", () => {
     setId(window.location.pathname);
   });
@@ -59,7 +60,7 @@ function User() {
           <div className="logo">
             <img src={Logo} alt="logo" className="logoHeader" />
           </div>
-          <Menu theme="dark" mode="horizontal" selectedKeys={[Id]}>
+          <Menu theme="dark" mode="horizontal" selectedKeys={[Id]} id="menu">
             <Menu.Item className="item" key="/water/user/home">
               <Link to="/water/user/home">الرئيسية</Link>
             </Menu.Item>
@@ -87,7 +88,7 @@ function User() {
               <Link to="/water/user/bills"> الفواتير</Link>
             </Menu.Item>
             <Menu.Item className="item" key="/water/user/points">
-              <Link to="/water/user/points"> نقاطي</Link>
+              <Link to="/water/user/points"> ساعدنا</Link>
             </Menu.Item>
             <Menu.Item key="out" className="out">
               <Button type="primary" onClick={singout}>
@@ -206,7 +207,7 @@ function User() {
                       <FontAwesomeIcon icon={faDollarSign} className="icon" />
                     }
                   >
-                    نقاطي
+                    ساعدنا
                   </Button>
                 </Link>
               </div>
@@ -230,10 +231,7 @@ function User() {
               </div>
             </Route>
             <Route path="/water/user/points">
-              <div className="services">
-                <div className="headerServices">نقاطي</div>
-                <Points />
-              </div>
+              <Points />
             </Route>
           </Switch>
         </Content>

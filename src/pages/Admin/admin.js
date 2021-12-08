@@ -7,7 +7,6 @@ import Tanks from "../../components/Tanks/tanks.js";
 import Employees from "../../components/Employees/employees.js";
 import WaterPlans from "../../components/WaterPlans/plans.js";
 import ComAdmin from "../../components/ComAdmin/comAd.js";
-
 import {
   BrowserRouter as Router,
   Route,
@@ -30,8 +29,8 @@ function Admin() {
   const { Content } = Layout;
   const { Header } = Layout;
   const history = useHistory();
-
   const singout = () => {
+    localStorage.removeItem("username");
     history.push("/water/login");
     window.location.reload();
   };
@@ -91,7 +90,7 @@ function Admin() {
               </div>
             </Route>
             <Route path="/water/admin/home">
-              <div className="userHomeContainer ">
+              <div className="userHomeContainer">
                 <Link to="/water/admin/employees">
                   <Button
                     type="primary"
