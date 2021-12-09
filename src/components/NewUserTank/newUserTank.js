@@ -4,6 +4,7 @@ import { Modal } from "react-responsive-modal";
 import "antd/dist/antd.css";
 import "./newUserTank.css";
 import "react-responsive-modal/styles.css";
+import axios from "axios";
 const EditableContext = React.createContext(null);
 const EditableRow = ({ index, ...props }) => {
   const [form] = Form.useForm();
@@ -23,6 +24,7 @@ const EditableCell = ({
   dataIndex,
   record,
   handleSave,
+
   ...restProps
 }) => {
   const [editing, setEditing] = useState(false);
@@ -64,6 +66,10 @@ const EditableCell = ({
           {
             required: true,
             message: ` قم بتعبئة ${title}`,
+          },
+          {
+            pattern: /^[+-]?([0-9]+\.?[0-9]*|\.[0-9]+)$/,
+            message: "يرجى إدخال قيمة صالحة",
           },
         ]}
       >
@@ -120,6 +126,7 @@ class NewUserTank extends React.Component {
       count: 1,
       open: false,
       service_number: props.service_number,
+      tanks: [],
     };
   }
   componentWillReceiveProps(nextProps) {
@@ -130,16 +137,18 @@ class NewUserTank extends React.Component {
     if (this.state.service_number !== "") {
       this.getTanks(parseInt(this.state.service_number)).then((res) => {
         const tanks = [];
+        const tankNumber = [];
         let i = 0;
         for (; i < res.data.length; i++) {
           const a = {
-            key: i + 1,
+            key: i,
             index: i + 1,
             capacity: res.data[i].capacity,
           };
           tanks.push(a);
+          tankNumber.push(res.data[i].tank_number);
         }
-        this.setState({ dataSource: tanks, count: i + 1 });
+        this.setState({ dataSource: tanks, count: i + 1, tanks: tankNumber });
       });
     }
   }
@@ -153,18 +162,76 @@ class NewUserTank extends React.Component {
       }
     );
   }
-  onFinish = (values) => {
-    console.log("Success:", values);
-    let capacity = document.getElementById("cap").value;
-    this.handleAdd(capacity);
-    this.handleClose();
-  };
+
+  async updateTankCapacity(capacity, tank_number) {
+    const bodyFormData = new FormData();
+    bodyFormData.append("tank_number", parseInt(tank_number));
+    bodyFormData.append("capacity", capacity);
+    axios({
+      method: "put",
+      url: "http://192.168.0.108:5000//water/citizens_tanks/update_capacity",
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      data: bodyFormData,
+    })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  async addnewTank(c) {
+    const bodyFormData = new FormData();
+    bodyFormData.append("service_number", this.state.service_number);
+    bodyFormData.append("capacity", c);
+    axios({
+      method: "post",
+      url: "http://192.168.0.108:5000//water/citizens_tanks/addNewTank",
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      data: bodyFormData,
+    })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  async deleteTank(tankNumber) {
+    const bodyFormData = new FormData();
+    bodyFormData.append("service_number", this.state.service_number);
+    bodyFormData.append("tank_number", tankNumber);
+    axios({
+      method: "delete",
+      url: "http://192.168.0.108:5000//water/citizens-tanks/deletecitiznTank",
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      data: bodyFormData,
+    })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
   onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
   handleDelete = (key) => {
     const dataSource = [...this.state.dataSource];
+    const tankNumber = this.state.tanks[dataSource[key].index - 1];
+    this.deleteTank(tankNumber).then((res) => {
+      console.log(res);
+    });
     this.setState({
       dataSource: dataSource.filter((item) => item.key !== key),
       count: this.state.count - 1,
@@ -187,7 +254,14 @@ class NewUserTank extends React.Component {
     const newData = [...this.state.dataSource];
     const index = newData.findIndex((item) => row.key === item.key);
     const item = newData[index];
+
     newData.splice(index, 1, { ...item, ...row });
+    this.updateTankCapacity(
+      newData[item.key].capacity,
+      this.state.tanks[item.key]
+    ).then((res) => {
+      console.log(res);
+    });
     this.setState({
       dataSource: newData,
     });
@@ -226,6 +300,8 @@ class NewUserTank extends React.Component {
           dataIndex: col.dataIndex,
           title: col.title,
           handleSave: this.handleSave,
+          tank_number: this.state.tanks,
+          count: this.state.count,
         }),
       };
     });
@@ -265,7 +341,12 @@ class NewUserTank extends React.Component {
               initialValues={{
                 remember: false,
               }}
-              onFinish={this.onFinish}
+              onFinish={(values) => {
+                let capacity = values.cap;
+                this.addnewTank(capacity).then((res) => console.log(res));
+                this.handleAdd(capacity);
+                this.handleClose();
+              }}
               onFinishFailed={this.onFinishFailed}
               autoComplete="off"
             >

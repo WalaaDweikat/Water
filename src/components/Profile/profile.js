@@ -10,8 +10,7 @@ const { TabPane } = Tabs;
 const { Option } = Select;
 export default function Profile() {
   localStorage.setItem("changed", 0);
-  const [lat, setLat] = useState("");
-  const [lng, setLng] = useState("");
+
   const [S_number, setS] = useState("");
   const [open, setOpen] = useState(false);
   const [services, setServices] = useState([]);
@@ -42,6 +41,16 @@ export default function Profile() {
     );
   };
 
+  const getServiceInfo = async (number) => {
+    const axios = require("axios");
+    return await axios.get(
+      "http://192.168.0.108:5000//water/services/getByServiceNumber",
+      {
+        params: { service_number: number },
+      }
+    );
+  };
+
   getAccountInfo().then((res) => {
     document.getElementById("idNumber").placeholder = res.data.username;
     document.getElementById("email").placeholder = res.data.email;
@@ -63,18 +72,17 @@ export default function Profile() {
   });
 
   const handleChange = (value) => {
-    services.map((option) => {
-      if (option.service_number === value) {
-        setS(option.service_number);
-        document.getElementById("service_address").placeholder =
-          option.longitude + "," + option.latitude;
-        document.getElementById("members_number").placeholder =
-          option.family_number;
-        document.getElementById("points").placeholder = option.points;
-        document.getElementById("height").placeholder = option.height;
-        return true;
-      }
-      return true;
+    localStorage.removeItem("lat");
+    localStorage.removeItem("lng");
+    document.getElementById("service_address").placeholder = null;
+    getServiceInfo(value).then((res) => {
+      setS(value);
+      document.getElementById("service_address").placeholder =
+        res.data[0].latitude + "," + res.data[0].longitude;
+      document.getElementById("members_number").placeholder =
+        res.data[0].family_number;
+      document.getElementById("points").placeholder = res.data[0].points;
+      document.getElementById("height").placeholder = res.data[0].height;
     });
   };
 
@@ -357,17 +365,17 @@ export default function Profile() {
               onFinish={(values) => {
                 let services_select = values.services_select;
                 if (services_select !== undefined) {
-                  let latt = lat;
-                  let lngg = lng;
+                  let lat = localStorage.getItem("lat");
+                  let lng = localStorage.getItem("lng");
                   let members_number = values.members_number;
                   let height = values.height;
 
-                  if (latt === "") {
+                  if (lat === null) {
                     const a = document
                       .getElementById("service_address")
                       .placeholder.split(",");
-                    latt = a[0];
-                    lngg = a[1];
+                    lat = a[0];
+                    lng = a[1];
                   }
                   if (members_number === "" || members_number === undefined) {
                     members_number =
@@ -382,13 +390,13 @@ export default function Profile() {
                     parseInt(members_number)
                   );
                   bodyFormData.append("height", parseFloat(height));
-                  bodyFormData.append("latitude", latt);
-                  bodyFormData.append("longitude", lngg);
+                  bodyFormData.append("latitude", lat);
+                  bodyFormData.append("longitude", lng);
                   bodyFormData.append(
                     "service_number",
                     parseInt(services_select)
                   );
-
+                  console.log(lat, lng);
                   axios({
                     method: "put",
                     url: "http://192.168.0.108:5000//water/services/updateServiceInfo",
@@ -399,11 +407,9 @@ export default function Profile() {
                   })
                     .then((response) => {
                       if (response.data === "Updated") {
-                        document.getElementById("service_address").placeholder =
-                          latt + "," + lngg;
-                        document.getElementById("members_number").placeholder =
-                          members_number;
-                        document.getElementById("height").placeholder = height;
+                        document.getElementById("info").reset();
+                        message.success("تم تحديث بيانات الخدمة ");
+                        setS(-1);
                       }
                     })
                     .catch((error) => {
@@ -604,14 +610,9 @@ export default function Profile() {
         open={open}
         onClose={() => {
           setOpen(false);
-          const a = localStorage.getItem("lat");
-          const b = localStorage.getItem("lng");
-          if (a !== null && localStorage.getItem("changed") === "1") {
-            setLat(a);
-            setLng(b);
+          if (localStorage.getItem("lat") !== null) {
             document.getElementById("service_address").placeholder =
-              a + "," + b;
-            localStorage.setItem("changed", 0);
+              localStorage.getItem("lat") + "," + localStorage.getItem("lng");
           }
         }}
         center
