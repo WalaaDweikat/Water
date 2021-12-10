@@ -71,6 +71,9 @@ export default function NewService() {
           console.log(response.data);
           if (response.data === "new order added") {
             success();
+            document.getElementById("newServiceForm").reset();
+            setFileList([]);
+            setFileList2([]);
           }
         })
         .catch((error) => {
@@ -78,9 +81,6 @@ export default function NewService() {
           error();
         });
     } else error();
-  };
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
   };
 
   const onChange = ({ fileList: newFileList }) => {
@@ -124,6 +124,7 @@ export default function NewService() {
       <Form
         className="newFrom"
         layout="vertical"
+        id="newServiceForm"
         labelCol={{
           span: 5,
         }}
@@ -134,7 +135,6 @@ export default function NewService() {
           remember: false,
         }}
         onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
         <Form.Item label="عنوان الخدمة" name="serviceAddress">

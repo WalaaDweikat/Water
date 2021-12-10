@@ -36,7 +36,7 @@ export default function Profile() {
     return await axios.get(
       "http://192.168.0.108:5000//water/services/getServicesByid_number",
       {
-        params: { id_number: localStorage.getItem("username") },
+        params: { id_number: parseInt(localStorage.getItem("username")) },
       }
     );
   };
@@ -120,7 +120,6 @@ export default function Profile() {
     } else {
       setPosition("top");
     }
-
     getServices().then((res) => {
       setServices(res.data);
     });
@@ -396,7 +395,6 @@ export default function Profile() {
                     "service_number",
                     parseInt(services_select)
                   );
-                  console.log(lat, lng);
                   axios({
                     method: "put",
                     url: "http://192.168.0.108:5000//water/services/updateServiceInfo",

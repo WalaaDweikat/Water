@@ -38,8 +38,25 @@
   font-family: 'Tajawal', sans-serif;
 }
 
+.demonstration{
+  text-align:center;
+  color: white;
+  background: #ee2260;
+  margin-left: 10%;
+  margin-right: 10%;
+  margin-top: 50px;
+  flex-direction: column;
+}
 
+.feedBack{
+  margin-top: 50px;
+  width: 80vw;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  
 
+}
 
 @media only screen and (max-width:600px) {
   .pointsContanier{

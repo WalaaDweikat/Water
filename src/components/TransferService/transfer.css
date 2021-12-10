@@ -1,0 +1,35 @@
+
+
+.serviceTransfer
+{
+ height:fit-content ;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+ margin-top: 0px;
+ padding-right: 5%;
+ margin-bottom: 100px;
+}
+
+.serviceTransfer label{
+  padding-top:10px;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 15px;
+}
+
+.serviceTransfer Button{
+  font-family: 'Tajawal', sans-serif;
+  font-size: 15px;
+  border-radius: 20px;
+  width: 100px;
+  height: 35px;
+  background-color: #ee2260;
+  border-color: #ee2260;
+  height: 35px;
+}
+
+.serviceTransfer Input{
+  font-family: 'Tajawal', sans-serif;
+  font-size: 15px;
+}
+
+.serviceTransfer Input::-webkit-input-placeholder {
+  color: black !important;
+  }

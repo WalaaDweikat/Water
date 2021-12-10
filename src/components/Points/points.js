@@ -1,18 +1,52 @@
 import "./points.css";
-import { Form, Input, Button, Rate, Tabs } from "antd";
+import axios from "axios";
+import { Form, Input, Button, Rate, Tabs, message, Select } from "antd";
 import { useEffect, useState } from "react";
 const { TabPane } = Tabs;
-
+const { Option } = Select;
 export default function HelpUs() {
   const [position, setPosition] = useState("top");
   const [w, setW] = useState(window.innerWidth);
   const [value, setValue] = useState(0);
+  const [firstReading, setFirstReading] = useState(false);
+  const [secondReading, setSecondReading] = useState(false);
+  const [feedBack, setFeedBack] = useState(true);
+  const [services, setServices] = useState([]);
+  const getServices = async () => {
+    const axios = require("axios");
+    return await axios.get(
+      "http://192.168.0.108:5000//water/services/getServicesByid_number",
+      {
+        params: { id_number: parseInt(localStorage.getItem("username")) },
+      }
+    );
+  };
+  const error = () => {
+    message.error({
+      content: "لا يمكن إجراء التقييم الان",
+      style: {
+        marginTop: "30vh",
+      },
+      duration: 1,
+    });
+  };
+  const success = () => {
+    message.success({
+      content: "تم التقييم بنجاح ",
+      style: {
+        marginTop: "30vh",
+      },
+      duration: 1,
+    });
+  };
+  useEffect(() => {
+    getServices().then((res) => {
+      setServices(res.data);
+    });
+  }, []);
   window.addEventListener("resize", () => {
     setW(window.innerWidth);
   });
-  const onFinish = (values) => {
-    console.log("Success:", values);
-  };
 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
@@ -28,6 +62,33 @@ export default function HelpUs() {
   const handleChange = (value) => {
     setValue(value);
   };
+  const onFinish = async (values) => {
+    if (feedBack) {
+      const bodyFormData = new FormData();
+      bodyFormData.append("serviceNumber", values.service_number);
+      bodyFormData.append("value", value);
+
+      axios({
+        method: "post",
+        url: "http://192.168.0.108:5000///water/user_feed_back/add",
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        data: bodyFormData,
+      })
+        .then((response) => {
+          console.log(response.data);
+          if (response.data === "added") {
+            success();
+            document.getElementById("form").reset();
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          error();
+        });
+    } else error();
+  };
   return (
     <Tabs
       defaultActiveKey="1"
@@ -35,39 +96,87 @@ export default function HelpUs() {
       tabPosition={position}
     >
       <TabPane tab="دورة المياه" key="1">
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            marginTop: "50px",
+        <Form
+          className="feedBack"
+          layout="vertical"
+          name="basic"
+          id="form"
+          labelCol={{
+            span: 5,
           }}
+          wrapperCol={{
+            span: 8,
+          }}
+          initialValues={{
+            remember: false,
+          }}
+          onFinish={onFinish}
+          autoComplete="off"
         >
-          <div
-            style={{
-              paddingBottom: "20px",
-              background: "#454241",
-              color: "white",
+          <Form.Item label="رقم الخدمة" name="service_number">
+            <Select>
+              {services.map((option) => {
+                return (
+                  <Option
+                    key={option.service_number}
+                    value={option.service_number}
+                  >
+                    {option.service_number}
+                  </Option>
+                );
+              })}
+            </Select>
+          </Form.Item>
+          <Form.Item name="value">
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              <div
+                style={{
+                  paddingBottom: "20px",
+                  background: "#454241",
+                  color: "white",
+                  textAlign: "center",
+                  paddingTop: "20px",
+                }}
+              >
+                تقدير نسبة امتلاء الخزان بعد عملية الضح
+              </div>
+              <span>
+                <Rate
+                  allowHalf
+                  onChange={handleChange}
+                  value={value}
+                  style={{
+                    background: "#454241",
+                    width: "100%",
+                    textAlign: "center",
+                    marginBottom: "10px",
+                    fontWeight: "bolder",
+                    paddingBottom: "20px",
+                  }}
+                />
+              </span>
+            </div>
+          </Form.Item>
+          <Form.Item
+            wrapperCol={{
+              offset: 3,
+              span: 100,
             }}
           >
-            تقدير نسبة امتلاء الخزان بعد عملية الضح
-          </div>
-          <span>
-            <Rate
-              allowHalf
-              onChange={handleChange}
-              value={value}
-              style={{
-                background: "#454241",
-                width: "100%",
-                textAlign: "center",
-                marginBottom: "10px",
-                fontWeight: "bolder",
-                paddingBottom: "20px",
-              }}
-            />
-          </span>
-          <Button type="primary">إرسال</Button>
-        </div>
+            <Button
+              type="primary"
+              htmlType="submit"
+              style={{ marginTop: "0px" }}
+            >
+              إرسال
+            </Button>
+          </Form.Item>
+        </Form>
       </TabPane>
       <TabPane tab="قراءة العداد" key="2">
         <Form
@@ -84,7 +193,29 @@ export default function HelpUs() {
           initialValues={{
             remember: false,
           }}
-          onFinish={onFinish}
+          onFinish={(values) => {
+            if (firstReading) {
+              const befor = values.befor;
+              const bodyFormData = new FormData();
+              bodyFormData.append("user_id", localStorage.getItem("username"));
+              bodyFormData.append("first_reading", befor);
+              axios({
+                method: "post",
+                url: "http://192.168.0.108:5000///water/first_reading/add",
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                },
+                data: bodyFormData,
+              })
+                .then((response) => {
+                  message.info("تم إضافة القراءة ");
+                })
+                .catch((error) => {});
+              setFirstReading(false);
+            } else {
+              message.info("لا يمكن تخزين القراءة حاليا");
+            }
+          }}
           onFinishFailed={onFinishFailed}
           autoComplete="off"
         >
@@ -130,7 +261,29 @@ export default function HelpUs() {
           initialValues={{
             remember: false,
           }}
-          onFinish={onFinish}
+          onFinish={(values) => {
+            if (secondReading) {
+              const after = values.after;
+              const bodyFormData = new FormData();
+              bodyFormData.append("user_id", localStorage.getItem("username"));
+              bodyFormData.append("second_reading", after);
+              axios({
+                method: "post",
+                url: "http://192.168.0.108:5000///water/secondReading/AddNewSecondRading",
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                },
+                data: bodyFormData,
+              })
+                .then((response) => {
+                  message.info("تم إضافة القراءة ");
+                })
+                .catch((error) => {});
+              setSecondReading(false);
+            } else {
+              message.info("لا يمكن تخزين القراءة حاليا");
+            }
+          }}
           onFinishFailed={onFinishFailed}
           autoComplete="off"
         >
@@ -163,7 +316,16 @@ export default function HelpUs() {
           </Form.Item>
         </Form>
       </TabPane>
-      <TabPane tab="توضيح" key="3"></TabPane>
+      <TabPane tab="توضيح" key="3">
+        <div className="demonstration">
+          <span style={{ fontWeight: "bolder" }}>المساعدة</span>
+          <p>
+            عزيزي المواطن,قم بقراءة العداد ووضع المياه عندك حيث ستتيح لك إمكانية
+            جمع النقاط.كلما حصلت على نقاط أكبر كانت الفائدة لك أكبر لاتتردد
+          </p>
+          <span style={{ fontWeight: "bolder" }}>شاركنا واجمع النقاط</span>
+        </div>
+      </TabPane>
     </Tabs>
   );
 }

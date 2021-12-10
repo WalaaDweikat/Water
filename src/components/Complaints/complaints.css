@@ -1,7 +1,8 @@
 
 .comForm
 {
- height:calc(125vh ) ;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+ height:fit-content;
+ margin-bottom: 100px;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
  padding-right: 5%;
 }
 
@@ -38,6 +39,11 @@
   justify-content: right;
   flex-direction: column;
 }
+
+
+.comForm Input::-webkit-input-placeholder {
+  color: black !important;
+  }
 
 
 @media only screen and (max-width: 600px) {

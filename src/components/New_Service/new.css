@@ -2,8 +2,9 @@
 
 .newFrom
 {
- height:calc(100vh - 100px);    
+ height:fit-content;    
  padding-right: 5%;
+ margin-bottom: 70px;
 }
 
 .newFrom label{

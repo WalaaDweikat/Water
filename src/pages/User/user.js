@@ -13,6 +13,7 @@ import NewService from "../../components/New_Service/new.js";
 import Bills from "../../components/Bills/bills.js";
 import Transactions from "../../components/Transactions/transaction.js";
 import Points from "../../components/Points/points.js";
+import Notifiactions from "../../components/Notification/notification.js";
 import {
   BrowserRouter as Router,
   Route,
@@ -60,6 +61,7 @@ function User(props) {
           <div className="logo">
             <img src={Logo} alt="logo" className="logoHeader" />
           </div>
+
           <Menu theme="dark" mode="horizontal" selectedKeys={[Id]} id="menu">
             <Menu.Item className="item" key="/water/user/home">
               <Link to="/water/user/home">الرئيسية</Link>
@@ -96,6 +98,9 @@ function User(props) {
               </Button>
             </Menu.Item>
           </Menu>
+          <div style={{ position: "relative", right: "100%", top: "-45px" }}>
+            <Notifiactions />
+          </div>
         </Header>
         <Content>
           <Switch>

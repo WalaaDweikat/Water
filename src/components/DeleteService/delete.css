@@ -2,9 +2,10 @@
 
 .deleteForm
 {
- height:calc(100vh - 200px) ;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+ height:fit-content;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
  margin-top: 0px;
  padding-right: 5%;
+ margin-bottom: 100pxd;
 }
 
 .deleteForm label{
