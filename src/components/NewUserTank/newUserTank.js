@@ -130,37 +130,28 @@ class NewUserTank extends React.Component {
     };
   }
 
-  static getDerivedStateFromProps(props, state) {
-    if (props.service_number !== state.service_number) {
-      return {
-        service_number: props.service_number,
-      };
+  componentWillReceiveProps(newProps) {
+    this.setState({
+      service_number: newProps.service_number,
+    });
+    if (newProps.service_number !== "") {
+      this.getTanks(parseInt(newProps.service_number)).then((res) => {
+        const tanks = [];
+        const tankNumber = [];
+        let i = 0;
+        for (; i < res.data.length; i++) {
+          const a = {
+            key: i,
+            index: i + 1,
+            capacity: res.data[i].capacity,
+          };
+          tanks.push(a);
+          tankNumber.push(res.data[i].tank_number);
+        }
+        this.setState({ dataSource: tanks, count: i + 1, tanks: tankNumber });
+      });
     }
-    return null;
   }
-  // componentWillReceiveProps(newProps) {
-  //   this.setState({
-  //     service_number: newProps.service_number,
-  //   });
-  //   if (newProps.service_number !== "") {
-  //     this.getTanks(parseInt(newProps.service_number)).then((res) => {
-  //       console.log("walaa");
-  //       const tanks = [];
-  //       const tankNumber = [];
-  //       let i = 0;
-  //       for (; i < res.data.length; i++) {
-  //         const a = {
-  //           key: i,
-  //           index: i + 1,
-  //           capacity: res.data[i].capacity,
-  //         };
-  //         tanks.push(a);
-  //         tankNumber.push(res.data[i].tank_number);
-  //       }
-  //       this.setState({ dataSource: tanks, count: i + 1, tanks: tankNumber });
-  //     });
-  //   }
-  // }
 
   async getTanks(aa) {
     const axios = require("axios");

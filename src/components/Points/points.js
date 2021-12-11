@@ -63,11 +63,11 @@ export default function HelpUs() {
     setValue(value);
   };
   const onFinish = async (values) => {
-    if (feedBack) {
+    if (feedBack && values.service_number !== undefined && value !== 0) {
       const bodyFormData = new FormData();
-      bodyFormData.append("serviceNumber", values.service_number);
+      bodyFormData.append("service_number", parseInt(values.service_number));
       bodyFormData.append("value", value);
-
+      console.log(value);
       axios({
         method: "post",
         url: "http://192.168.0.108:5000///water/user_feed_back/add",
@@ -81,6 +81,8 @@ export default function HelpUs() {
           if (response.data === "added") {
             success();
             document.getElementById("form").reset();
+            setFeedBack(false);
+            setValue(0);
           }
         })
         .catch((error) => {
@@ -95,7 +97,7 @@ export default function HelpUs() {
       className="pointsContanier"
       tabPosition={position}
     >
-      <TabPane tab="دورة المياه" key="1">
+      <TabPane tab="دورة المياه" key="1" style={{ width: "100vw" }}>
         <Form
           className="feedBack"
           layout="vertical"

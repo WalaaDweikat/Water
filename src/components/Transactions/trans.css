@@ -2,30 +2,39 @@
 
 .transContainer{
   margin-top: 150px;
-  height: calc(100vh - 215px);
+  height:calc(100vh - 215px);
   font-family: 'Tajawal', sans-serif;
 }
 
 .collapse{
-width: 60vw;
-margin-left: 20vw;
-margin-right: 20vw;
-height: 40vh;
-overflow: scroll;
+width: 70vw;
+margin-left: 15vw;
+margin-right: 15vw;
 background-color: transparent;
+border: none;
+
+
+}
+
+.space{
+  width:100vw;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  height: 350px;
+  display: flex;
+  flex-direction: column;
 }
 
 .panel{
   margin-top: 5px;
-  border:2px solid white;
+  border:none;
+  margin-bottom: 20px;
   font-size:15px;
+  background-color: #b2cde4;
+  box-shadow: 10px 10px 5px grey;
+  color: white;
+
 }
 
-@media only screen and (max-width:500px) {
 
-  .collapse{
-    width: 70vw;
-    margin-left: 15vw;
-    margin-right: 15vw;
-    }
-}
+

@@ -4,10 +4,10 @@
   margin-top: 130px;
   align-items: center;
   align-content: center;
-  justify-content: space-around;
   font-family: 'Tajawal', sans-serif;
   font-size: 15px;
   height: 130vh;
+  width: 100vw;
 }
 
 
@@ -50,10 +50,11 @@
 
 .feedBack{
   margin-top: 50px;
-  width: 80vw;
+  width: 90%;
   display: flex;
   flex-direction: column;
-  align-content: center;
+  margin-right: 5%;  
+  margin-left: 5%;  
   
 
 }
