@@ -18,7 +18,7 @@ export default function TransferService() {
   const getServices = async () => {
     const axios = require("axios");
     return await axios.get(
-      "http://192.168.0.108:5000//water/services/getServicesByid_number",
+      "http://192.168.0.109:5000//water/services/getServicesByid_number",
       {
         params: { id_number: parseInt(localStorage.getItem("username")) },
       }
@@ -80,7 +80,7 @@ export default function TransferService() {
 
       axios({
         method: "post",
-        url: "http://192.168.0.108:5000///water/transactions/newOrder/transferSubscription",
+        url: "http://192.168.0.109:5000///water/transactions/newOrder/transferSubscription",
         headers: {
           "Content-Type": "multipart/form-data",
         },

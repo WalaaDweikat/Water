@@ -1,18 +1,14 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
-import { Table, Input, Button, Popconfirm, Form, Select } from "antd";
+import { Table, Input, Button, Popconfirm, Form, Select, message } from "antd";
+import axios from "axios";
 import { Modal } from "react-responsive-modal";
 import "antd/dist/antd.css";
 import "../Tanks/tanks.css";
 import "./employees.css";
 import "react-responsive-modal/styles.css";
-import LocationMap from "../LocationMap/location.js";
 const EditableContext = React.createContext(null);
 const { Search } = Input;
 const { Option } = Select;
-
-function handleChange(value) {
-  console.log(`selected ${value}`);
-}
 
 const EditableRow = ({ index, ...props }) => {
   const [form] = Form.useForm();
@@ -101,7 +97,7 @@ class Employees extends React.Component {
       {
         title: "اسم الموطف",
         dataIndex: "name",
-        width: "10%",
+        width: "30%",
         editable: false,
       },
       {
@@ -136,25 +132,115 @@ class Employees extends React.Component {
           ) : null,
       },
     ];
+
     this.state = {
-      dataSource: [
-        {
-          key: "1",
-          name: "2",
-          id: "32",
-          address: "London, Park Lane no. 1",
-        },
-      ],
-      count: 2,
+      dataSource: [],
+      dataSource2: [],
+      count: 0,
       open: false,
       open2: false,
       open3: false,
       job: "",
-      location: "",
+      selectValue: "",
+      username: "",
+      password: "",
     };
   }
+  componentDidMount() {
+    const a = [];
+    let i = 0;
+
+    this.getEmployees().then((res) => {
+      for (; i < res.data.length; i++) {
+        let job = "";
+        if (res.data[i].type == 1) job = "مهندس مي";
+        if (res.data[i].type == 2) job = "فني مي";
+        if (res.data[i].type == 3) job = "موظف الخدمات";
+        if (res.data[i].type == 4) job = "موظف العدادات والشحن";
+        const name =
+          res.data[i].Fname +
+          " " +
+          res.data[i].Sname +
+          " " +
+          res.data[i].Lname +
+          " ";
+        const address =
+          res.data[i].region +
+          " " +
+          res.data[i].area +
+          " " +
+          res.data[i].street +
+          " ";
+        const data = {
+          key: i,
+          name: name,
+          id: res.data[i].id,
+          address: address,
+          job: job,
+        };
+        a.push(data);
+      }
+      this.setState({
+        dataSource: a,
+        dataSource2: a,
+        count: i,
+      });
+    });
+  }
+  async getEmployees() {
+    const axios = require("axios");
+    return await axios.get("http://192.168.0.109:5000//water/employees/all");
+  }
+
+  async deleteEmployee(id) {
+    const bodyFormData = new FormData();
+    bodyFormData.append("id", parseInt(id));
+    axios({
+      method: "delete",
+      url: "http://192.168.0.109:5000//water/employees/delete",
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      data: bodyFormData,
+    })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  async addnewEmployee(fName, sName, lName, job, id) {
+    const bodyFormData = new FormData();
+    bodyFormData.append("id", id);
+    bodyFormData.append("fName", fName);
+    bodyFormData.append("sName", sName);
+    bodyFormData.append("lName", lName);
+    bodyFormData.append("type", job);
+    bodyFormData.append("email", "");
+    axios({
+      method: "post",
+      url: "http://192.168.0.109:5000//water/employeeAccount/newEmployeeForSystem",
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      data: bodyFormData,
+    })
+      .then((response) => {
+        this.setState({
+          username: response.data["username"],
+          password: response.data["password"],
+        });
+        message.success("تمت إضافة موظف جديد");
+      })
+      .catch((error) => {
+        console.log(error);
+        message.error("حدث خطأ");
+      });
+  }
+
   onFinish = (values) => {
-    console.log("Success:", values);
     let employeeName = document.getElementById("name").value;
     let address = document.getElementById("address").value;
     let id = document.getElementById("id").value;
@@ -172,8 +258,11 @@ class Employees extends React.Component {
 
   handleDelete = (key) => {
     const dataSource = [...this.state.dataSource];
+    const id = this.state.dataSource[key].id;
+    this.deleteEmployee(id).then((res) => console.log(res));
     this.setState({
       dataSource: dataSource.filter((item) => item.key !== key),
+      count: this.state.count - 1,
     });
   };
   handleAdd = (employeeName, address, id) => {
@@ -242,23 +331,147 @@ class Employees extends React.Component {
         }),
       };
     });
-    const onSearch = (value) => console.log(value);
 
     return (
       <div className="newTank">
         <div className="search">
-          <Select placeholder="البحث بناء على" style={{ width: "130px" }}>
-            <Option value="name">الاسم</Option>
-            <Option value="address">العنوان</Option>
+          <Select
+            onChange={(value) => {
+              this.setState({ selectValue: value });
+            }}
+            placeholder="البحث بناء على"
+            style={{ width: "130px" }}
+          >
+            <Option value="Fname"> الاسم</Option>
+            <Option value="region">المدينة</Option>
+            <Option value="area">التجمع</Option>
+            <Option value="street">الشارع</Option>
             <Option value="id">رقم الهوية</Option>
             <Option value="job">الوظيفة</Option>
           </Select>
           <Search
             placeholder="أدخل نص البحث"
-            onSearch={onSearch}
+            onSearch={(value) => {
+              if (
+                this.state.selectValue !== "" &&
+                this.state.selectValue !== "id"
+              ) {
+                const axios = require("axios");
+                axios
+                  .get(
+                    "http://192.168.0.109:5000//water/employees/searchbyKey",
+                    {
+                      params: {
+                        key: this.state.selectValue,
+                        value: '"' + value + '"',
+                      },
+                    }
+                  )
+                  .then((res) => {
+                    const a = [];
+                    let i = 0;
+                    for (; i < res.data.length; i++) {
+                      let job = "";
+                      if (res.data[i].type == 1) job = "مهندس مي";
+                      if (res.data[i].type == 2) job = "فني مي";
+                      if (res.data[i].type == 3) job = "موظف الخدمات";
+                      if (res.data[i].type == 4) job = "موظف العدادات والشحن";
+                      const name =
+                        res.data[i].Fname +
+                        " " +
+                        res.data[i].Sname +
+                        " " +
+                        res.data[i].Lname +
+                        " ";
+                      const address =
+                        res.data[i].region +
+                        " " +
+                        res.data[i].area +
+                        " " +
+                        res.data[i].street +
+                        " ";
+                      const data = {
+                        key: i,
+                        name: name,
+                        id: res.data[i].id,
+                        address: address,
+                        job: job,
+                      };
+                      a.push(data);
+                    }
+                    this.setState({
+                      dataSource: a,
+                      count: i,
+                    });
+                  });
+              } else if (
+                this.state.selectValue !== "" &&
+                this.state.selectValue === "id"
+              ) {
+                const axios = require("axios");
+                axios
+                  .get(
+                    "http://192.168.0.109:5000//water/employees/searchbyKey",
+                    {
+                      params: {
+                        key: this.state.selectValue,
+                        value: value,
+                      },
+                    }
+                  )
+                  .then((res) => {
+                    const a = [];
+                    let i = 0;
+                    for (; i < res.data.length; i++) {
+                      let job = "";
+                      if (res.data[i].type == 1) job = "مهندس مي";
+                      if (res.data[i].type == 2) job = "فني مي";
+                      if (res.data[i].type == 3) job = "موظف الخدمات";
+                      if (res.data[i].type == 4) job = "موظف العدادات والشحن";
+                      const name =
+                        res.data[i].Fname +
+                        " " +
+                        res.data[i].Sname +
+                        " " +
+                        res.data[i].Lname +
+                        " ";
+                      const address =
+                        res.data[i].region +
+                        " " +
+                        res.data[i].area +
+                        " " +
+                        res.data[i].street +
+                        " ";
+                      const data = {
+                        key: i,
+                        name: name,
+                        id: res.data[i].id,
+                        address: address,
+                        job: job,
+                      };
+                      a.push(data);
+                    }
+                    this.setState({
+                      dataSource: a,
+                      count: i,
+                    });
+                  });
+              }
+            }}
             enterButton
             style={{ width: "290px", marginRight: "5px" }}
           />
+          <Button
+            type="primary"
+            onClick={() => {
+              this.setState({
+                dataSource: this.state.dataSource2,
+                count: this.state.dataSource2.length,
+              });
+            }}
+          >
+            X
+          </Button>
         </div>
 
         <Table
@@ -299,7 +512,33 @@ class Employees extends React.Component {
                 initialValues={{
                   remember: false,
                 }}
-                onFinish={this.onFinish}
+                onFinish={(values) => {
+                  const fName = values.fname;
+                  const lName = values.lname;
+                  const sName = values.sname;
+                  const id = values.id;
+                  let job = 0;
+                  if (values.job === "فني مياه") job = "1";
+                  else if (values.job === "مهندس مي") job = "2";
+                  else if (values.job === "موظف العدادات والشحن") job = "4";
+                  else if (values.job === "موظف الخدمات") job = "3";
+
+                  this.addnewEmployee(fName, sName, lName, job, id);
+                  const newData = {
+                    key: this.state.count,
+                    name: fName + " " + sName + " " + lName,
+                    id: id,
+                    address: "",
+                    job: values.job,
+                  };
+                  this.setState({
+                    dataSource: [...this.state.dataSource, newData],
+                    open3: false,
+                    open2: true,
+                    open: false,
+                    count: this.state.count + 1,
+                  });
+                }}
                 onFinishFailed={this.onFinishFailed}
                 autoComplete="off"
               >
@@ -313,32 +552,52 @@ class Employees extends React.Component {
                     },
                   ]}
                 >
-                  <Select
-                    placeholder="اختر الوظيفة"
-                    style={{ width: "170px" }}
-                    onChange={(value) => {
-                      this.setState({
-                        dataSource: [...this.state.dataSource],
-                        job: value,
-                      });
-                      console.log(value);
-                    }}
-                  >
+                  <Select placeholder="اختر الوظيفة" style={{ width: "170px" }}>
                     <Option value="فني مياه">فني مياه</Option>
-                    <Option value="عامل صيانة">عامل صيانة</Option>
+                    <Option value="موظف الخدمات">موظف الخدمات</Option>
+                    <Option value="مهندس مي">مهندس مي</Option>
+                    <Option value="موظف العدادات والشحن">
+                      موظف العدادات والشحن
+                    </Option>
                   </Select>
                 </Form.Item>
                 <Form.Item
-                  label="الاسم"
-                  name="name"
+                  label=" الاسم الاول"
+                  name="fname"
                   rules={[
                     {
                       required: true,
-                      message: "أدخل اسم الموظف",
+                      message: "أدخل الاسم",
                     },
                   ]}
                 >
-                  <Input id="name" style={{ borderRadius: "10px" }} />
+                  <Input id="fname" style={{ borderRadius: "10px" }} />
+                </Form.Item>
+
+                <Form.Item
+                  label=" الاسم الثاني"
+                  name="sname"
+                  rules={[
+                    {
+                      required: true,
+                      message: "أدخل الاسم",
+                    },
+                  ]}
+                >
+                  <Input id="sname" style={{ borderRadius: "10px" }} />
+                </Form.Item>
+
+                <Form.Item
+                  label=" الاسم الأخير"
+                  name="lname"
+                  rules={[
+                    {
+                      required: true,
+                      message: "أدخل الاسم",
+                    },
+                  ]}
+                >
+                  <Input id="lname" style={{ borderRadius: "10px" }} />
                 </Form.Item>
 
                 <Form.Item
@@ -347,7 +606,7 @@ class Employees extends React.Component {
                   rules={[
                     {
                       required: true,
-                      message: "أدخل رقم هويتك",
+                      message: "أدخل رقم الهوية",
                     },
                     {
                       pattern: /^(?:\d*)$/,
@@ -360,23 +619,6 @@ class Employees extends React.Component {
                   ]}
                 >
                   <Input id="id" style={{ borderRadius: "10px" }} />
-                </Form.Item>
-                <Form.Item
-                  label="العنوان"
-                  name="adderess"
-                  rules={[
-                    {
-                      required: true,
-                      message: "أدخل العنوان",
-                    },
-                  ]}
-                >
-                  <Input
-                    style={{ borderRadius: "10px" }}
-                    onClick={this.setLoction}
-                    id="EmAdd"
-                    value={this.state.location}
-                  />
                 </Form.Item>
 
                 <Form.Item
@@ -408,24 +650,9 @@ class Employees extends React.Component {
         >
           <div className="theEmployeeNewAccount" id="newAccount">
             <div>معلومات حساب الموظف الجديد </div>
-            <div>اسم المستخدم</div>
-            <div>كلمة المرور</div>
+            <div>اسم المستخدم :{this.state.username}</div>
+            <div>كلمة المرور : {this.state.password}</div>
           </div>
-        </Modal>
-        <Modal
-          open={this.state.open3}
-          onClose={() => {
-            const a = document.getElementById("EmAdd").value;
-            this.setState({
-              dataSource: [...this.state.dataSource],
-              open3: false,
-              location: a,
-            });
-            console.log(a);
-          }}
-          center
-        >
-          <LocationMap />
         </Modal>
       </div>
     );

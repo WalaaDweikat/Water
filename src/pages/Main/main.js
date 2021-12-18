@@ -103,7 +103,7 @@ export default function Main() {
                     </div>
                   </div>
                 </Carousel>
-                <div className="news">
+                {/* <div className="news">
                   <div className="news1">
                     <div className="img">
                       <img
@@ -154,7 +154,7 @@ export default function Main() {
                       </pre>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
               <Footer />
             </Route>

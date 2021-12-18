@@ -15,7 +15,7 @@ export default function HelpUs() {
   const getServices = async () => {
     const axios = require("axios");
     return await axios.get(
-      "http://192.168.0.108:5000//water/services/getServicesByid_number",
+      "http://192.168.0.109:5000//water/services/getServicesByid_number",
       {
         params: { id_number: parseInt(localStorage.getItem("username")) },
       }
@@ -70,7 +70,7 @@ export default function HelpUs() {
       console.log(value);
       axios({
         method: "post",
-        url: "http://192.168.0.108:5000///water/user_feed_back/add",
+        url: "http://192.168.0.109:5000///water/user_feed_back/add",
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -203,7 +203,7 @@ export default function HelpUs() {
               bodyFormData.append("first_reading", befor);
               axios({
                 method: "post",
-                url: "http://192.168.0.108:5000///water/first_reading/add",
+                url: "http://192.168.0.109:5000///water/first_reading/add",
                 headers: {
                   "Content-Type": "multipart/form-data",
                 },
@@ -271,7 +271,7 @@ export default function HelpUs() {
               bodyFormData.append("second_reading", after);
               axios({
                 method: "post",
-                url: "http://192.168.0.108:5000///water/secondReading/AddNewSecondRading",
+                url: "http://192.168.0.109:5000///water/secondReading/AddNewSecondRading",
                 headers: {
                   "Content-Type": "multipart/form-data",
                 },

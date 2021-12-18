@@ -45,7 +45,6 @@ function User(props) {
   const singout = () => {
     localStorage.removeItem("username");
     history.push("/water/login");
-    window.location.reload();
   };
   window.addEventListener("click", () => {
     setId(window.location.pathname);

@@ -156,7 +156,7 @@ class NewUserTank extends React.Component {
   async getTanks(aa) {
     const axios = require("axios");
     return await axios.get(
-      "http://192.168.0.108:5000//water/citizens_tanks/search_service_number",
+      "http://192.168.0.109:5000//water/citizens_tanks/search_service_number",
       {
         params: { service_number: aa },
       }
@@ -169,7 +169,7 @@ class NewUserTank extends React.Component {
     bodyFormData.append("capacity", capacity);
     axios({
       method: "put",
-      url: "http://192.168.0.108:5000//water/citizens_tanks/update_capacity",
+      url: "http://192.168.0.109:5000//water/citizens_tanks/update_capacity",
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -189,7 +189,7 @@ class NewUserTank extends React.Component {
     bodyFormData.append("capacity", c);
     axios({
       method: "post",
-      url: "http://192.168.0.108:5000//water/citizens_tanks/addNewTank",
+      url: "http://192.168.0.109:5000//water/citizens_tanks/addNewTank",
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -209,7 +209,7 @@ class NewUserTank extends React.Component {
     bodyFormData.append("tank_number", tankNumber);
     axios({
       method: "delete",
-      url: "http://192.168.0.108:5000//water/citizens-tanks/deletecitiznTank",
+      url: "http://192.168.0.109:5000//water/citizens-tanks/deletecitiznTank",
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -254,7 +254,6 @@ class NewUserTank extends React.Component {
     const newData = [...this.state.dataSource];
     const index = newData.findIndex((item) => row.key === item.key);
     const item = newData[index];
-
     newData.splice(index, 1, { ...item, ...row });
     this.updateTankCapacity(
       newData[item.key].capacity,

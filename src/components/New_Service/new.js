@@ -61,7 +61,7 @@ export default function NewService() {
 
       axios({
         method: "post",
-        url: "http://192.168.0.108:5000///water/transactions/newOrder/subscriptionRequest",
+        url: "http://192.168.0.109:5000///water/transactions/newOrder/subscriptionRequest",
         headers: {
           "Content-Type": "multipart/form-data",
         },

@@ -18,58 +18,63 @@ export default function Profile() {
   const [position, setPosition] = useState("top");
   const getAccountInfo = async () => {
     const axios = require("axios");
-    return await axios.get("http://192.168.0.108:5000//water/users/UserBy", {
+    return await axios.get("http://192.168.0.109:5000//water/users/UserBy", {
       params: { username: localStorage.getItem("username") },
     });
   };
   const getPersonalInfo = async () => {
     const axios = require("axios");
     return await axios.get(
-      "http://192.168.0.108:5000//water/citizens/search_id_number",
+      "http://192.168.0.109:5000//water/citizens/search_id_number",
       {
         params: { id_number: localStorage.getItem("username") },
       }
     );
   };
-  const getServices = async () => {
+  const getServices = () => {
     const axios = require("axios");
-    return await axios.get(
-      "http://192.168.0.108:5000//water/services/getServicesByid_number",
-      {
+    axios
+      .get("http://192.168.0.109:5000//water/services/getServicesByid_number", {
         params: { id_number: parseInt(localStorage.getItem("username")) },
-      }
-    );
+      })
+      .then((res) => {
+        setServices(res.data);
+      });
   };
 
   const getServiceInfo = async (number) => {
     const axios = require("axios");
     return await axios.get(
-      "http://192.168.0.108:5000//water/services/getByServiceNumber",
+      "http://192.168.0.109:5000//water/services/getByServiceNumber",
       {
         params: { service_number: number },
       }
     );
   };
 
-  getAccountInfo().then((res) => {
-    document.getElementById("idNumber").placeholder = res.data.username;
-    document.getElementById("email").placeholder = res.data.email;
-  });
+  useEffect(() => {
+    getServices();
 
-  getPersonalInfo().then((res) => {
-    const name =
-      res.data[0].first_name +
-      " " +
-      res.data[0].middle_name +
-      " " +
-      res.data[0].last_name;
-    document.getElementById("username").placeholder = name;
-    document.getElementById("area").placeholder = res.data[0].area;
-    document.getElementById("region").placeholder = res.data[0].region;
-    document.getElementById("street").placeholder = res.data[0].street;
-    document.getElementById("mobile_number").placeholder =
-      "0" + res.data[0].mobile_number;
-  });
+    getAccountInfo().then((res) => {
+      document.getElementById("idNumber").placeholder = res.data.username;
+      document.getElementById("email").placeholder = res.data.email;
+    });
+
+    getPersonalInfo().then((res) => {
+      const name =
+        res.data[0].first_name +
+        " " +
+        res.data[0].middle_name +
+        " " +
+        res.data[0].last_name;
+      document.getElementById("username").placeholder = name;
+      document.getElementById("area").placeholder = res.data[0].area;
+      document.getElementById("region").placeholder = res.data[0].region;
+      document.getElementById("street").placeholder = res.data[0].street;
+      document.getElementById("mobile_number").placeholder =
+        "0" + res.data[0].mobile_number;
+    });
+  }, []);
 
   const handleChange = (value) => {
     localStorage.removeItem("lat");
@@ -120,10 +125,7 @@ export default function Profile() {
     } else {
       setPosition("top");
     }
-    getServices().then((res) => {
-      setServices(res.data);
-    });
-  }, [w, S_number]);
+  }, [w]);
 
   return (
     <Tabs
@@ -171,7 +173,7 @@ export default function Profile() {
                 bodyFormData.append("mobile_number", mobile_number);
                 axios({
                   method: "put",
-                  url: "http://192.168.0.108:5000//water/citizens/updateInfo/all",
+                  url: "http://192.168.0.109:5000//water/citizens/updateInfo/all",
                   data: bodyFormData,
                   headers: {
                     "Content-Type": "multipart/form-data",
@@ -292,7 +294,7 @@ export default function Profile() {
                 bodyFormData.append("email", email);
                 axios({
                   method: "put",
-                  url: "http://192.168.0.108:5000///water/users/updateEmail",
+                  url: "http://192.168.0.109:5000///water/users/updateEmail",
                   headers: {
                     "Content-Type": "multipart/form-data",
                   },
@@ -397,7 +399,7 @@ export default function Profile() {
                   );
                   axios({
                     method: "put",
-                    url: "http://192.168.0.108:5000//water/services/updateServiceInfo",
+                    url: "http://192.168.0.109:5000//water/services/updateServiceInfo",
                     data: bodyFormData,
                     headers: {
                       "Content-Type": "multipart/form-data",
@@ -541,7 +543,7 @@ export default function Profile() {
               bodyFormData.append("oldPassword", old_pass);
               axios({
                 method: "put",
-                url: "http://192.168.0.108:5000///water/users/changePass",
+                url: "http://192.168.0.109:5000///water/users/changePass",
                 headers: {
                   "Content-Type": "multipart/form-data",
                 },

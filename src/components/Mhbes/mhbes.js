@@ -1,9 +1,11 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
-import { Table, Input, Button, Popconfirm, Form } from "antd";
+import { Table, Input, Button, Popconfirm, Form, message } from "antd";
 import { Modal } from "react-responsive-modal";
+import axios from "axios";
 import "antd/dist/antd.css";
 import "../Tanks/tanks.css";
 import "react-responsive-modal/styles.css";
+import LocationMap from "../LocationMap/location.js";
 const EditableContext = React.createContext(null);
 const EditableRow = ({ index, ...props }) => {
   const [form] = Form.useForm();
@@ -41,18 +43,17 @@ const EditableCell = ({
     });
   };
 
-  const save = async () => {
+  const save = async (lng, lat) => {
     try {
-      const values = await form.validateFields();
       toggleEdit();
-      handleSave({ ...record, ...values });
+      handleSave({ ...record, lng, lat });
     } catch (errInfo) {
       console.log("Save failed:", errInfo);
     }
   };
 
   let childNode = children;
-
+  const [open, setOpen] = useState(false);
   if (editable) {
     childNode = editing ? (
       <Form.Item
@@ -67,7 +68,15 @@ const EditableCell = ({
           },
         ]}
       >
-        <Input ref={inputRef} onPressEnter={save} onBlur={save} />
+        <Input
+          ref={inputRef}
+          id="location"
+          onClick={() => {
+            localStorage.removeItem("lng");
+            localStorage.removeItem("lat");
+            setOpen(true);
+          }}
+        />
       </Form.Item>
     ) : (
       <div
@@ -82,7 +91,22 @@ const EditableCell = ({
     );
   }
 
-  return <td {...restProps}>{childNode}</td>;
+  return (
+    <>
+      <td {...restProps}>{childNode}</td>
+      <Modal
+        open={open}
+        onClose={() => {
+          setOpen(false);
+          if (localStorage.getItem("lat"))
+            save(localStorage.getItem("lng"), localStorage.getItem("lat"));
+        }}
+        center
+      >
+        <LocationMap />
+      </Modal>
+    </>
+  );
 };
 class Mhbes extends React.Component {
   constructor(props) {
@@ -118,9 +142,77 @@ class Mhbes extends React.Component {
     ];
     this.state = {
       dataSource: [],
-      count: 2,
+      count: 0,
       open: false,
+      tank_number: -1,
+      open3: false,
     };
+  }
+
+  async getStopcocks(tank_number) {
+    const axios = require("axios");
+    return await axios.get(
+      "http://192.168.0.109:5000//water/mahbes/search_tank_number",
+      {
+        params: { tank_number: tank_number },
+      }
+    );
+  }
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.tank_number !== prevState.tank_number) {
+      return { tank_number: nextProps.tank_number };
+    } else return null;
+  }
+
+  async updateMahbesLocation(lat, lng, id) {
+    const bodyFormData = new FormData();
+    bodyFormData.append("mahbes_number", parseInt(id));
+    bodyFormData.append("latitude", lat);
+    bodyFormData.append("longitude", lng);
+    axios({
+      method: "put",
+      url: "http://192.168.0.109:5000//water/mahbes/update_location",
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      data: bodyFormData,
+    })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+  async getTanks() {
+    const axios = require("axios");
+    return await axios.get("http://192.168.0.109:5000//water/MainTanks");
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.tank_number !== this.props.tank_number) {
+      this.setState({ tank_number: prevProps.tank_number });
+      this.classMethod();
+    }
+  }
+
+  componentDidMount() {
+    this.getStopcocks(this.state.tank_number).then((res) => {
+      let i = 0;
+      const data = [];
+      for (; i < res.data.length; i++) {
+        const a = {
+          id: res.data[i].mahbes_number,
+          index: i + 1,
+          key: i,
+          address: res.data[i].latitude + " , " + res.data[i].longitude,
+        };
+        data.push(a);
+      }
+      this.setState({
+        dataSource: data,
+        count: i,
+      });
+    });
   }
   onFinish = (values) => {
     console.log("Success:", values);
@@ -134,28 +226,44 @@ class Mhbes extends React.Component {
   };
   handleDelete = (key) => {
     const dataSource = [...this.state.dataSource];
+    const id = this.state.dataSource[key].id;
+    console.log(id);
+    const bodyFormData = new FormData();
+    bodyFormData.append("mahbes_number", parseInt(id));
+    axios({
+      method: "delete",
+      url: "http://192.168.0.109:5000//water/mahbes/delete",
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      data: bodyFormData,
+    })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
     this.setState({
       dataSource: dataSource.filter((item) => item.key !== key),
     });
   };
 
-  handleAdd = (capacity) => {
-    const { count, dataSource } = this.state;
-    const newData = {
-      key: count,
-      index: count,
-      address: `أدخل العنوان `,
-    };
-    this.setState({
-      dataSource: [...dataSource, newData],
-      count: count + 1,
-    });
-  };
   handleSave = (row) => {
     const newData = [...this.state.dataSource];
-    const index = newData.findIndex((item) => row.key === item.key);
+    const a = {
+      id: row.id,
+      key: row.key,
+      index: row.index,
+      address: row.lat + " , " + row.lng,
+    };
+    this.updateMahbesLocation(row.lat, row.lng, row.id).then((res) => {
+      console.log(res);
+    });
+    const index = newData.findIndex((item) => a.key === item.key);
     const item = newData[index];
-    newData.splice(index, 1, { ...item, ...row });
+    newData.splice(index, 1, { ...item, ...a });
     this.setState({
       dataSource: newData,
     });
@@ -197,7 +305,7 @@ class Mhbes extends React.Component {
       };
     });
     return (
-      <div className="newTank">
+      <div style={{ height: "fit-content" }}>
         <Table
           bordered
           components={components}
@@ -216,7 +324,7 @@ class Mhbes extends React.Component {
         </Button>
         <Modal open={this.state.open} onClose={() => this.handleClose()} center>
           <div className="newTankForm">
-            <h2 className="headerNewTank">إضافة خزان</h2>.
+            <h2 className="headerNewTank">إضافة محبس</h2>
             <Form
               className="newTankForm"
               name="basic"
@@ -229,7 +337,50 @@ class Mhbes extends React.Component {
               initialValues={{
                 remember: false,
               }}
-              onFinish={this.onFinish}
+              onFinish={(values) => {
+                if (document.getElementById("address").placeholder) {
+                  const bodyFormData = new FormData();
+                  bodyFormData.append("latitude", localStorage.getItem("lat"));
+                  bodyFormData.append("longitude", localStorage.getItem("lng"));
+                  bodyFormData.append("tank_number", this.state.tank_number);
+                  axios({
+                    method: "post",
+                    url: "http://192.168.0.109:5000//water/mahbes/add",
+                    headers: {
+                      "Content-Type": "multipart/form-data",
+                    },
+                    data: bodyFormData,
+                  })
+                    .then((response) => {
+                      message.success("تمت إضافة محبس جديد");
+                      this.handleClose();
+                      this.getStopcocks(this.state.tank_number).then((res) => {
+                        let i = 0;
+                        const data = [];
+                        for (; i < res.data.length; i++) {
+                          const a = {
+                            id: res.data[i].mahbes_number,
+                            key: i,
+                            index: i + 1,
+                            address:
+                              res.data[i].latitude +
+                              " , " +
+                              res.data[i].longitude,
+                          };
+                          data.push(a);
+                        }
+                        this.setState({
+                          dataSource: data,
+                          count: i,
+                        });
+                      });
+                    })
+                    .catch((error) => {
+                      console.log(error);
+                      message.error("حدث خطأ");
+                    });
+                }
+              }}
               onFinishFailed={this.onFinishFailed}
               autoComplete="off"
             >
@@ -238,12 +389,19 @@ class Mhbes extends React.Component {
                 name="address"
                 rules={[
                   {
-                    required: true,
                     message: "حدد عنوان المحبس",
                   },
                 ]}
               >
-                <Input id="cap" style={{ borderRadius: "20px" }} />
+                <Input
+                  id="address"
+                  style={{ borderRadius: "20px" }}
+                  onClick={() => {
+                    localStorage.removeItem("lat");
+                    localStorage.removeItem("lng");
+                    this.setState({ open3: true });
+                  }}
+                />
               </Form.Item>
 
               <Form.Item
@@ -261,6 +419,20 @@ class Mhbes extends React.Component {
               </Form.Item>
             </Form>
           </div>
+        </Modal>
+        <Modal
+          open={this.state.open3}
+          onClose={() => {
+            this.setState({ open3: false });
+            if (localStorage.getItem("lat"))
+              document.getElementById("address").placeholder =
+                localStorage.getItem("lat") +
+                " , " +
+                localStorage.getItem("lng");
+          }}
+          center
+        >
+          <LocationMap />
         </Modal>
       </div>
     );

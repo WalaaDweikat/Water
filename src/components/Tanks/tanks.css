@@ -17,6 +17,8 @@
 }
 
 .newTank{
+  height: fit-content;
+  margin-bottom: 200px;
   font-size: 20px;
   font-family: 'Tajawal', sans-serif;
 }

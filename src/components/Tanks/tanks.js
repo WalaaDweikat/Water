@@ -1,10 +1,12 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
-import { Table, Input, Button, Popconfirm, Form, Select } from "antd";
+import { Table, Input, Button, Popconfirm, Form, Select, message } from "antd";
 import { Modal } from "react-responsive-modal";
 import "antd/dist/antd.css";
 import "./tanks.css";
 import "react-responsive-modal/styles.css";
 import Mhbes from "../Mhbes/mhbes.js";
+import LocationMap from "../LocationMap/location.js";
+import axios from "axios";
 const { Option } = Select;
 const { Search } = Input;
 const EditableContext = React.createContext(null);
@@ -104,9 +106,9 @@ class Tanks extends React.Component {
         width: "10%",
       },
       {
-        title: "العنوان",
+        title: "الموقع",
         dataIndex: "address",
-        editable: true,
+        editable: false,
       },
       {
         title: "عرض المحابس",
@@ -120,6 +122,28 @@ class Tanks extends React.Component {
               onConfirm={() => this.handleShow(record)}
             >
               <Button> عرض</Button>
+            </Popconfirm>
+          ) : null,
+      },
+      {
+        title: "تحديث الموقع",
+        dataIndex: "updateLocation",
+        width: "10%",
+
+        render: (_, record) =>
+          this.state.dataSource.length >= 1 ? (
+            <Popconfirm
+              title="سيتم عرض الخريطة"
+              onConfirm={() => {
+                localStorage.setItem("key", record["key"]);
+                localStorage.removeItem("lat");
+                localStorage.removeItem("lng");
+                this.setState({
+                  open4: true,
+                });
+              }}
+            >
+              <Button> عرض الخريطة</Button>
             </Popconfirm>
           ) : null,
       },
@@ -140,25 +164,80 @@ class Tanks extends React.Component {
       },
     ];
     this.state = {
-      dataSource: [
-        {
-          id: "0",
-          key: "0",
-          index: "1",
-          capacity: "32",
-          address: "London, Park Lane no. 0",
-        },
-        {
-          key: "1",
-          index: "2",
-          capacity: "32",
-          address: "London, Park Lane no. 1",
-        },
-      ],
-      count: 2,
+      dataSource: [],
+      count: 0,
       open: false,
       open2: false,
+      open3: false,
+      open4: false,
+      tank_number: -1,
     };
+  }
+
+  async updateTankCapacity(capacity, tank_number) {
+    const bodyFormData = new FormData();
+    bodyFormData.append("tank_number", parseInt(tank_number));
+    bodyFormData.append("capacity", capacity);
+    axios({
+      method: "put",
+      url: "http://192.168.0.109:5000//water/MainTanks/updateMainTankCapacity",
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      data: bodyFormData,
+    })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  async updateTankLocation(lat, lng, tank_number) {
+    const bodyFormData = new FormData();
+    bodyFormData.append("tank_number", parseInt(tank_number));
+    bodyFormData.append("latitude", lat);
+    bodyFormData.append("longitude", lng);
+    axios({
+      method: "put",
+      url: "http://192.168.0.109:5000//water/MainTanks/updateMainTankLocation",
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      data: bodyFormData,
+    })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+  async getTanks() {
+    const axios = require("axios");
+    return await axios.get("http://192.168.0.109:5000//water/MainTanks");
+  }
+
+  componentDidMount() {
+    this.getTanks().then((res) => {
+      let i = 0;
+      const data = [];
+      for (; i < res.data.length; i++) {
+        const a = {
+          id: res.data[i].tank_number,
+          key: i,
+          index: i + 1,
+          capacity: res.data[i].capacity,
+          address: res.data[i].latitude + " , " + res.data[i].longitude,
+        };
+        data.push(a);
+      }
+      this.setState({
+        dataSource: data,
+        count: i,
+      });
+    });
   }
   onFinish = (values) => {
     console.log("Success:", values);
@@ -172,38 +251,76 @@ class Tanks extends React.Component {
   };
   handleDelete = (key) => {
     const dataSource = [...this.state.dataSource];
+    const id = this.state.dataSource[key].id;
+    const bodyFormData = new FormData();
+    bodyFormData.append("tank_number", parseInt(id));
+    axios({
+      method: "delete",
+      url: "http://192.168.0.109:5000//water/MainTanks/DeleteMainTank",
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      data: bodyFormData,
+    })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
     this.setState({
       dataSource: dataSource.filter((item) => item.key !== key),
     });
   };
   handleShow = (record) => {
     this.setState({
+      tank_number: record.id,
       dataSource: [...this.state.dataSource],
       open2: true,
     });
   };
-  handleAdd = (capacity) => {
-    const { count, dataSource } = this.state;
-    const newData = {
-      key: count,
-      index: count,
-      capacity: capacity,
-      address: `أدخل العنوان `,
-    };
-    this.setState({
-      dataSource: [...dataSource, newData],
-      count: count + 1,
-    });
-  };
+
   handleSave = (row) => {
     const newData = [...this.state.dataSource];
     const index = newData.findIndex((item) => row.key === item.key);
     const item = newData[index];
     newData.splice(index, 1, { ...item, ...row });
+    this.updateTankCapacity(newData[item.key].capacity, newData[item.key].id);
     this.setState({
       dataSource: newData,
     });
   };
+
+  handleSaveLocation = (row) => {
+    console.log(row);
+    const newData = [];
+    for (let i = 0; i < this.state.dataSource.length; i++) {
+      let add = "";
+      if (this.state.dataSource[i].id === row.id) {
+        add = row.address;
+        const b = row.address.split(" , ");
+        console.log(b[0]);
+        this.updateTankLocation(b[0], b[1], row.id).then((res) =>
+          console.log(res)
+        );
+      } else {
+        add = this.state.dataSource[i].address;
+      }
+      const a = {
+        id: this.state.dataSource[i].id,
+        key: this.state.dataSource[i].key,
+        index: this.state.dataSource[i].index,
+        capacity: this.state.dataSource[i].capacity,
+        address: add,
+      };
+      newData.push(a);
+    }
+    this.setState({
+      dataSource: newData,
+    });
+  };
+
   handleOpen() {
     this.setState({
       dataSource: [...this.state.dataSource],
@@ -244,17 +361,6 @@ class Tanks extends React.Component {
     });
     return (
       <div className="newTank">
-        <div className="search">
-          <Select placeholder="البحث بناء على" style={{ width: "130px" }}>
-            <Option value="capacity">السعة</Option>
-            <Option value="address">العنوان</Option>
-          </Select>
-          <Search
-            placeholder="أدخل نص البحث"
-            enterButton
-            style={{ width: "290px", marginRight: "5px" }}
-          />
-        </div>
         <Table
           bordered
           components={components}
@@ -286,7 +392,54 @@ class Tanks extends React.Component {
               initialValues={{
                 remember: false,
               }}
-              onFinish={this.onFinish}
+              onFinish={(values) => {
+                if (document.getElementById("newTankAddress").placeholder) {
+                  const capacity = values.cap;
+                  const bodyFormData = new FormData();
+                  bodyFormData.append("capacity", capacity);
+                  bodyFormData.append("height", 0);
+                  bodyFormData.append("latitude", localStorage.getItem("lat"));
+                  bodyFormData.append("longitude", localStorage.getItem("lng"));
+
+                  axios({
+                    method: "post",
+                    url: "http://192.168.0.109:5000///water/MainTanks/AddNewMainTank",
+                    headers: {
+                      "Content-Type": "multipart/form-data",
+                    },
+                    data: bodyFormData,
+                  })
+                    .then((response) => {
+                      message.success("تمت إضافة خزان جديد");
+                      this.handleClose();
+                      this.getTanks().then((res) => {
+                        let i = 0;
+                        const data = [];
+                        for (; i < res.data.length; i++) {
+                          const a = {
+                            id: res.data[i].tank_number,
+                            key: i,
+                            index: i + 1,
+                            capacity: res.data[i].capacity,
+                            address:
+                              res.data[i].latitude +
+                              " , " +
+                              res.data[i].longitude,
+                          };
+                          data.push(a);
+                        }
+                        this.setState({
+                          dataSource: data,
+                          count: i,
+                        });
+                      });
+                    })
+                    .catch((error) => {
+                      console.log(error);
+                      message.error("حدث خطأ");
+                    });
+                }
+              }}
               onFinishFailed={this.onFinishFailed}
               autoComplete="off"
             >
@@ -307,17 +460,26 @@ class Tanks extends React.Component {
                 <Input id="cap" style={{ borderRadius: "20px" }} />
               </Form.Item>
 
-              <Form.Item name="location">
-                <Button
-                  style={{
-                    background: "#ee2260",
-                    borderColor: "#ee2260",
-                    color: "white",
-                    borderRadius: "20px",
+              <Form.Item
+                label="العنوان"
+                name="newTankAddress"
+                rules={[
+                  {
+                    message: "حدد العنوان",
+                  },
+                ]}
+              >
+                <Input
+                  id="newTankAddress"
+                  onClick={() => {
+                    localStorage.removeItem("lat");
+                    localStorage.removeItem("lng");
+                    this.setState({
+                      open3: true,
+                    });
                   }}
-                >
-                  تحديد موقع الخزان
-                </Button>
+                  style={{ borderRadius: "20px" }}
+                />
               </Form.Item>
 
               <Form.Item
@@ -337,13 +499,50 @@ class Tanks extends React.Component {
           </div>
         </Modal>
         <Modal
-          style={{ width: "100vw" }}
           open={this.state.open2}
           onClose={() => this.handleClose()}
           center
-          sty
         >
-          <Mhbes />
+          <Mhbes tank_number={this.state.tank_number} />
+        </Modal>
+
+        <Modal
+          open={this.state.open3}
+          onClose={() => {
+            this.setState({ open3: false });
+            if (localStorage.getItem("lat"))
+              document.getElementById("newTankAddress").placeholder =
+                localStorage.getItem("lat") +
+                " , " +
+                localStorage.getItem("lng");
+          }}
+          center
+        >
+          <LocationMap />
+        </Modal>
+        <Modal
+          open={this.state.open4}
+          onClose={() => {
+            this.setState({ open4: false });
+            const key = localStorage.getItem("key");
+            localStorage.removeItem("key");
+            if (localStorage.getItem("lat")) {
+              const record = {
+                id: this.state.dataSource[key].id,
+                key: key,
+                index: this.state.dataSource[key].index,
+                capacity: this.state.dataSource[key].capacity,
+                address:
+                  localStorage.getItem("lat") +
+                  " , " +
+                  localStorage.getItem("lng"),
+              };
+              this.handleSaveLocation(record);
+            }
+          }}
+          center
+        >
+          <LocationMap />
         </Modal>
       </div>
     );

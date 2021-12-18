@@ -17,7 +17,7 @@ export default function Login() {
 
   const error = () => {
     message.error({
-      content: "كلمة مرور خاطئة",
+      content: "كلمة مرور  او اسم المستخدم خاطئ",
       style: {
         marginTop: "30vh",
       },
@@ -26,21 +26,36 @@ export default function Login() {
   };
   const onFinish = async (values) => {
     const axios = require("axios");
-    const res = await axios.get("http://192.168.0.108:5000//water/login", {
+    const res = await axios.get("http://192.168.0.109:5000//water/login", {
       params: { username: username, password: password },
     });
 
-    console.log(res.data);
     if (res.data === 0) {
       //admin
       localStorage.setItem("username", username);
       history.push("/water/admin/home");
-      window.location.reload();
     } else if (res.data === -1) {
       //user
       localStorage.setItem("username", username);
+
       history.push("/water/user/home");
-      window.location.reload();
+    } else if (res.data === 1) {
+      //water_engineer
+      localStorage.setItem("username", username);
+      history.push("/water/water_engineer/home");
+    } else if (res.data === 2) {
+      //water_Technician
+      localStorage.setItem("username", username);
+      history.push("/water/water_technician/home");
+    } else if (res.data === 3) {
+      // "موظف الخدمات";
+
+      localStorage.setItem("username", username);
+      history.push("/water/");
+    } else if (res.data === 4) {
+      //موظف العدادات والشحن";
+      localStorage.setItem("username", username);
+      history.push("/water/");
     } else error();
   };
 

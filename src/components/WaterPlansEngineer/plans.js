@@ -2,7 +2,7 @@ import "./plans.css";
 import L, { map, point, polygon } from "leaflet";
 import { Form, Input, Button, Select } from "antd";
 import { useState, useEffect, useRef } from "react";
-
+let points = [];
 function inside(point, vs) {
   var x = point[0],
     y = point[1];
@@ -25,8 +25,8 @@ export default function WaterPlansEngineer() {
   const [action, setAcction] = useState(-1);
   const [display, setDisplay] = useState("flex");
   const mapRef = useRef(null);
-  const [reset, setReset] = useState(false);
   const [position, setPosition] = useState([0, 0]);
+  const [draw, setDraw] = useState(false);
   useEffect(() => {
     mapRef.current = L.map("map", {
       center: [32.131596, 35.205],
@@ -39,14 +39,8 @@ export default function WaterPlansEngineer() {
         }),
       ],
     });
-    let points = [];
+
     mapRef.current.on("click", function (e) {
-      if (reset === true) {
-        console.log("walaa");
-        points = [];
-        setLocation(points);
-        console.log(location);
-      }
       const a = [];
       a[0] = e.latlng.lat;
       a[1] = e.latlng.lng;
@@ -55,7 +49,13 @@ export default function WaterPlansEngineer() {
       setLocation(points);
     });
   }, []);
-
+  useEffect(() => {
+    if (draw === true) {
+      points = [];
+      setLocation([]);
+      setDraw(false);
+    }
+  }, [draw]);
   useEffect(() => {
     var circleOptions = {
       color: "blue",
@@ -66,7 +66,6 @@ export default function WaterPlansEngineer() {
     circle.addTo(mapRef.current);
   }, [position]);
 
-  useEffect(() => {}, [action]);
   return (
     <div>
       <Button
@@ -81,28 +80,29 @@ export default function WaterPlansEngineer() {
       >
         اضغط هنا لتعديل المناطق التوزيعية
       </Button>
-      <div>
+      <div className="newDA" id="newDA">
         <Form
-          id="newDA"
-          className="newDA"
+          id="form1"
+          className="form"
           layout="vertical"
           name="basic"
           labelCol={{
-            span: 5,
+            span: 100,
           }}
           wrapperCol={{
-            span: 8,
+            span: 100,
           }}
           initialValues={{
             remember: false,
           }}
           onFinish={(values) => {
-            if (action === 1) {
-              console.log(location);
-              const polygon = L.polygon(location, { color: "red" });
-              polygon.addTo(mapRef.current);
-              document.getElementById("newDA").reset();
-            }
+            const polygon = L.polygon(location, {
+              color: "red",
+              fillColor: "transparent",
+            });
+            polygon.addTo(mapRef.current);
+            document.getElementById("form1").reset();
+            setDraw(true);
           }}
           onFinishFailed={(values) => {}}
           autoComplete="off"
@@ -131,14 +131,43 @@ export default function WaterPlansEngineer() {
                 style={{
                   marginTop: "5px",
                 }}
-                onClick={() => {
-                  setAcction(1);
-                  setReset(true);
-                }}
               >
                 أضف
               </Button>
             </Form.Item>
+          </div>
+        </Form>
+
+        <Form
+          id="form2"
+          className="form"
+          layout="vertical"
+          labelCol={{
+            span: 100,
+          }}
+          wrapperCol={{
+            span: 100,
+          }}
+          initialValues={{
+            remember: false,
+          }}
+          onFinish={(values) => {}}
+          onFinishFailed={(values) => {}}
+          autoComplete="off"
+        >
+          <Form.Item
+            label="اختر المنطقة التوزيعية"
+            name="DAname_select"
+            rules={[
+              {
+                required: true,
+                message: "اختر اسم المنطقة التوزيعية",
+              },
+            ]}
+          >
+            <Select id="DAname_select" />
+          </Form.Item>
+          <div className="buttons">
             <Form.Item
               wrapperCol={{
                 offset: 0,
@@ -149,10 +178,6 @@ export default function WaterPlansEngineer() {
                 htmlType="submit"
                 style={{
                   marginTop: "5px",
-                  marginRight: "10px",
-                }}
-                onClick={() => {
-                  setAcction(0);
                 }}
               >
                 حذف
@@ -161,20 +186,8 @@ export default function WaterPlansEngineer() {
           </div>
         </Form>
       </div>
+
       <div id="map" className="map_A"></div>
-      {/* <MapContainer
-        ref={mapRef}
-        center={[32.131596, 35.205]}
-        zoom={17}
-        scrollWheelZoom={false}
-        className="map_A"
-      >
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        />
-        <Markers location={location} />
-      </MapContainer> */}
     </div>
   );
 }

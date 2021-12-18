@@ -32,7 +32,6 @@ function Admin() {
   const singout = () => {
     localStorage.removeItem("username");
     history.push("/water/login");
-    window.location.reload();
   };
 
   window.addEventListener("click", () => {
@@ -58,9 +57,9 @@ function Admin() {
             <Menu.Item className="item" key="/water/admin/water_plans">
               <Link to="/water/admin/water_plans">شبكات المياه</Link>
             </Menu.Item>
-            <Menu.Item className="item" key="/water/admin/complaints">
+            {/* <Menu.Item className="item" key="/water/admin/complaints">
               <Link to="/water/admin/complaints"> الشكاوي</Link>
-            </Menu.Item>
+            </Menu.Item> */}
             <Menu.Item className="item" key="/water/admin/employees">
               <Link to="/water/admin/employees"> الموظفيين</Link>
             </Menu.Item>
@@ -100,7 +99,7 @@ function Admin() {
                     الموظفيين
                   </Button>
                 </Link>
-                <Link to="/water/admin/complaints">
+                {/* <Link to="/water/admin/complaints">
                   <Button
                     type="primary"
                     id="complaints"
@@ -108,7 +107,7 @@ function Admin() {
                   >
                     الشكاوي
                   </Button>
-                </Link>
+                </Link> */}
                 <Link to="/water/admin/water_plans">
                   <Button
                     type="primary"

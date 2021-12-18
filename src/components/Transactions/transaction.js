@@ -8,7 +8,7 @@ export default function Transactions() {
   const getTransactions = async () => {
     const axios = require("axios");
     return await axios.get(
-      "http://192.168.0.108:5000//water/transactionsIdNum",
+      "http://192.168.0.109:5000//water/transactionsIdNum",
       {
         params: { id_number: localStorage.getItem("username") },
       }
@@ -18,7 +18,7 @@ export default function Transactions() {
   const getComplaints = async () => {
     const axios = require("axios");
     return await axios.get(
-      "http://192.168.0.108:5000//water/complaints/getComplaintsByid_number",
+      "http://192.168.0.109:5000//water/complaints/getComplaintsByid_number",
       {
         params: { id_number: localStorage.getItem("username") },
       }
@@ -28,7 +28,7 @@ export default function Transactions() {
   const getOrderStatus = async (order_number) => {
     const axios = require("axios");
     return await axios.get(
-      "http://192.168.0.108:5000//water/OrderStatus/getByorder_number",
+      "http://192.168.0.109:5000//water/OrderStatus/getByorder_number",
       {
         params: { order_number: order_number },
       }
@@ -38,7 +38,7 @@ export default function Transactions() {
   const getComplaintStatus = async (com_number) => {
     const axios = require("axios");
     return await axios.get(
-      "http://192.168.0.108:5000//water/complaints_status/getBycomplaints_number",
+      "http://192.168.0.109:5000//water/complaints_status/getBycomplaints_number",
       {
         params: { complaints_number: com_number },
       }
