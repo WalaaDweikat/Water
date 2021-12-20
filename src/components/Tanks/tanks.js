@@ -7,8 +7,6 @@ import "react-responsive-modal/styles.css";
 import Mhbes from "../Mhbes/mhbes.js";
 import LocationMap from "../LocationMap/location.js";
 import axios from "axios";
-const { Option } = Select;
-const { Search } = Input;
 const EditableContext = React.createContext(null);
 const EditableRow = ({ index, ...props }) => {
   const [form] = Form.useForm();

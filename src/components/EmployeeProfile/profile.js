@@ -1,24 +1,80 @@
 import "./profile.css";
 import "antd/dist/antd.css";
-import NewUserTank from "../NewUserTank/newUserTank.js";
+import axios from "axios";
+import { Modal } from "react-responsive-modal";
+import LocationMap from "../LocationMap/location.js";
 import { useState, useEffect } from "react";
-import { Form, Input, Button, Select, Tabs } from "antd";
+import { Form, Input, Button, Select, Tabs, message } from "antd";
 const { TabPane } = Tabs;
-export default function EmployeeProfile() {
-  const [count, setCount] = useState(1);
+export default function Profile() {
+  localStorage.setItem("changed", 0);
+
+  const [open, setOpen] = useState(false);
   const [w, setW] = useState(window.innerWidth);
   const [position, setPosition] = useState("top");
+  const getAccountInfo = async () => {
+    const axios = require("axios");
+    return await axios.get(
+      "http://192.168.0.109:5000//water/employeeAccount/getEmailById",
+      {
+        params: { username: localStorage.getItem("username") },
+      }
+    );
+  };
+  const getPersonalInfo = async () => {
+    const axios = require("axios");
+    return await axios.get(
+      "http://192.168.0.109:5000//water/employees/search_id",
+      {
+        params: { id_number: localStorage.getItem("username") },
+      }
+    );
+  };
+
+  useEffect(() => {
+    getAccountInfo().then((res) => {
+      document.getElementById("email").placeholder = res.data.email;
+    });
+
+    getPersonalInfo().then((res) => {
+      const name =
+        res.data[0].Fname + " " + res.data[0].Sname + " " + res.data[0].Lname;
+      document.getElementById("username").placeholder = name;
+      document.getElementById("idNumber").placeholder = res.data[0].id;
+      document.getElementById("area").placeholder = res.data[0].area;
+      document.getElementById("region").placeholder = res.data[0].region;
+      document.getElementById("street").placeholder = res.data[0].street;
+    });
+  }, []);
+
+  const success = () => {
+    message.success({
+      content: "تم تغيير كلمة المرور بنجاح ",
+      style: {
+        marginTop: "30vh",
+      },
+      duration: 1,
+    });
+  };
+
+  const error = () => {
+    message.error({
+      content: "كلمة مرور خاطئة",
+      style: {
+        marginTop: "30vh",
+      },
+      duration: 1,
+    });
+  };
 
   window.addEventListener("resize", () => {
     setW(window.innerWidth);
   });
-  const onFinish = (values) => {
-    console.log("Success:", values);
-  };
 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
+
   useEffect(() => {
     if (w < 350) {
       setPosition("right");
@@ -26,6 +82,7 @@ export default function EmployeeProfile() {
       setPosition("top");
     }
   }, [w]);
+
   return (
     <Tabs
       defaultActiveKey="1"
@@ -43,9 +100,47 @@ export default function EmployeeProfile() {
               }}
               labelCol={{ span: 100 }}
               initialValues={{
-                remember: false,
+                remember: true,
               }}
-              onFinish={onFinish}
+              // onFinish={(values) => {
+              //   let area = values.area;
+              //   let region = values.region;
+              //   let street = values.street;
+
+              //   if (area === undefined)
+              //     area = document.getElementById("area").placeholder;
+              //   if (region === undefined)
+              //     region = document.getElementById("region").placeholder;
+              //   if (street === undefined)
+              //     street = document.getElementById("street").placeholder;
+
+              //   const bodyFormData = new FormData();
+              //   bodyFormData.append(
+              //     "id_number",
+              //     localStorage.getItem("username")
+              //   );
+              //   bodyFormData.append("area", area);
+              //   bodyFormData.append("region", region);
+              //   bodyFormData.append("street", street);
+              //   axios({
+              //     method: "put",
+              //     url: "http://192.168.0.109:5000//water/citizens/updateInfo/all",
+              //     data: bodyFormData,
+              //     headers: {
+              //       "Content-Type": "multipart/form-data",
+              //     },
+              //   })
+              //     .then((response) => {
+              //       if (response.data === "Updated") {
+              //         document.getElementById("area").placeholder = area;
+              //         document.getElementById("region").placeholder = region;
+              //         document.getElementById("street").placeholder = street;
+              //       }
+              //     })
+              //     .catch((error) => {
+              //       console.log(error);
+              //     });
+              // }}
               onFinishFailed={onFinishFailed}
               autoComplete="off"
               className="info"
@@ -55,55 +150,39 @@ export default function EmployeeProfile() {
               </Form.Item>
               <Form.Item
                 label="المدينة "
-                name="address"
+                name="area"
                 rules={[
                   {
-                    required: true,
+                    required: false,
                     message: "قم بإدخال المدينة",
                   },
                 ]}
               >
-                <Select id="city" />
+                <Input id="area" />
               </Form.Item>
               <Form.Item
                 label="التجمع"
-                name="area"
+                name="region"
                 rules={[
                   {
-                    required: true,
+                    required: false,
                     message: "قم بإدخال التجمع ",
                   },
                 ]}
               >
-                <Select id="area" />
+                <Input id="region" />
               </Form.Item>
               <Form.Item
                 label="الشارع"
                 name="street"
                 rules={[
                   {
-                    required: true,
+                    required: false,
                     message: "قم بإدخال الشارع",
                   },
                 ]}
               >
                 <Input id="street" />
-              </Form.Item>
-              <Form.Item
-                label="رقم الهاتف المحمول"
-                name="phone_number"
-                rules={[
-                  {
-                    required: true,
-                    message: "قم بإدخال رقم الهاتف المحمول",
-                  },
-                  {
-                    pattern: /^(?:\d*)$/,
-                    message: "يرجى إدخال أرقام فقط",
-                  },
-                ]}
-              >
-                <Input id="phone_number" />
               </Form.Item>
 
               <Form.Item>
@@ -135,7 +214,34 @@ export default function EmployeeProfile() {
               initialValues={{
                 remember: false,
               }}
-              onFinish={onFinish}
+              // onFinish={(values) => {
+              //   let email = values.email;
+
+              //   if (email === undefined)
+              //     email = document.getElementById("email").placeholder;
+              //   const bodyFormData = new FormData();
+              //   bodyFormData.append(
+              //     "username",
+              //     localStorage.getItem("username")
+              //   );
+              //   bodyFormData.append("email", email);
+              //   axios({
+              //     method: "put",
+              //     url: "http://192.168.0.109:5000///water/users/updateEmail",
+              //     headers: {
+              //       "Content-Type": "multipart/form-data",
+              //     },
+              //     data: bodyFormData,
+              //   })
+              //     .then((response) => {
+              //       if (response.data === "Updated") {
+              //         document.getElementById("email").placeholder = email;
+              //       }
+              //     })
+              //     .catch((error) => {
+              //       console.log(error);
+              //     });
+              // }}
               onFinishFailed={onFinishFailed}
               autoComplete="off"
             >
@@ -151,7 +257,7 @@ export default function EmployeeProfile() {
                     message: "يرجى إدخال بريد إلكتروني صالح",
                   },
                   {
-                    required: true,
+                    required: false,
                     message: "أدخل بريك الإلكتروني",
                   },
                 ]}
@@ -177,7 +283,7 @@ export default function EmployeeProfile() {
         </div>
       </TabPane>
 
-      <TabPane tab="تغيير كلمة المرور" key="3">
+      <TabPane tab="تغيير كلمة المرور" key="2">
         <div className="sec ">
           <Form
             layout="vertical"
@@ -188,14 +294,37 @@ export default function EmployeeProfile() {
             initialValues={{
               remember: false,
             }}
-            onFinish={onFinish}
+            onFinish={(values) => {
+              let old_pass = values.old_pass;
+              let new_pass = values.new_pass;
+
+              const bodyFormData = new FormData();
+              bodyFormData.append("username", localStorage.getItem("username"));
+              bodyFormData.append("newPassword", new_pass);
+              bodyFormData.append("oldPassword", old_pass);
+              axios({
+                method: "put",
+                url: "http://192.168.0.109:5000///water/users/changePass",
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                },
+                data: bodyFormData,
+              })
+                .then((response) => {
+                  if (response.data === "password changed") success();
+                  else if (response.data === "wrong password") error();
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
+            }}
             onFinishFailed={onFinishFailed}
             autoComplete="off"
           >
             <div className="t">تغيير كلمة المرور</div>
             <Form.Item
               label="كلمة المرور القديمة"
-              name="old_password"
+              name="old_pass"
               rules={[
                 {
                   required: true,
@@ -207,7 +336,7 @@ export default function EmployeeProfile() {
             </Form.Item>
             <Form.Item
               label="كلمة المرور الجديدة"
-              name="new_password"
+              name="new_pass"
               rules={[
                 {
                   required: true,
@@ -238,6 +367,19 @@ export default function EmployeeProfile() {
           </Form>
         </div>
       </TabPane>
+      <Modal
+        open={open}
+        onClose={() => {
+          setOpen(false);
+          if (localStorage.getItem("lat") !== null) {
+            document.getElementById("service_address").placeholder =
+              localStorage.getItem("lat") + "," + localStorage.getItem("lng");
+          }
+        }}
+        center
+      >
+        <LocationMap />
+      </Modal>
     </Tabs>
   );
 }

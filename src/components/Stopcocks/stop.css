@@ -1,0 +1,54 @@
+
+.stopForm
+{
+ margin-top: 200px;
+ height:fit-content;
+ margin-bottom: 240px;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+ padding-right: 5%;
+}
+
+
+.stopForm label{
+  padding-top:10px;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 15px;
+}
+
+.stopForm Button{
+  font-family: 'Tajawal', sans-serif;
+  text-align: center;
+  font-size: 15px;
+  height: 35px;
+  background-color: #ee2260;
+  border-color: #ee2260;
+  height: 35px;
+}
+
+.stopForm Input{
+  font-family: 'Tajawal', sans-serif;
+  font-size: 15px;
+}
+
+.stopForm TextArea{
+  font-family: 'Tajawal', sans-serif;
+  font-size: 15px;
+}
+
+.comAddress{
+  display: flex;
+  justify-content: right;
+  flex-direction: column;
+}
+
+
+.stopForm Input::-webkit-input-placeholder {
+  color: black !important;
+  }
+
+
+@media only screen and (max-width: 600px) {
+  .stopForm
+    {
+       margin-right: 0;
+    }
+}

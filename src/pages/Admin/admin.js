@@ -6,7 +6,7 @@ import Login from "../Login/login.js";
 import Tanks from "../../components/Tanks/tanks.js";
 import Employees from "../../components/Employees/employees.js";
 import WaterPlans from "../../components/WaterPlans/plans.js";
-import ComAdmin from "../../components/ComAdmin/comAd.js";
+import WaterServices from "../../components/WaterServices/comAd.js";
 import {
   BrowserRouter as Router,
   Route,
@@ -18,7 +18,7 @@ import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Layout, Menu, Button } from "antd";
 import {
-  faComment,
+  faTint,
   faArchive,
   faUsers,
   faBorderNone,
@@ -57,9 +57,9 @@ function Admin() {
             <Menu.Item className="item" key="/water/admin/water_plans">
               <Link to="/water/admin/water_plans">شبكات المياه</Link>
             </Menu.Item>
-            {/* <Menu.Item className="item" key="/water/admin/complaints">
-              <Link to="/water/admin/complaints"> الشكاوي</Link>
-            </Menu.Item> */}
+            <Menu.Item className="item" key="/water/admin/services">
+              <Link to="/water/admin/services"> الاشتراكات</Link>
+            </Menu.Item>
             <Menu.Item className="item" key="/water/admin/employees">
               <Link to="/water/admin/employees"> الموظفيين</Link>
             </Menu.Item>
@@ -99,15 +99,15 @@ function Admin() {
                     الموظفيين
                   </Button>
                 </Link>
-                {/* <Link to="/water/admin/complaints">
+                <Link to="/water/admin/services">
                   <Button
                     type="primary"
                     id="complaints"
-                    icon={<FontAwesomeIcon icon={faComment} className="icon" />}
+                    icon={<FontAwesomeIcon icon={faTint} className="icon" />}
                   >
-                    الشكاوي
+                    الاشتراكات
                   </Button>
-                </Link> */}
+                </Link>
                 <Link to="/water/admin/water_plans">
                   <Button
                     type="primary"
@@ -146,7 +146,7 @@ function Admin() {
                 <Employees />
               </div>
             </Route>
-            <Route path="/water/admin/complaints">
+            <Route path="/water/admin/services">
               <div className="tanksContainer">
                 <h2
                   style={{
@@ -157,9 +157,9 @@ function Admin() {
                     fontWeight: "bold",
                   }}
                 >
-                  الشكاوي
+                  الاشتراكات
                 </h2>
-                <ComAdmin />
+                <WaterServices />
               </div>
             </Route>
             <Route path="/water/admin/water_plans">

@@ -2,6 +2,10 @@ import "./plans.css";
 import L, { map, point, polygon } from "leaflet";
 import { Form, Input, Button, Select } from "antd";
 import { useState, useEffect, useRef } from "react";
+import Tank from "../../img/tank.png";
+import Mahbes from "../../img/mahbes.png";
+import Service from "../../img/serviceIcon.png";
+import Complaint from "../../img/complaint.png";
 let points = [];
 function inside(point, vs) {
   var x = point[0],
@@ -22,11 +26,62 @@ function inside(point, vs) {
 
 export default function WaterPlansEngineer() {
   const [location, setLocation] = useState([]);
-  const [action, setAcction] = useState(-1);
   const [display, setDisplay] = useState("flex");
   const mapRef = useRef(null);
   const [position, setPosition] = useState([0, 0]);
   const [draw, setDraw] = useState(false);
+  const tankIcon = L.icon({
+    iconSize: [35, 35],
+    iconAnchor: [5, 5],
+    popupAnchor: [0, 0],
+    iconUrl: Tank,
+  });
+  const mahbesIcon = L.icon({
+    iconSize: [25, 25],
+    iconAnchor: [5, 5],
+    iconUrl: Mahbes,
+  });
+
+  const serviceIcon = L.icon({
+    iconSize: [25, 25],
+    iconAnchor: [5, 5],
+    popupAnchor: [0, 0],
+    iconUrl: Service,
+  });
+
+  const complaintIcon = L.icon({
+    iconSize: [35, 35],
+    iconAnchor: [5, 5],
+    popupAnchor: [0, 0],
+    iconUrl: Complaint,
+  });
+  const getTanks = async () => {
+    const axios = require("axios");
+    return await axios.get("http://192.168.0.109:5000//water/MainTanks");
+  };
+
+  const getServices = async () => {
+    const axios = require("axios");
+    return await axios.get("http://192.168.0.109:5000//water/services");
+  };
+
+  const getComplaints = async () => {
+    const axios = require("axios");
+    return await axios.get(
+      "http://192.168.0.109:5000//water/complaints/getAll"
+    );
+  };
+
+  const getStopcocks = async (tank_number) => {
+    const axios = require("axios");
+    return await axios.get(
+      "http://192.168.0.109:5000//water/mahbes/search_tank_number",
+      {
+        params: { tank_number: tank_number },
+      }
+    );
+  };
+  const colors = ["yellow", "red", "green"];
   useEffect(() => {
     mapRef.current = L.map("map", {
       center: [32.131596, 35.205],
@@ -39,7 +94,91 @@ export default function WaterPlansEngineer() {
         }),
       ],
     });
+    getTanks().then((res) => {
+      for (let i = 0; i < res.data.length; i++) {
+        getStopcocks(res.data[i].tank_number).then((res2) => {
+          for (let j = 0; j < res2.data.length; j++) {
+            L.Routing.control({
+              waypoints: [
+                L.latLng(res.data[i].latitude, res.data[i].longitude),
+                L.latLng(res2.data[j].latitude, res2.data[j].longitude),
+              ],
+              collapsible: false,
+              lineOptions: {
+                styles: [{ color: colors[i], weight: 3 }],
+              },
+              show: false,
+              addWaypoints: false,
+              routeWhileDragging: false,
+              draggableWaypoints: false,
+              fitSelectedRoutes: false,
+              showAlternatives: false,
+              createMarker: function () {
+                return null;
+              },
+            }).addTo(mapRef.current);
+            L.marker(
+              [res2.data[j].latitude, res2.data[j].longitude],
+              {
+                draggable: false, // Make the icon dragable
+                title: "محبس", // Add a title
+                opacity: 1,
+                icon: mahbesIcon,
+                color: colors[i],
+              } // Adjust the opacity
+            ).addTo(mapRef.current);
+          }
+        });
+        const tank = L.marker(
+          [res.data[i].latitude, res.data[i].longitude],
+          {
+            draggable: false, // Make the icon dragable
+            title: "خزان", // Add a title
+            opacity: 1,
+            icon: tankIcon,
+          } // Adjust the opacity
+        )
+          .addTo(mapRef.current)
+          .bindPopup(
+            `<b> الخزان رقم ${res.data[i].tank_number}</b><br> سعة الخزان ${res.data[i].capacity}`
+          );
+      }
+    });
 
+    getServices().then((res) => {
+      for (let i = 0; i < res.data.length; i++) {
+        L.marker(
+          [res.data[i].latitude, res.data[i].longitude],
+          {
+            draggable: false, // Make the icon dragable
+            title: "خدمة", // Add a title
+            opacity: 1,
+            icon: serviceIcon,
+          } // Adjust the opacity
+        )
+          .addTo(mapRef.current)
+          .bindPopup(
+            `<b> خدمة  رقم ${res.data[i].service_number}</b><br> عدد الأفراد${res.data[i].family_number}`
+          );
+      }
+    });
+    getComplaints().then((res) => {
+      for (let i = 0; i < res.data.length; i++) {
+        L.marker(
+          [res.data[i].latitude, res.data[i].longitude],
+          {
+            draggable: false, // Make the icon dragable
+            title: "شكوى", // Add a title
+            opacity: 1,
+            icon: complaintIcon,
+          } // Adjust the opacity
+        )
+          .addTo(mapRef.current)
+          .bindPopup(
+            `<b> شكوى  رقم ${res.data[i].complaints_number}</b><br> رقم هوية صاحب الشكوى ${res.data[i].id_number}<br> موضوع الشكوى : ${res.data[i].subject}<br> تاريخ الشكوى : ${res.data[i].date}`
+          );
+      }
+    });
     mapRef.current.on("click", function (e) {
       const a = [];
       a[0] = e.latlng.lat;

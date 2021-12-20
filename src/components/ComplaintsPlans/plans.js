@@ -8,7 +8,7 @@ import Complaint from "../../img/complaint.png";
 
 import "leaflet-routing-machine";
 
-export default function WaterPlans() {
+export default function ComplaintsPlans() {
   const mapRef = useRef(null);
   const tankIcon = L.icon({
     iconSize: [35, 35],
@@ -30,19 +30,15 @@ export default function WaterPlans() {
   });
 
   const complaintIcon = L.icon({
-    iconSize: [35, 35],
+    iconSize: [40, 40],
     iconAnchor: [5, 5],
     popupAnchor: [0, 0],
     iconUrl: Complaint,
   });
+
   const getTanks = async () => {
     const axios = require("axios");
     return await axios.get("http://192.168.0.109:5000//water/MainTanks");
-  };
-
-  const getServices = async () => {
-    const axios = require("axios");
-    return await axios.get("http://192.168.0.109:5000//water/services");
   };
 
   const getComplaints = async () => {
@@ -107,10 +103,12 @@ export default function WaterPlans() {
                 icon: mahbesIcon,
                 color: colors[i],
               } // Adjust the opacity
-            ).addTo(mapRef.current);
+            )
+              .addTo(mapRef.current)
+              .bindPopup(`<b> المحبس رقم ${res2.data[j].mahbes_number}</b>`);
           }
         });
-        const tank = L.marker(
+        L.marker(
           [res.data[i].latitude, res.data[i].longitude],
           {
             draggable: false, // Make the icon dragable
@@ -126,23 +124,6 @@ export default function WaterPlans() {
       }
     });
 
-    getServices().then((res) => {
-      for (let i = 0; i < res.data.length; i++) {
-        L.marker(
-          [res.data[i].latitude, res.data[i].longitude],
-          {
-            draggable: false, // Make the icon dragable
-            title: "خدمة", // Add a title
-            opacity: 1,
-            icon: serviceIcon,
-          } // Adjust the opacity
-        )
-          .addTo(mapRef.current)
-          .bindPopup(
-            `<b> خدمة  رقم ${res.data[i].service_number}</b><br> عدد الأفراد${res.data[i].family_number}`
-          );
-      }
-    });
     getComplaints().then((res) => {
       for (let i = 0; i < res.data.length; i++) {
         L.marker(

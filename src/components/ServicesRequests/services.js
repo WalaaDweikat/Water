@@ -9,12 +9,42 @@ const { TextArea } = Input;
 export default function WaterTechCom() {
   const [com, setCom] = useState([]);
   const [image, setImage] = useState([]);
+  const [sesrviceNumber, setServiceNumber] = useState("0000");
+  const [name, setName] = useState("");
   const [open, setOpen] = useState(false);
-  const getComplaints = async () => {
+  const [i, setI] = useState(0);
+  const getOrders = async () => {
     const axios = require("axios");
-    return await axios.get(
-      "http://192.168.0.109:5000//water/complaints/getAll"
-    );
+    return await axios.get("http://192.168.0.109:5000//water/transactions");
+  };
+
+  const getCitizen = async (id_number) => {
+    const axios = require("axios");
+    await axios
+      .get("http://192.168.0.109:5000//water/citizens/search_id_number", {
+        params: { id_number: id_number },
+      })
+      .then((res) => {
+        setName(
+          res.data[0].first_name +
+            " " +
+            res.data[0].middle_name +
+            " " +
+            res.data[0].last_name
+        );
+      });
+  };
+
+  const getorderRef = async (order_number) => {
+    const axios = require("axios");
+    await axios
+      .get("http://192.168.0.109:5000//water/order_ref", {
+        params: { order_number: order_number },
+      })
+      .then((res) => {
+        if (res.data) setServiceNumber(res.data.service_number);
+        else setServiceNumber("");
+      });
   };
 
   // const getComplaintImage = async (order_number) => {
@@ -28,7 +58,7 @@ export default function WaterTechCom() {
   // };
 
   useEffect(() => {
-    getComplaints().then((res) => {
+    getOrders().then((res) => {
       setCom(res.data);
     });
     // getComplaintImage().then((res) => {
@@ -39,28 +69,36 @@ export default function WaterTechCom() {
   return (
     <div className="transContainer">
       <div className="space">
-        {com.map((option) => {
-          const a =
-            " شكوى رقم " + option.complaints_number + " : " + option.subject;
+        {com.map((option, index) => {
+          const type = option.order_type;
+          let b = "";
+          if (type === 0) b = "طلب اشتراك";
+          if (type === 1) b = "نقل اشتراك";
+          if (type === 2) b = "حذف اشتراك";
+          const a = " طلب  رقم " + option.order_number + " " + b;
+
+          // const x = getCitizen(option.id_number);
+          // const y = getorderRef(option.order_number);
           return (
             <Collapse className="collapse">
-              <Panel
-                header={a}
-                key={option.complaints_number}
-                className="panel"
-              >
+              <Panel header={a} key={option.order_number} className="panel">
                 {/* <Image
                   width={100}
                   src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
                 /> */}
-                <p>الوصف: {option.message}</p>
-
+                {/* <Image
+                  width={100}
+                  src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+                /> */}
+                <p>الاسم: {name}</p>
+                <p>رقم الهوية: {option.id_number}</p>
+                <p>رقم الخدمة : {sesrviceNumber}</p>
                 <Button
                   onClick={() => {
                     setOpen(true);
                   }}
                 >
-                  إضافة رد للشكوى
+                  إضافة رد
                 </Button>
               </Panel>
               <Modal

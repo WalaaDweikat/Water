@@ -1,8 +1,8 @@
 import "antd/dist/antd.css";
 import Footer from "../../components/Footer/footer.js";
 import Logo from "../../img/256888_109854515773613_2567514_o.jpg";
-import WaterPlansEngineer from "../../components/WaterPlansEngineer/plans.js";
 import EmployeeProfile from "../../components/EmployeeProfile/profile.js";
+import ServicesRequests from "../../components/ServicesRequests/services.js";
 import {
   BrowserRouter as Router,
   Route,
@@ -10,24 +10,17 @@ import {
   Switch,
   useHistory,
 } from "react-router-dom";
-import { Layout, Menu, Button, Form, Input, Select } from "antd";
+import { Layout, Menu, Button } from "antd";
 import { useState } from "react";
 
-function WaterEngineer(props) {
-  const username = props.usename;
-  const onFinish = (values) => {
-    console.log("Success:", values);
-  };
-
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
-  };
+function ServicesEmployee() {
   const [Id, setId] = useState(window.location.pathname);
   const { Content } = Layout;
   const { Header } = Layout;
   const history = useHistory();
 
   const singout = () => {
+    localStorage.removeItem("username");
     history.push("/water/login");
     window.location.reload();
   };
@@ -46,12 +39,12 @@ function WaterEngineer(props) {
             <img src={Logo} alt="logo" className="logoHeader" />
           </div>
           <Menu theme="dark" mode="horizontal" selectedKeys={[Id]}>
-            <Menu.Item className="item" key="/water/water_engineer/profile">
-              <Link to="/water/water_engineer/profile">الملف الشخصي </Link>
+            <Menu.Item className="item" key="/water/Services_employee/profile">
+              <Link to="/water/Services_employee/profile">الملف الشخصي </Link>
             </Menu.Item>
 
-            <Menu.Item className="item" key="/water/water_engineer/water_plans">
-              <Link to="/water/water_engineer/water_plans">شبكات المياه</Link>
+            <Menu.Item className="item" key="/water/Services_employee/services">
+              <Link to="/water/Services_employee/services">الخدمات</Link>
             </Menu.Item>
 
             <Menu.Item key="out" className="out">
@@ -63,11 +56,10 @@ function WaterEngineer(props) {
         </Header>
         <Content>
           <Switch>
-            <Route path="/water/water_engineer/water_plans">
-              <WaterPlansEngineer />
+            <Route path="/water/Services_employee/services">
+              <ServicesRequests />
             </Route>
-
-            <Route path="/water/water_engineer/profile">
+            <Route path="/water/Services_employee/profile">
               <EmployeeProfile />
             </Route>
           </Switch>
@@ -78,4 +70,4 @@ function WaterEngineer(props) {
   );
 }
 
-export default WaterEngineer;
+export default ServicesEmployee;

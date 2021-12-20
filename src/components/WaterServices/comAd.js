@@ -91,28 +91,24 @@ class ComAdmin extends React.Component {
     super(props);
     this.columns = [
       {
-        title: "موضوع الشكوى",
-        dataIndex: "subject",
+        title: "رقم الاشتراك",
+        dataIndex: "number",
         editable: false,
-        width: "25%",
-      },
-      {
-        title: "الوصف",
-        dataIndex: "des",
-        editable: false,
-        width: "25%",
-      },
-      {
-        title: "صاحب الشكوى",
-        dataIndex: "name",
-        editable: false,
-        width: "25%",
       },
       {
         title: "رقم الهوية",
         dataIndex: "id",
         editable: false,
-        width: "25%",
+      },
+      {
+        title: "الاسم",
+        dataIndex: "name",
+        editable: false,
+      },
+      {
+        title: "عددالأفراد",
+        dataIndex: "members",
+        editable: false,
       },
     ];
     this.state = {
@@ -120,6 +116,41 @@ class ComAdmin extends React.Component {
     };
   }
 
+  async getServiceName(id) {
+    const axios = require("axios");
+    return await axios.get(
+      "http://192.168.0.109:5000//water/citizens/search_id_number",
+      { params: { id_number: id } }
+    );
+  }
+
+  componentDidMount() {
+    const axios = require("axios");
+    axios.get("http://192.168.0.109:5000//water/services").then((res) => {
+      const data = [];
+
+      let i = 0;
+      for (; i < res.data.length; i++) {
+        const a = {
+          key: i,
+          id: res.data[i].id_number,
+          number: res.data[i].service_number,
+          name: "",
+          members: res.data[i].family_number,
+        };
+        this.getServiceName(res.data[i].id_number).then((res2) => {
+          a["name"] =
+            res2.data[0].first_name +
+            " " +
+            res2.data[0].middle_name +
+            " " +
+            res2.data[0].last_name;
+          data.push(a);
+          this.setState({ dataSource: data });
+        });
+      }
+    });
+  }
   render() {
     const { dataSource } = this.state;
     const components = {
@@ -148,19 +179,6 @@ class ComAdmin extends React.Component {
 
     return (
       <div className="newTank">
-        <div className="search">
-          <Select placeholder="البحث بناء على" style={{ width: "130px" }}>
-            <Option value="ال">الاسم</Option>
-            <Option value="رقم الهوية">رقم الهوية</Option>
-          </Select>
-          <Search
-            placeholder="أدخل نص البحث"
-            onSearch={onSearch}
-            enterButton
-            style={{ width: "290px", marginRight: "5px" }}
-          />
-        </div>
-
         <Table
           bordered
           components={components}

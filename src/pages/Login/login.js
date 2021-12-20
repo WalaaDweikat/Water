@@ -10,6 +10,7 @@ import { Form, Input, Button, message } from "antd";
 import { useHistory } from "react-router-dom";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { useState } from "react";
+import WaterTech from "../WaterTechnician/tech.js";
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -194,7 +195,7 @@ export default function Login() {
           <Admin />
         </Route>
         <Route path="/water/water_technician">
-          <User />
+          <WaterTech />
         </Route>
         <Route path="/water/water_engineer">
           <User />
