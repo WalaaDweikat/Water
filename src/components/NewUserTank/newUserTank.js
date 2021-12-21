@@ -5,6 +5,7 @@ import "antd/dist/antd.css";
 import "./newUserTank.css";
 import "react-responsive-modal/styles.css";
 import axios from "axios";
+import IP from "../../ip.js";
 const EditableContext = React.createContext(null);
 const EditableRow = ({ index, ...props }) => {
   const [form] = Form.useForm();
@@ -130,37 +131,40 @@ class NewUserTank extends React.Component {
     };
   }
 
-  componentWillReceiveProps(newProps) {
-    this.setState({
-      service_number: newProps.service_number,
-    });
-    if (newProps.service_number !== "") {
-      this.getTanks(parseInt(newProps.service_number)).then((res) => {
-        const tanks = [];
-        const tankNumber = [];
-        let i = 0;
-        for (; i < res.data.length; i++) {
-          const a = {
-            key: i,
-            index: i + 1,
-            capacity: res.data[i].capacity,
-          };
-          tanks.push(a);
-          tankNumber.push(res.data[i].tank_number);
-        }
-        this.setState({ dataSource: tanks, count: i + 1, tanks: tankNumber });
-      });
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.service_number !== prevState.service_number) {
+      return { service_number: nextProps.service_number };
+    } else return null;
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.service_number !== this.props.service_number) {
+      this.setState({ service_number: this.props.service_number });
+      if (this.state.service_number !== "") {
+        this.getTanks(parseInt(this.state.service_number)).then((res) => {
+          const tanks = [];
+          const tankNumber = [];
+          let i = 0;
+          for (; i < res.data.length; i++) {
+            const a = {
+              key: i,
+              index: i + 1,
+              capacity: res.data[i].capacity,
+            };
+            tanks.push(a);
+            tankNumber.push(res.data[i].tank_number);
+          }
+          this.setState({ dataSource: tanks, count: i + 1, tanks: tankNumber });
+        });
+      }
     }
   }
 
   async getTanks(aa) {
     const axios = require("axios");
-    return await axios.get(
-      "http://192.168.0.109:5000//water/citizens_tanks/search_service_number",
-      {
-        params: { service_number: aa },
-      }
-    );
+    return await axios.get(IP + "/water/citizens_tanks/search_service_number", {
+      params: { service_number: aa },
+    });
   }
 
   async updateTankCapacity(capacity, tank_number) {
@@ -169,7 +173,7 @@ class NewUserTank extends React.Component {
     bodyFormData.append("capacity", capacity);
     axios({
       method: "put",
-      url: "http://192.168.0.109:5000//water/citizens_tanks/update_capacity",
+      url: IP + "/water/citizens_tanks/update_capacity",
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -189,7 +193,7 @@ class NewUserTank extends React.Component {
     bodyFormData.append("capacity", c);
     axios({
       method: "post",
-      url: "http://192.168.0.109:5000//water/citizens_tanks/addNewTank",
+      url: IP + "/water/citizens_tanks/addNewTank",
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -201,6 +205,22 @@ class NewUserTank extends React.Component {
       .catch((error) => {
         console.log(error);
       });
+
+    this.getTanks(parseInt(this.state.service_number)).then((res) => {
+      const tanks = [];
+      const tankNumber = [];
+      let i = 0;
+      for (; i < res.data.length; i++) {
+        const a = {
+          key: i,
+          index: i + 1,
+          capacity: res.data[i].capacity,
+        };
+        tanks.push(a);
+        tankNumber.push(res.data[i].tank_number);
+      }
+      this.setState({ dataSource: tanks, count: i + 1, tanks: tankNumber });
+    });
   }
 
   async deleteTank(tankNumber) {
@@ -209,7 +229,7 @@ class NewUserTank extends React.Component {
     bodyFormData.append("tank_number", tankNumber);
     axios({
       method: "delete",
-      url: "http://192.168.0.109:5000//water/citizens-tanks/deletecitiznTank",
+      url: IP + "/water/citizens-tanks/deletecitiznTank",
       headers: {
         "Content-Type": "multipart/form-data",
       },

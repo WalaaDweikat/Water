@@ -1,6 +1,7 @@
 import "antd/dist/antd.css";
 import "./transfer.css";
 import { Form, Input, Button, Select, Upload, message } from "antd";
+import IP from "../../ip.js";
 import { Modal } from "react-responsive-modal";
 import LocationMap from "../LocationMap/location.js";
 import ImgCrop from "antd-img-crop";
@@ -17,12 +18,9 @@ export default function TransferService() {
   const [open, setOpen] = useState(false);
   const getServices = async () => {
     const axios = require("axios");
-    return await axios.get(
-      "http://192.168.0.109:5000//water/services/getServicesByid_number",
-      {
-        params: { id_number: parseInt(localStorage.getItem("username")) },
-      }
-    );
+    return await axios.get(IP + "/water/services/getServicesByid_number", {
+      params: { id_number: parseInt(localStorage.getItem("username")) },
+    });
   };
   const error = () => {
     message.error({
@@ -80,7 +78,7 @@ export default function TransferService() {
 
       axios({
         method: "post",
-        url: "http://192.168.0.109:5000///water/transactions/newOrder/transferSubscription",
+        url: IP + "//water/transactions/newOrder/transferSubscription",
         headers: {
           "Content-Type": "multipart/form-data",
         },

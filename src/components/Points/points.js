@@ -2,6 +2,7 @@ import "./points.css";
 import axios from "axios";
 import { Form, Input, Button, Rate, Tabs, message, Select } from "antd";
 import { useEffect, useState } from "react";
+import IP from "../../ip.js";
 const { TabPane } = Tabs;
 const { Option } = Select;
 export default function HelpUs() {
@@ -14,12 +15,9 @@ export default function HelpUs() {
   const [services, setServices] = useState([]);
   const getServices = async () => {
     const axios = require("axios");
-    return await axios.get(
-      "http://192.168.0.109:5000//water/services/getServicesByid_number",
-      {
-        params: { id_number: parseInt(localStorage.getItem("username")) },
-      }
-    );
+    return await axios.get(IP + "/water/services/getServicesByid_number", {
+      params: { id_number: parseInt(localStorage.getItem("username")) },
+    });
   };
   const error = () => {
     message.error({
@@ -70,7 +68,7 @@ export default function HelpUs() {
       console.log(value);
       axios({
         method: "post",
-        url: "http://192.168.0.109:5000///water/user_feed_back/add",
+        url: IP + "//water/user_feed_back/add",
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -203,7 +201,7 @@ export default function HelpUs() {
               bodyFormData.append("first_reading", befor);
               axios({
                 method: "post",
-                url: "http://192.168.0.109:5000///water/first_reading/add",
+                url: IP + "//water/first_reading/add",
                 headers: {
                   "Content-Type": "multipart/form-data",
                 },
@@ -271,7 +269,7 @@ export default function HelpUs() {
               bodyFormData.append("second_reading", after);
               axios({
                 method: "post",
-                url: "http://192.168.0.109:5000///water/secondReading/AddNewSecondRading",
+                url: IP + "//water/secondReading/AddNewSecondRading",
                 headers: {
                   "Content-Type": "multipart/form-data",
                 },

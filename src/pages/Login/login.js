@@ -1,5 +1,6 @@
 import "./login.css";
 import "antd/dist/antd.css";
+import IP from "../../ip.js";
 import profile from "../../img/Profile.jpg";
 import User from "../User/user.js";
 import Admin from "../Admin/admin.js";
@@ -15,7 +16,6 @@ export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const history = useHistory();
-
   const error = () => {
     message.error({
       content: "كلمة مرور  او اسم المستخدم خاطئ",
@@ -27,7 +27,7 @@ export default function Login() {
   };
   const onFinish = async (values) => {
     const axios = require("axios");
-    const res = await axios.get("http://192.168.0.109:5000//water/login", {
+    const res = await axios.get(IP + "/water/login", {
       params: { username: username, password: password },
     });
 

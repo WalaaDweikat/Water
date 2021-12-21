@@ -5,6 +5,7 @@ import axios from "axios";
 import "antd/dist/antd.css";
 import "../Tanks/tanks.css";
 import "react-responsive-modal/styles.css";
+import IP from "../../ip.js";
 import LocationMap from "../LocationMap/location.js";
 const EditableContext = React.createContext(null);
 const EditableRow = ({ index, ...props }) => {
@@ -151,12 +152,9 @@ class Mhbes extends React.Component {
 
   async getStopcocks(tank_number) {
     const axios = require("axios");
-    return await axios.get(
-      "http://192.168.0.109:5000//water/mahbes/search_tank_number",
-      {
-        params: { tank_number: tank_number },
-      }
-    );
+    return await axios.get(IP + "/water/mahbes/search_tank_number", {
+      params: { tank_number: tank_number },
+    });
   }
   static getDerivedStateFromProps(nextProps, prevState) {
     if (nextProps.tank_number !== prevState.tank_number) {
@@ -164,6 +162,30 @@ class Mhbes extends React.Component {
     } else return null;
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.tank_number !== this.props.tank_number) {
+      this.setState({ tank_number: this.props.tank_number });
+      this.getStopcocks(this.state.tank_number).then((res) => {
+        let i = 0;
+        const data = [];
+        for (; i < res.data.length; i++) {
+          const a = {
+            id: res.data[i].mahbes_number,
+            index: i + 1,
+            key: i,
+            address: res.data[i].latitude + " , " + res.data[i].longitude,
+          };
+          data.push(a);
+        }
+        this.setState({
+          dataSource: data,
+          count: i,
+        });
+      });
+    }
+  }
+
+  componentDidMount() {}
   async updateMahbesLocation(lat, lng, id) {
     const bodyFormData = new FormData();
     bodyFormData.append("mahbes_number", parseInt(id));
@@ -171,7 +193,7 @@ class Mhbes extends React.Component {
     bodyFormData.append("longitude", lng);
     axios({
       method: "put",
-      url: "http://192.168.0.109:5000//water/mahbes/update_location",
+      url: IP + "/water/mahbes/update_location",
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -186,34 +208,9 @@ class Mhbes extends React.Component {
   }
   async getTanks() {
     const axios = require("axios");
-    return await axios.get("http://192.168.0.109:5000//water/MainTanks");
-  }
-  componentDidUpdate(prevProps, prevState) {
-    if (prevProps.tank_number !== this.props.tank_number) {
-      this.setState({ tank_number: prevProps.tank_number });
-      this.classMethod();
-    }
+    return await axios.get(IP + "/water/MainTanks");
   }
 
-  componentDidMount() {
-    this.getStopcocks(this.state.tank_number).then((res) => {
-      let i = 0;
-      const data = [];
-      for (; i < res.data.length; i++) {
-        const a = {
-          id: res.data[i].mahbes_number,
-          index: i + 1,
-          key: i,
-          address: res.data[i].latitude + " , " + res.data[i].longitude,
-        };
-        data.push(a);
-      }
-      this.setState({
-        dataSource: data,
-        count: i,
-      });
-    });
-  }
   onFinish = (values) => {
     console.log("Success:", values);
     let capacity = document.getElementById("cap").value;
@@ -232,7 +229,7 @@ class Mhbes extends React.Component {
     bodyFormData.append("mahbes_number", parseInt(id));
     axios({
       method: "delete",
-      url: "http://192.168.0.109:5000//water/mahbes/delete",
+      url: IP + "/water/mahbes/delete",
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -345,7 +342,7 @@ class Mhbes extends React.Component {
                   bodyFormData.append("tank_number", this.state.tank_number);
                   axios({
                     method: "post",
-                    url: "http://192.168.0.109:5000//water/mahbes/add",
+                    url: IP + "/water/mahbes/add",
                     headers: {
                       "Content-Type": "multipart/form-data",
                     },

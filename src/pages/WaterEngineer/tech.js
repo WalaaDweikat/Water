@@ -10,18 +10,10 @@ import {
   Switch,
   useHistory,
 } from "react-router-dom";
-import { Layout, Menu, Button, Form, Input, Select } from "antd";
+import { Layout, Menu, Button } from "antd";
 import { useState } from "react";
 
 function WaterEngineer(props) {
-  const username = props.usename;
-  const onFinish = (values) => {
-    console.log("Success:", values);
-  };
-
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
-  };
   const [Id, setId] = useState(window.location.pathname);
   const { Content } = Layout;
   const { Header } = Layout;

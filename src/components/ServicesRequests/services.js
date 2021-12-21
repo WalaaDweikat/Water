@@ -2,6 +2,7 @@ import { Collapse } from "antd";
 import { useEffect, useState } from "react";
 import { Image, Button, Form, Select, Input } from "antd";
 import { Modal } from "react-responsive-modal";
+import IP from "../../ip.js";
 const { Option } = Select;
 const { Panel } = Collapse;
 const { TextArea } = Input;
@@ -15,13 +16,13 @@ export default function WaterTechCom() {
   const [i, setI] = useState(0);
   const getOrders = async () => {
     const axios = require("axios");
-    return await axios.get("http://192.168.0.109:5000//water/transactions");
+    return await axios.get(IP + "/water/transactions");
   };
 
   const getCitizen = async (id_number) => {
     const axios = require("axios");
     await axios
-      .get("http://192.168.0.109:5000//water/citizens/search_id_number", {
+      .get(IP + "/water/citizens/search_id_number", {
         params: { id_number: id_number },
       })
       .then((res) => {
@@ -38,7 +39,7 @@ export default function WaterTechCom() {
   const getorderRef = async (order_number) => {
     const axios = require("axios");
     await axios
-      .get("http://192.168.0.109:5000//water/order_ref", {
+      .get(IP + "/water/order_ref", {
         params: { order_number: order_number },
       })
       .then((res) => {
@@ -47,40 +48,36 @@ export default function WaterTechCom() {
       });
   };
 
-  // const getComplaintImage = async (order_number) => {
+  // const getOrderImage = async (order_number) => {
   //   const axios = require("axios");
-  //   return await axios.get(
-  //     "http://192.168.0.109:5000//water/OrderStatus/getByorder_number",
-  //     {
-  //       params: { order_number: order_number },
-  //     }
-  //   );
+  //   return await axios.get(IP + "/water/OrderStatus/getByorder_number", {
+  //     params: { order_number: order_number },
+  //   });
   // };
 
   useEffect(() => {
     getOrders().then((res) => {
       setCom(res.data);
     });
-    // getComplaintImage().then((res) => {
-    //   console.log(res.data);
+    // getOrderImage().then((res) => {
     //   setImage(res.data);
     // });
   }, []);
   return (
     <div className="transContainer">
       <div className="space">
-        {com.map((option, index) => {
-          const type = option.order_type;
-          let b = "";
-          if (type === 0) b = "طلب اشتراك";
-          if (type === 1) b = "نقل اشتراك";
-          if (type === 2) b = "حذف اشتراك";
-          const a = " طلب  رقم " + option.order_number + " " + b;
+        <Collapse className="collapse">
+          {com.map((option, index) => {
+            const type = option.order_type;
+            let b = "";
+            if (type === 0) b = "طلب اشتراك";
+            if (type === 1) b = "نقل اشتراك";
+            if (type === 2) b = "حذف اشتراك";
+            const a = " طلب  رقم " + option.order_number + " " + b;
 
-          // const x = getCitizen(option.id_number);
-          // const y = getorderRef(option.order_number);
-          return (
-            <Collapse className="collapse">
+            //getCitizen(option.id_number);
+            // getorderRef(option.order_number);
+            return (
               <Panel header={a} key={option.order_number} className="panel">
                 {/* <Image
                   width={100}
@@ -101,81 +98,89 @@ export default function WaterTechCom() {
                   إضافة رد
                 </Button>
               </Panel>
-              <Modal
-                open={open}
-                onClose={() => {
-                  setOpen(false);
-                }}
-                center
+            );
+          })}
+        </Collapse>
+
+        <Modal
+          open={open}
+          onClose={() => {
+            setOpen(false);
+          }}
+          center
+        >
+          <Form
+            style={{ width: "30vw", marginTop: "50px" }}
+            layout="vertical"
+            name="basic"
+            id="form"
+            labelCol={{
+              span: 100,
+            }}
+            wrapperCol={{
+              span: 100,
+            }}
+            initialValues={{
+              remember: false,
+            }}
+            onFinish={(values) => {}}
+            onFinishFailed={(error) => {
+              console.log(error);
+            }}
+            autoComplete="off"
+          >
+            <Form.Item
+              label="حالة الشكوى"
+              name="complaintStatus"
+              rules={[
+                {
+                  required: true,
+                  message: "اختر حالة الشكوى",
+                },
+              ]}
+            >
+              <Select>
+                <Option value="0">مرفوضة</Option>
+                <Option value="1">مقبولة</Option>
+              </Select>
+            </Form.Item>
+
+            <Form.Item
+              label="أضف شرحا"
+              name="desc"
+              rules={[
+                {
+                  required: true,
+                  message: "أضف شرحا",
+                },
+              ]}
+            >
+              <TextArea rows={5} style={{ resize: "none" }} />
+            </Form.Item>
+
+            <Form.Item
+              wrapperCol={{
+                offset: 0,
+                span: 10,
+              }}
+            >
+              <Button
+                type="primary"
+                htmlType="submit"
+                style={{ marginTop: "20px" }}
               >
-                <Form
-                  style={{ width: "30vw", marginTop: "50px" }}
-                  layout="vertical"
-                  name="basic"
-                  id="form"
-                  labelCol={{
-                    span: 100,
-                  }}
-                  wrapperCol={{
-                    span: 100,
-                  }}
-                  initialValues={{
-                    remember: false,
-                  }}
-                  onFinish={(values) => {}}
-                  onFinishFailed={(error) => {
-                    console.log(error);
-                  }}
-                  autoComplete="off"
-                >
-                  <Form.Item
-                    label="حالة الشكوى"
-                    name="complaintStatus"
-                    rules={[
-                      {
-                        required: true,
-                        message: "اختر حالة الشكوى",
-                      },
-                    ]}
-                  >
-                    <Select>
-                      <Option value="0">مرفوضة</Option>
-                      <Option value="1">مقبولة</Option>
-                    </Select>
-                  </Form.Item>
-
-                  <Form.Item
-                    label="أضف شرحا"
-                    name="desc"
-                    rules={[
-                      {
-                        required: true,
-                        message: "أضف شرحا",
-                      },
-                    ]}
-                  >
-                    <TextArea rows={5} style={{ resize: "none" }} />
-                  </Form.Item>
-
-                  <Form.Item
-                    wrapperCol={{
-                      offset: 0,
-                      span: 10,
-                    }}
-                  >
-                    <Button
-                      type="primary"
-                      htmlType="submit"
-                      style={{ marginTop: "20px" }}
-                    >
-                      إضافة رد
-                    </Button>
-                  </Form.Item>
-                </Form>
-              </Modal>
-            </Collapse>
-          );
-        })}
+                إضافة رد
+              </Button>
+              <Button
+                type="primary"
+                htmlType="submit"
+                style={{ marginTop: "20px" }}
+              >
+                حذف الشكوى
+              </Button>
+            </Form.Item>
+          </Form>
+        </Modal>
       </div>
     </div>
   );

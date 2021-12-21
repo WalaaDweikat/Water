@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
-import { Table, Input, Button, Popconfirm, Form, Select, message } from "antd";
+import { Table, Input, Button, Popconfirm, Form, message } from "antd";
+import IP from "../../ip.js";
 import { Modal } from "react-responsive-modal";
 import "antd/dist/antd.css";
 import "./tanks.css";
@@ -178,7 +179,7 @@ class Tanks extends React.Component {
     bodyFormData.append("capacity", capacity);
     axios({
       method: "put",
-      url: "http://192.168.0.109:5000//water/MainTanks/updateMainTankCapacity",
+      url: IP + "/water/MainTanks/updateMainTankCapacity",
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -199,7 +200,7 @@ class Tanks extends React.Component {
     bodyFormData.append("longitude", lng);
     axios({
       method: "put",
-      url: "http://192.168.0.109:5000//water/MainTanks/updateMainTankLocation",
+      url: IP + "/water/MainTanks/updateMainTankLocation",
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -214,7 +215,7 @@ class Tanks extends React.Component {
   }
   async getTanks() {
     const axios = require("axios");
-    return await axios.get("http://192.168.0.109:5000//water/MainTanks");
+    return await axios.get(IP + "/water/MainTanks");
   }
 
   componentDidMount() {
@@ -254,7 +255,7 @@ class Tanks extends React.Component {
     bodyFormData.append("tank_number", parseInt(id));
     axios({
       method: "delete",
-      url: "http://192.168.0.109:5000//water/MainTanks/DeleteMainTank",
+      url: IP + "/water/MainTanks/DeleteMainTank",
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -401,7 +402,7 @@ class Tanks extends React.Component {
 
                   axios({
                     method: "post",
-                    url: "http://192.168.0.109:5000///water/MainTanks/AddNewMainTank",
+                    url: IP + "//water/MainTanks/AddNewMainTank",
                     headers: {
                       "Content-Type": "multipart/form-data",
                     },

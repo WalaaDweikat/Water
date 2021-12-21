@@ -5,7 +5,7 @@ import Tank from "../../img/tank.png";
 import Mahbes from "../../img/mahbes.png";
 import Service from "../../img/serviceIcon.png";
 import Complaint from "../../img/complaint.png";
-
+import IP from "../../ip.js";
 import "leaflet-routing-machine";
 
 export default function ComplaintsPlans() {
@@ -38,24 +38,19 @@ export default function ComplaintsPlans() {
 
   const getTanks = async () => {
     const axios = require("axios");
-    return await axios.get("http://192.168.0.109:5000//water/MainTanks");
+    return await axios.get(IP + "/water/MainTanks");
   };
 
   const getComplaints = async () => {
     const axios = require("axios");
-    return await axios.get(
-      "http://192.168.0.109:5000//water/complaints/getAll"
-    );
+    return await axios.get(IP + "/water/complaints/getAll");
   };
 
   const getStopcocks = async (tank_number) => {
     const axios = require("axios");
-    return await axios.get(
-      "http://192.168.0.109:5000//water/mahbes/search_tank_number",
-      {
-        params: { tank_number: tank_number },
-      }
-    );
+    return await axios.get(IP + "/water/mahbes/search_tank_number", {
+      params: { tank_number: tank_number },
+    });
   };
   const colors = ["yellow", "red", "green"];
   useEffect(() => {

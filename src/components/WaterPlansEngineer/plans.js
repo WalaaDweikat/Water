@@ -6,6 +6,8 @@ import Tank from "../../img/tank.png";
 import Mahbes from "../../img/mahbes.png";
 import Service from "../../img/serviceIcon.png";
 import Complaint from "../../img/complaint.png";
+import IP from "../../ip.js";
+
 let points = [];
 function inside(point, vs) {
   var x = point[0],
@@ -57,29 +59,24 @@ export default function WaterPlansEngineer() {
   });
   const getTanks = async () => {
     const axios = require("axios");
-    return await axios.get("http://192.168.0.109:5000//water/MainTanks");
+    return await axios.get(IP + "/water/MainTanks");
   };
 
   const getServices = async () => {
     const axios = require("axios");
-    return await axios.get("http://192.168.0.109:5000//water/services");
+    return await axios.get(IP + "/water/services");
   };
 
   const getComplaints = async () => {
     const axios = require("axios");
-    return await axios.get(
-      "http://192.168.0.109:5000//water/complaints/getAll"
-    );
+    return await axios.get(IP + "/water/complaints/getAll");
   };
 
   const getStopcocks = async (tank_number) => {
     const axios = require("axios");
-    return await axios.get(
-      "http://192.168.0.109:5000//water/mahbes/search_tank_number",
-      {
-        params: { tank_number: tank_number },
-      }
-    );
+    return await axios.get(IP + "/water/mahbes/search_tank_number", {
+      params: { tank_number: tank_number },
+    });
   };
   const colors = ["yellow", "red", "green"];
   useEffect(() => {

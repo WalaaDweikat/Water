@@ -5,6 +5,7 @@ import { Modal } from "react-responsive-modal";
 import LocationMap from "../LocationMap/location.js";
 import NewUserTank from "../../components/NewUserTank/newUserTank.js";
 import { useState, useEffect } from "react";
+import IP from "../../ip.js";
 import { Form, Input, Button, Select, Tabs, message } from "antd";
 const { TabPane } = Tabs;
 const { Option } = Select;
@@ -18,23 +19,20 @@ export default function Profile() {
   const [position, setPosition] = useState("top");
   const getAccountInfo = async () => {
     const axios = require("axios");
-    return await axios.get("http://192.168.0.109:5000//water/users/UserBy", {
+    return await axios.get(IP + "/water/users/UserBy", {
       params: { username: localStorage.getItem("username") },
     });
   };
   const getPersonalInfo = async () => {
     const axios = require("axios");
-    return await axios.get(
-      "http://192.168.0.109:5000//water/citizens/search_id_number",
-      {
-        params: { id_number: localStorage.getItem("username") },
-      }
-    );
+    return await axios.get(IP + "/water/citizens/search_id_number", {
+      params: { id_number: localStorage.getItem("username") },
+    });
   };
   const getServices = () => {
     const axios = require("axios");
     axios
-      .get("http://192.168.0.109:5000//water/services/getServicesByid_number", {
+      .get(IP + "/water/services/getServicesByid_number", {
         params: { id_number: parseInt(localStorage.getItem("username")) },
       })
       .then((res) => {
@@ -44,12 +42,9 @@ export default function Profile() {
 
   const getServiceInfo = async (number) => {
     const axios = require("axios");
-    return await axios.get(
-      "http://192.168.0.109:5000//water/services/getByServiceNumber",
-      {
-        params: { service_number: number },
-      }
-    );
+    return await axios.get(IP + "/water/services/getByServiceNumber", {
+      params: { service_number: number },
+    });
   };
 
   useEffect(() => {
@@ -173,7 +168,7 @@ export default function Profile() {
                 bodyFormData.append("mobile_number", mobile_number);
                 axios({
                   method: "put",
-                  url: "http://192.168.0.109:5000//water/citizens/updateInfo/all",
+                  url: IP + "/water/citizens/updateInfo/all",
                   data: bodyFormData,
                   headers: {
                     "Content-Type": "multipart/form-data",
@@ -294,7 +289,7 @@ export default function Profile() {
                 bodyFormData.append("email", email);
                 axios({
                   method: "put",
-                  url: "http://192.168.0.109:5000///water/users/updateEmail",
+                  url: IP + "//water/users/updateEmail",
                   headers: {
                     "Content-Type": "multipart/form-data",
                   },
@@ -399,7 +394,7 @@ export default function Profile() {
                   );
                   axios({
                     method: "put",
-                    url: "http://192.168.0.109:5000//water/services/updateServiceInfo",
+                    url: IP + "/water/services/updateServiceInfo",
                     data: bodyFormData,
                     headers: {
                       "Content-Type": "multipart/form-data",
@@ -543,7 +538,7 @@ export default function Profile() {
               bodyFormData.append("oldPassword", old_pass);
               axios({
                 method: "put",
-                url: "http://192.168.0.109:5000///water/users/changePass",
+                url: IP + "//water/users/changePass",
                 headers: {
                   "Content-Type": "multipart/form-data",
                 },

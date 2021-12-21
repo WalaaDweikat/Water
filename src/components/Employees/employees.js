@@ -6,6 +6,7 @@ import "antd/dist/antd.css";
 import "../Tanks/tanks.css";
 import "./employees.css";
 import "react-responsive-modal/styles.css";
+import IP from "../../ip.js";
 const EditableContext = React.createContext(null);
 const { Search } = Input;
 const { Option } = Select;
@@ -189,7 +190,7 @@ class Employees extends React.Component {
   }
   async getEmployees() {
     const axios = require("axios");
-    return await axios.get("http://192.168.0.109:5000//water/employees/all");
+    return await axios.get(IP + "/water/employees/all");
   }
 
   async deleteEmployee(id) {
@@ -197,7 +198,7 @@ class Employees extends React.Component {
     bodyFormData.append("id", parseInt(id));
     axios({
       method: "delete",
-      url: "http://192.168.0.109:5000//water/employees/delete",
+      url: IP + "/water/employees/delete",
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -221,7 +222,7 @@ class Employees extends React.Component {
     bodyFormData.append("email", "");
     axios({
       method: "post",
-      url: "http://192.168.0.109:5000//water/employeeAccount/newEmployeeForSystem",
+      url: IP + "/water/employeeAccount/newEmployeeForSystem",
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -358,15 +359,12 @@ class Employees extends React.Component {
               ) {
                 const axios = require("axios");
                 axios
-                  .get(
-                    "http://192.168.0.109:5000//water/employees/searchbyKey",
-                    {
-                      params: {
-                        key: this.state.selectValue,
-                        value: '"' + value + '"',
-                      },
-                    }
-                  )
+                  .get(IP + "/water/employees/searchbyKey", {
+                    params: {
+                      key: this.state.selectValue,
+                      value: '"' + value + '"',
+                    },
+                  })
                   .then((res) => {
                     const a = [];
                     let i = 0;
@@ -410,15 +408,12 @@ class Employees extends React.Component {
               ) {
                 const axios = require("axios");
                 axios
-                  .get(
-                    "http://192.168.0.109:5000//water/employees/searchbyKey",
-                    {
-                      params: {
-                        key: this.state.selectValue,
-                        value: value,
-                      },
-                    }
-                  )
+                  .get(IP + "/water/employees/searchbyKey", {
+                    params: {
+                      key: this.state.selectValue,
+                      value: value,
+                    },
+                  })
                   .then((res) => {
                     const a = [];
                     let i = 0;

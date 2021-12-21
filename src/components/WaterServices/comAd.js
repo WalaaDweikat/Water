@@ -1,10 +1,9 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
-import { Table, Input, Form, Select } from "antd";
+import { Table, Input, Form } from "antd";
 import "antd/dist/antd.css";
 import "react-responsive-modal/styles.css";
+import IP from "../../ip.js";
 const EditableContext = React.createContext(null);
-const { Search } = Input;
-const { Option } = Select;
 
 const EditableRow = ({ index, ...props }) => {
   const [form] = Form.useForm();
@@ -118,15 +117,14 @@ class ComAdmin extends React.Component {
 
   async getServiceName(id) {
     const axios = require("axios");
-    return await axios.get(
-      "http://192.168.0.109:5000//water/citizens/search_id_number",
-      { params: { id_number: id } }
-    );
+    return await axios.get(IP + "/water/citizens/search_id_number", {
+      params: { id_number: id },
+    });
   }
 
   componentDidMount() {
     const axios = require("axios");
-    axios.get("http://192.168.0.109:5000//water/services").then((res) => {
+    axios.get(IP + "/water/services").then((res) => {
       const data = [];
 
       let i = 0;

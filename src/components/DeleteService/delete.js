@@ -4,6 +4,7 @@ import { Form, Button, Select, Upload, message } from "antd";
 import ImgCrop from "antd-img-crop";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import IP from "../../ip.js";
 const { Option } = Select;
 export default function TransferService() {
   const [fileList, setFileList] = useState([]);
@@ -11,12 +12,9 @@ export default function TransferService() {
   const [services, setServices] = useState([]);
   const getServices = async () => {
     const axios = require("axios");
-    return await axios.get(
-      "http://192.168.0.109:5000//water/services/getServicesByid_number",
-      {
-        params: { id_number: parseInt(localStorage.getItem("username")) },
-      }
-    );
+    return await axios.get(IP + "/water/services/getServicesByid_number", {
+      params: { id_number: parseInt(localStorage.getItem("username")) },
+    });
   };
   const error = () => {
     message.error({
@@ -71,7 +69,7 @@ export default function TransferService() {
 
       axios({
         method: "post",
-        url: "http://192.168.0.109:5000///water/transactions/newOrder/removeSubscription",
+        url: IP + "//water/transactions/newOrder/removeSubscription",
         headers: {
           "Content-Type": "multipart/form-data",
         },

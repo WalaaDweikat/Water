@@ -5,6 +5,7 @@ import LocationMap from "../LocationMap/location.js";
 import { Upload, Button, Form, Input, message } from "antd";
 import ImgCrop from "antd-img-crop";
 import { useState } from "react";
+import IP from "../../ip.js";
 export default function NewService() {
   const [lat, setLat] = useState("");
   const [lng, setLng] = useState("");
@@ -61,7 +62,7 @@ export default function NewService() {
 
       axios({
         method: "post",
-        url: "http://192.168.0.109:5000///water/transactions/newOrder/subscriptionRequest",
+        url: IP + "/water/transactions/newOrder/subscriptionRequest",
         headers: {
           "Content-Type": "multipart/form-data",
         },

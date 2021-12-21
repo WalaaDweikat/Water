@@ -1,7 +1,8 @@
 import { Collapse } from "antd";
 import { useEffect, useState } from "react";
-import { Image, Button, Form, Select, Input } from "antd";
+import { Button, Form, Select, Input } from "antd";
 import { Modal } from "react-responsive-modal";
+import IP from "../../ip.js";
 const { Option } = Select;
 const { Panel } = Collapse;
 const { TextArea } = Input;
@@ -12,19 +13,14 @@ export default function WaterTechCom() {
   const [open, setOpen] = useState(false);
   const getComplaints = async () => {
     const axios = require("axios");
-    return await axios.get(
-      "http://192.168.0.109:5000//water/complaints/getAll"
-    );
+    return await axios.get(IP + "/water/complaints/getAll");
   };
 
   // const getComplaintImage = async (order_number) => {
   //   const axios = require("axios");
-  //   return await axios.get(
-  //     "http://192.168.0.109:5000//water/OrderStatus/getByorder_number",
-  //     {
-  //       params: { order_number: order_number },
-  //     }
-  //   );
+  //   return await axios.get(IP + "/water/OrderStatus/getByorder_number", {
+  //     params: { order_number: order_number },
+  //   });
   // };
 
   useEffect(() => {
@@ -39,11 +35,11 @@ export default function WaterTechCom() {
   return (
     <div className="transContainer">
       <div className="space">
-        {com.map((option) => {
-          const a =
-            " شكوى رقم " + option.complaints_number + " : " + option.subject;
-          return (
-            <Collapse className="collapse">
+        <Collapse className="collapse">
+          {com.map((option) => {
+            const a =
+              " شكوى رقم " + option.complaints_number + " : " + option.subject;
+            return (
               <Panel
                 header={a}
                 key={option.complaints_number}
@@ -63,81 +59,81 @@ export default function WaterTechCom() {
                   إضافة رد للشكوى
                 </Button>
               </Panel>
-              <Modal
-                open={open}
-                onClose={() => {
-                  setOpen(false);
-                }}
-                center
+            );
+          })}
+        </Collapse>
+        <Modal
+          open={open}
+          onClose={() => {
+            setOpen(false);
+          }}
+          center
+        >
+          <Form
+            style={{ width: "30vw", marginTop: "50px" }}
+            layout="vertical"
+            name="basic"
+            id="form"
+            labelCol={{
+              span: 100,
+            }}
+            wrapperCol={{
+              span: 100,
+            }}
+            initialValues={{
+              remember: false,
+            }}
+            onFinish={(values) => {}}
+            onFinishFailed={(error) => {
+              console.log(error);
+            }}
+            autoComplete="off"
+          >
+            <Form.Item
+              label="حالة الشكوى"
+              name="complaintStatus"
+              rules={[
+                {
+                  required: true,
+                  message: "اختر حالة الشكوى",
+                },
+              ]}
+            >
+              <Select>
+                <Option value="0">مرفوضة</Option>
+                <Option value="1">مقبولة</Option>
+              </Select>
+            </Form.Item>
+
+            <Form.Item
+              label="أضف شرحا"
+              name="desc"
+              rules={[
+                {
+                  required: true,
+                  message: "أضف شرحا",
+                },
+              ]}
+            >
+              <TextArea rows={5} style={{ resize: "none" }} />
+            </Form.Item>
+
+            <Form.Item
+              wrapperCol={{
+                offset: 0,
+                span: 10,
+              }}
+            >
+              <Button
+                type="primary"
+                htmlType="submit"
+                style={{ marginTop: "20px" }}
               >
-                <Form
-                  style={{ width: "30vw", marginTop: "50px" }}
-                  layout="vertical"
-                  name="basic"
-                  id="form"
-                  labelCol={{
-                    span: 100,
-                  }}
-                  wrapperCol={{
-                    span: 100,
-                  }}
-                  initialValues={{
-                    remember: false,
-                  }}
-                  onFinish={(values) => {}}
-                  onFinishFailed={(error) => {
-                    console.log(error);
-                  }}
-                  autoComplete="off"
-                >
-                  <Form.Item
-                    label="حالة الشكوى"
-                    name="complaintStatus"
-                    rules={[
-                      {
-                        required: true,
-                        message: "اختر حالة الشكوى",
-                      },
-                    ]}
-                  >
-                    <Select>
-                      <Option value="0">مرفوضة</Option>
-                      <Option value="1">مقبولة</Option>
-                    </Select>
-                  </Form.Item>
-
-                  <Form.Item
-                    label="أضف شرحا"
-                    name="desc"
-                    rules={[
-                      {
-                        required: true,
-                        message: "أضف شرحا",
-                      },
-                    ]}
-                  >
-                    <TextArea rows={5} style={{ resize: "none" }} />
-                  </Form.Item>
-
-                  <Form.Item
-                    wrapperCol={{
-                      offset: 0,
-                      span: 10,
-                    }}
-                  >
-                    <Button
-                      type="primary"
-                      htmlType="submit"
-                      style={{ marginTop: "20px" }}
-                    >
-                      إضافة رد
-                    </Button>
-                  </Form.Item>
-                </Form>
-              </Modal>
-            </Collapse>
-          );
-        })}
+                إضافة رد
+              </Button>
+            </Form.Item>
+          </Form>
+        </Modal>
       </div>
     </div>
   );

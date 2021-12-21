@@ -14,6 +14,7 @@ import Bills from "../../components/Bills/bills.js";
 import Transactions from "../../components/Transactions/transaction.js";
 import Points from "../../components/Points/points.js";
 import Notifiactions from "../../components/Notification/notification.js";
+
 import {
   BrowserRouter as Router,
   Route,

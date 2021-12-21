@@ -1,4 +1,5 @@
 import "./complaints.css";
+import IP from "../../ip.js";
 import { Modal } from "react-responsive-modal";
 import LocationMap from "../LocationMap/location.js";
 import React, { useState } from "react";
@@ -12,7 +13,6 @@ export default function Complaints() {
   localStorage.setItem("changed", 0);
   const [open, setOpen] = useState(false);
   const [fileList, setFileList] = useState([]);
-
   const error = () => {
     message.error({
       content: "فشل إرسال الطلب",
@@ -56,7 +56,7 @@ export default function Complaints() {
 
       axios({
         method: "post",
-        url: "http://192.168.0.109:5000///water/complaints/newComplaint",
+        url: IP + "/water/complaints/newComplaint",
         headers: {
           "Content-Type": "multipart/form-data",
         },

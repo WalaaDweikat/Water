@@ -4,7 +4,8 @@ import axios from "axios";
 import { Modal } from "react-responsive-modal";
 import LocationMap from "../LocationMap/location.js";
 import { useState, useEffect } from "react";
-import { Form, Input, Button, Select, Tabs, message } from "antd";
+import { Form, Input, Button, Tabs, message } from "antd";
+import IP from "../../ip.js";
 const { TabPane } = Tabs;
 export default function Profile() {
   localStorage.setItem("changed", 0);
@@ -14,38 +15,32 @@ export default function Profile() {
   const [position, setPosition] = useState("top");
   const getAccountInfo = async () => {
     const axios = require("axios");
-    return await axios.get(
-      "http://192.168.0.109:5000//water/employeeAccount/getEmailById",
-      {
-        params: { username: localStorage.getItem("username") },
-      }
-    );
+    return await axios.get(IP + "/water/employeeAccount/getEmailById", {
+      params: { username: localStorage.getItem("username") },
+    });
   };
   const getPersonalInfo = async () => {
     const axios = require("axios");
-    return await axios.get(
-      "http://192.168.0.109:5000//water/employees/search_id",
-      {
-        params: { id_number: localStorage.getItem("username") },
-      }
-    );
+    return await axios.get(IP + "/water/employees/search_id", {
+      params: { id_number: localStorage.getItem("username") },
+    });
   };
 
-  useEffect(() => {
-    getAccountInfo().then((res) => {
-      document.getElementById("email").placeholder = res.data.email;
-    });
+  // useEffect(() => {
+  //   getAccountInfo().then((res) => {
+  //     document.getElementById("email").placeholder = res.data.email;
+  //   });
 
-    getPersonalInfo().then((res) => {
-      const name =
-        res.data[0].Fname + " " + res.data[0].Sname + " " + res.data[0].Lname;
-      document.getElementById("username").placeholder = name;
-      document.getElementById("idNumber").placeholder = res.data[0].id;
-      document.getElementById("area").placeholder = res.data[0].area;
-      document.getElementById("region").placeholder = res.data[0].region;
-      document.getElementById("street").placeholder = res.data[0].street;
-    });
-  }, []);
+  //   getPersonalInfo().then((res) => {
+  //     const name =
+  //       res.data[0].Fname + " " + res.data[0].Sname + " " + res.data[0].Lname;
+  //     document.getElementById("username").placeholder = name;
+  //     document.getElementById("idNumber").placeholder = res.data[0].id;
+  //     document.getElementById("area").placeholder = res.data[0].area;
+  //     document.getElementById("region").placeholder = res.data[0].region;
+  //     document.getElementById("street").placeholder = res.data[0].street;
+  //   });
+  // }, []);
 
   const success = () => {
     message.success({
@@ -124,7 +119,7 @@ export default function Profile() {
               //   bodyFormData.append("street", street);
               //   axios({
               //     method: "put",
-              //     url: "http://192.168.0.109:5000//water/citizens/updateInfo/all",
+              //     url: IP+"/water/citizens/updateInfo/all",
               //     data: bodyFormData,
               //     headers: {
               //       "Content-Type": "multipart/form-data",
@@ -227,7 +222,7 @@ export default function Profile() {
               //   bodyFormData.append("email", email);
               //   axios({
               //     method: "put",
-              //     url: "http://192.168.0.109:5000///water/users/updateEmail",
+              //     url: IP+"//water/users/updateEmail",
               //     headers: {
               //       "Content-Type": "multipart/form-data",
               //     },
@@ -304,7 +299,7 @@ export default function Profile() {
               bodyFormData.append("oldPassword", old_pass);
               axios({
                 method: "put",
-                url: "http://192.168.0.109:5000///water/users/changePass",
+                url: IP + "//water/users/changePass",
                 headers: {
                   "Content-Type": "multipart/form-data",
                 },

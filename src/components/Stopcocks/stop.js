@@ -1,12 +1,14 @@
 import "./stop.css";
 import { useEffect, useState } from "react";
-import { Form, Input, Button, Upload, Select } from "antd";
+import { Form, Button, Select } from "antd";
+import IP from "../../ip.js";
+
 const { Option } = Select;
 export default function Stopcocks() {
   const [Stopcocks, setStopcocks] = useState([]);
   const getStopcocks = async () => {
     const axios = require("axios");
-    return await axios.get("http://192.168.0.109:5000//water/mahbes/all");
+    return await axios.get(IP + "/water/mahbes/all");
   };
   useEffect(() => {
     getStopcocks().then((res) => {

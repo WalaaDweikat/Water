@@ -2,7 +2,7 @@ import { useState } from "react";
 import { MapContainer, TileLayer, Circle, useMapEvents } from "react-leaflet";
 const Markers = () => {
   const [position, setPosition] = useState("");
-  const map = useMapEvents({
+  useMapEvents({
     click(e) {
       setPosition(e.latlng);
       localStorage.setItem("lat", e.latlng.lat);
