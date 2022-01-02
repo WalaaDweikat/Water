@@ -38,6 +38,7 @@ export default function WaterPlansEngineer() {
   const [position, setPosition] = useState([0, 0]);
   const [DA, setDA] = useState([]);
   const [services, setServices] = useState([]);
+  const [stopscocks, setStop] = useState([]);
   const [draw, setDraw] = useState(false);
   const tankIcon = L.icon({
     iconSize: [35, 35],
@@ -67,6 +68,13 @@ export default function WaterPlansEngineer() {
   const getTanks = async () => {
     const axios = require("axios");
     return await axios.get(IP + "/water/MainTanks");
+  };
+
+  const getStopcocksAll = async () => {
+    const axios = require("axios");
+    return await axios.get(IP + "/water/mahbes/all").then((res) => {
+      setStop(res.data);
+    });
   };
 
   const getServices = async () => {
@@ -235,6 +243,7 @@ export default function WaterPlansEngineer() {
           );
       }
     });
+    getStopcocksAll();
     getComplaints().then((res) => {
       for (let i = 0; i < res.data.length; i++) {
         L.marker(
@@ -369,6 +378,37 @@ export default function WaterPlansEngineer() {
                   axios({
                     method: "put",
                     url: IP + "/water/services/updateDA",
+                    data: bodyFormData,
+                    headers: {
+                      "Content-Type": "multipart/form-data",
+                    },
+                  })
+                    .then((response) => {
+                      console.log(response);
+                    })
+                    .catch((error) => {
+                      console.log(error);
+                    });
+                }
+              }
+
+              for (let i = 0; i < stopscocks.length; i++) {
+                if (
+                  !stopscocks[i].DA &&
+                  inside(
+                    [stopscocks[i].latitude, services[i].longitude],
+                    location
+                  )
+                ) {
+                  const bodyFormData = new FormData();
+                  bodyFormData.append("DA", values.DAname);
+                  bodyFormData.append(
+                    "mahbes_number",
+                    stopscocks[i].mahbes_number
+                  );
+                  axios({
+                    method: "put",
+                    url: IP + "/water/mahbes/update_DA",
                     data: bodyFormData,
                     headers: {
                       "Content-Type": "multipart/form-data",

@@ -1,23 +1,19 @@
 import "./register.css";
 import "antd/dist/antd.css";
-import { Input, Button, Form } from "antd";
+import { Input, Button, Form, message } from "antd";
 import { UserOutlined, LockOutlined, MailOutlined } from "@ant-design/icons";
 import { useHistory } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import BackArrow from "../../img/R.jpg";
 import Register2 from "../Register2/register2";
-
+import axios from "axios";
+import IP from "../../ip.js";
 export default function Register() {
   const history = useHistory();
   const [match, setMatch] = useState(false);
   const [pass, setPass] = useState();
   const [confirmPass, setConfirmPass] = useState();
-  const onFinish = (values) => {
-    history.push("/water/signup/cont");
-    window.location.reload();
-    console.log("Success:", values);
-  };
 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
@@ -51,7 +47,40 @@ export default function Register() {
               initialValues={{
                 remember: true,
               }}
-              onFinish={onFinish}
+              onFinish={(values) => {
+                const bodyFormData = new FormData();
+                bodyFormData.append("username", values["0"]);
+                bodyFormData.append("password", values["1"]);
+                bodyFormData.append("email", values["2"]);
+                bodyFormData.append(
+                  "userId",
+                  parseInt(localStorage.getItem("username"))
+                );
+                bodyFormData.append(
+                  "userType",
+                  parseInt(localStorage.getItem("type"))
+                );
+
+                axios({
+                  method: "post",
+                  url: IP + "/water/ratingApp/withnote",
+                  headers: {
+                    "Content-Type": "multipart/form-data",
+                  },
+                  data: bodyFormData,
+                })
+                  .then((response) => {
+                    console.log(response.data);
+                    if (response.data === "added") {
+                      message.success("نم اضافة مشترك جدد");
+                      document.getElementById("form").reset();
+                    }
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                    error();
+                  });
+              }}
               onFinishFailed={onFinishFailed}
               autoComplete="off"
             >

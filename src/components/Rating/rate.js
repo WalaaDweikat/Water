@@ -19,7 +19,7 @@ export default function HelpUs() {
     });
   };
 
-  const onFinish = async (values) => {
+  const onFinish = (values) => {
     const bodyFormData = new FormData();
     bodyFormData.append("color", values["0"]);
     bodyFormData.append("view", values["1"]);

@@ -54,9 +54,9 @@ function User() {
 
   const menu = (
     <Menu style={{ height: "60vh", overflow: "scroll" }}>
-      {notifications.map((option) => {
+      {notifications.map((option, index) => {
         return (
-          <Menu.Item id={option.notification_id}>
+          <Menu.Item key={index} id={option.notification_id}>
             <div>{option.notification_mssage}</div>
             <div>{option.date}</div>
           </Menu.Item>
@@ -112,9 +112,9 @@ function User() {
             <Menu.Item className="item" key="/water/user/complaints">
               <Link to="/water/user/complaints"> الشكاوي</Link>
             </Menu.Item>
-            <Menu.Item className="item" key="/water/user/bills">
+            {/* <Menu.Item className="item" key="/water/user/bills">
               <Link to="/water/user/bills"> الفواتير</Link>
-            </Menu.Item>
+            </Menu.Item> */}
             <Menu.Item className="item" key="/water/user/points">
               <Link to="/water/user/points"> ساعدنا</Link>
             </Menu.Item>
@@ -222,7 +222,7 @@ function User() {
                     خدماتي
                   </Button>
                 </Link>
-                <Link to="/water/user/bills">
+                {/* <Link to="/water/user/bills">
                   <Button
                     type="primary"
                     id="/water/user/bills"
@@ -235,7 +235,7 @@ function User() {
                   >
                     الفواتير
                   </Button>
-                </Link>
+                </Link> */}
                 <Link to="/water/user/points">
                   <Button
                     type="primary"
@@ -261,12 +261,12 @@ function User() {
             <Route path="/water/user/login">
               <Login />
             </Route>
-            <Route path="/water/user/bills">
+            {/* <Route path="/water/user/bills">
               <div className="services">
                 <div className="headerServices">الفواتير</div>
                 <Bills />
               </div>
-            </Route>
+            </Route> */}
             <Route path="/water/user/points">
               <Points />
             </Route>

@@ -3,7 +3,7 @@ import Footer from "../../components/Footer/footer.js";
 import Logo from "../../img/256888_109854515773613_2567514_o.jpg";
 import EmployeeProfile from "../../components/EmployeeProfile/profile.js";
 import Complaints from "../../components/WaterTechCom/waterTechCom.js";
-import WaterPlans from "../../components/WaterPlans/plans.js";
+import ComplaintsPlans from "../../components/ComplaintsPlans/plans.js";
 import Stopcocks from "../../components/Stopcocks/stop.js";
 import Rating from "../../components/Rating/rate.js";
 import {
@@ -79,7 +79,7 @@ function WaterTech(props) {
             </Route>
 
             <Route path="/water/water_technician/plans">
-              <WaterPlans />
+              <ComplaintsPlans />
             </Route>
 
             <Route path="/water/water_technician/stopcocks">

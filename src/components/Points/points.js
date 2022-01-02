@@ -115,7 +115,7 @@ export default function HelpUs() {
             <Select>
               {services.map((option, index) => {
                 return (
-                  <Option key={index} value={option.service_number}>
+                  <Option key={index} value={option.service_number} id={index}>
                     {option.service_number}
                   </Option>
                 );
