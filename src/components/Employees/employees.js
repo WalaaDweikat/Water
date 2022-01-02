@@ -157,7 +157,8 @@ class Employees extends React.Component {
         if (res.data[i].type == 1) job = "مهندس مي";
         if (res.data[i].type == 2) job = "فني مي";
         if (res.data[i].type == 3) job = "موظف الخدمات";
-        if (res.data[i].type == 4) job = "موظف العدادات والشحن";
+        if (res.data[i].type == 4) job = "موظف العدادات ";
+        if (res.data[i].type == 5) job = "موظف والشحن";
         const name =
           res.data[i].Fname +
           " " +
@@ -190,7 +191,7 @@ class Employees extends React.Component {
   }
   async getEmployees() {
     const axios = require("axios");
-    return await axios.get(IP + "/water/employees/all");
+    return await axios.get(IP + "/water/employees/all1");
   }
 
   async deleteEmployee(id) {
@@ -373,7 +374,9 @@ class Employees extends React.Component {
                       if (res.data[i].type == 1) job = "مهندس مي";
                       if (res.data[i].type == 2) job = "فني مي";
                       if (res.data[i].type == 3) job = "موظف الخدمات";
-                      if (res.data[i].type == 4) job = "موظف العدادات والشحن";
+                      if (res.data[i].type == 4) job = "موظف العدادات ";
+                      if (res.data[i].type == 5) job = "موظف الشحن";
+
                       const name =
                         res.data[i].Fname +
                         " " +
@@ -422,7 +425,8 @@ class Employees extends React.Component {
                       if (res.data[i].type == 1) job = "مهندس مي";
                       if (res.data[i].type == 2) job = "فني مي";
                       if (res.data[i].type == 3) job = "موظف الخدمات";
-                      if (res.data[i].type == 4) job = "موظف العدادات والشحن";
+                      if (res.data[i].type == 4) job = "موظف العدادات ";
+                      if (res.data[i].type == 5) job = "موظف الشحن";
                       const name =
                         res.data[i].Fname +
                         " " +
@@ -515,7 +519,8 @@ class Employees extends React.Component {
                   let job = 0;
                   if (values.job === "فني مياه") job = "1";
                   else if (values.job === "مهندس مي") job = "2";
-                  else if (values.job === "موظف العدادات والشحن") job = "4";
+                  else if (values.job === "موظف الشحن") job = "5";
+                  else if (values.job === "موظف العدادات") job = "4";
                   else if (values.job === "موظف الخدمات") job = "3";
 
                   this.addnewEmployee(fName, sName, lName, job, id);
@@ -551,9 +556,8 @@ class Employees extends React.Component {
                     <Option value="فني مياه">فني مياه</Option>
                     <Option value="موظف الخدمات">موظف الخدمات</Option>
                     <Option value="مهندس مي">مهندس مي</Option>
-                    <Option value="موظف العدادات والشحن">
-                      موظف العدادات والشحن
-                    </Option>
+                    <Option value="موظف العدادات">موظف العدادات</Option>
+                    <Option value="موظف والشحن">موظف الشحن</Option>
                   </Select>
                 </Form.Item>
                 <Form.Item

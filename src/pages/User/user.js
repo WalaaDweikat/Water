@@ -9,12 +9,12 @@ import Profile from "../../components/Profile/profile.js";
 import DeleteService from "../../components/DeleteService/delete.js";
 import Complaints from "../../components/Complaints/complaints.js";
 import TransferService from "../../components/TransferService/transfer.js";
+import Rating from "../../components/Rating/rate.js";
 import NewService from "../../components/New_Service/new.js";
 import Bills from "../../components/Bills/bills.js";
 import Transactions from "../../components/Transactions/transaction.js";
 import Points from "../../components/Points/points.js";
-import Notifiactions from "../../components/Notification/notification.js";
-
+import IP from "../../ip.js";
 import {
   BrowserRouter as Router,
   Route,
@@ -22,9 +22,9 @@ import {
   Switch,
   useHistory,
 } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Layout, Menu, Button } from "antd";
+import { Layout, Menu, Button, Dropdown } from "antd";
 import {
   faComment,
   faUser,
@@ -36,8 +36,34 @@ import {
   faFileInvoiceDollar,
   faDollarSign,
 } from "@fortawesome/free-solid-svg-icons";
+import { NotificationOutlined } from "@ant-design/icons";
 
-function User(props) {
+function User() {
+  const [notifications, setNotifications] = useState([]);
+  const getNotifications = async () => {
+    const axios = require("axios");
+    await axios.get(IP + "/water/notifications/getAll").then((res) => {
+      console.log(res);
+      setNotifications(res.data);
+    });
+  };
+
+  useEffect(() => {
+    getNotifications();
+  }, []);
+
+  const menu = (
+    <Menu style={{ height: "60vh", overflow: "scroll" }}>
+      {notifications.map((option) => {
+        return (
+          <Menu.Item id={option.notification_id}>
+            <div>{option.notification_mssage}</div>
+            <div>{option.date}</div>
+          </Menu.Item>
+        );
+      })}
+    </Menu>
+  );
   const [Id, setId] = useState(window.location.pathname);
   const { Content } = Layout;
   const { Header } = Layout;
@@ -92,15 +118,21 @@ function User(props) {
             <Menu.Item className="item" key="/water/user/points">
               <Link to="/water/user/points"> ساعدنا</Link>
             </Menu.Item>
+            <Menu.Item key="/water/user/rate_us" className="out">
+              <a href="/water/user/rate_us">تقييم التطبيق</a>
+            </Menu.Item>
+            <Menu.Item className="item" key="/water/user/points" disabled>
+              <Dropdown overlay={menu} placement={"bottomCenter"} arrow>
+                <Button icon={<NotificationOutlined />}></Button>
+              </Dropdown>
+            </Menu.Item>
+
             <Menu.Item key="out" className="out">
               <Button type="primary" onClick={singout}>
                 تسجيل الخروج
               </Button>
             </Menu.Item>
           </Menu>
-          <div style={{ position: "relative", right: "100%", top: "-45px" }}>
-            <Notifiactions />
-          </div>
         </Header>
         <Content>
           <Switch>
@@ -237,6 +269,9 @@ function User(props) {
             </Route>
             <Route path="/water/user/points">
               <Points />
+            </Route>
+            <Route path="/water/user/rate_us">
+              <Rating />
             </Route>
           </Switch>
         </Content>

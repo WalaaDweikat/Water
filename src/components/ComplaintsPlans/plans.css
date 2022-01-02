@@ -1,9 +1,0 @@
-.map {
-  height:calc(100vh - 100px);
-  width: 100vw;
-  margin-top: 65px;
-}
-
-.leaflet-control-container .leaflet-routing-container-hide {
-  display: none;
-}

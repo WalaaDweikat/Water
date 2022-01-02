@@ -22,25 +22,25 @@ export default function Profile() {
   const getPersonalInfo = async () => {
     const axios = require("axios");
     return await axios.get(IP + "/water/employees/search_id", {
-      params: { id_number: localStorage.getItem("username") },
+      params: { id: parseInt(localStorage.getItem("username")) },
     });
   };
 
-  // useEffect(() => {
-  //   getAccountInfo().then((res) => {
-  //     document.getElementById("email").placeholder = res.data.email;
-  //   });
+  useEffect(() => {
+    getAccountInfo().then((res) => {
+      document.getElementById("email").placeholder = res.data.email;
+    });
 
-  //   getPersonalInfo().then((res) => {
-  //     const name =
-  //       res.data[0].Fname + " " + res.data[0].Sname + " " + res.data[0].Lname;
-  //     document.getElementById("username").placeholder = name;
-  //     document.getElementById("idNumber").placeholder = res.data[0].id;
-  //     document.getElementById("area").placeholder = res.data[0].area;
-  //     document.getElementById("region").placeholder = res.data[0].region;
-  //     document.getElementById("street").placeholder = res.data[0].street;
-  //   });
-  // }, []);
+    getPersonalInfo().then((res) => {
+      const name =
+        res.data[0].Fname + " " + res.data[0].Sname + " " + res.data[0].Lname;
+      document.getElementById("username").placeholder = name;
+      document.getElementById("idNumber").placeholder = res.data[0].id;
+      document.getElementById("area").placeholder = res.data[0].area;
+      document.getElementById("region").placeholder = res.data[0].region;
+      document.getElementById("street").placeholder = res.data[0].street;
+    });
+  }, []);
 
   const success = () => {
     message.success({
@@ -97,45 +97,45 @@ export default function Profile() {
               initialValues={{
                 remember: true,
               }}
-              // onFinish={(values) => {
-              //   let area = values.area;
-              //   let region = values.region;
-              //   let street = values.street;
+              onFinish={(values) => {
+                let area = values.area;
+                let region = values.region;
+                let street = values.street;
 
-              //   if (area === undefined)
-              //     area = document.getElementById("area").placeholder;
-              //   if (region === undefined)
-              //     region = document.getElementById("region").placeholder;
-              //   if (street === undefined)
-              //     street = document.getElementById("street").placeholder;
+                if (area === undefined)
+                  area = document.getElementById("area").placeholder;
+                if (region === undefined)
+                  region = document.getElementById("region").placeholder;
+                if (street === undefined)
+                  street = document.getElementById("street").placeholder;
 
-              //   const bodyFormData = new FormData();
-              //   bodyFormData.append(
-              //     "id_number",
-              //     localStorage.getItem("username")
-              //   );
-              //   bodyFormData.append("area", area);
-              //   bodyFormData.append("region", region);
-              //   bodyFormData.append("street", street);
-              //   axios({
-              //     method: "put",
-              //     url: IP+"/water/citizens/updateInfo/all",
-              //     data: bodyFormData,
-              //     headers: {
-              //       "Content-Type": "multipart/form-data",
-              //     },
-              //   })
-              //     .then((response) => {
-              //       if (response.data === "Updated") {
-              //         document.getElementById("area").placeholder = area;
-              //         document.getElementById("region").placeholder = region;
-              //         document.getElementById("street").placeholder = street;
-              //       }
-              //     })
-              //     .catch((error) => {
-              //       console.log(error);
-              //     });
-              // }}
+                const bodyFormData = new FormData();
+                bodyFormData.append(
+                  "id_number",
+                  localStorage.getItem("username")
+                );
+                bodyFormData.append("area", area);
+                bodyFormData.append("region", region);
+                bodyFormData.append("street", street);
+                axios({
+                  method: "put",
+                  url: IP + "water/employee/updateInfo/all",
+                  data: bodyFormData,
+                  headers: {
+                    "Content-Type": "multipart/form-data",
+                  },
+                })
+                  .then((response) => {
+                    if (response.data === "Updated") {
+                      document.getElementById("area").placeholder = area;
+                      document.getElementById("region").placeholder = region;
+                      document.getElementById("street").placeholder = street;
+                    }
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                  });
+              }}
               onFinishFailed={onFinishFailed}
               autoComplete="off"
               className="info"
@@ -209,38 +209,38 @@ export default function Profile() {
               initialValues={{
                 remember: false,
               }}
-              // onFinish={(values) => {
-              //   let email = values.email;
+              onFinish={(values) => {
+                let email = values.email;
 
-              //   if (email === undefined)
-              //     email = document.getElementById("email").placeholder;
-              //   const bodyFormData = new FormData();
-              //   bodyFormData.append(
-              //     "username",
-              //     localStorage.getItem("username")
-              //   );
-              //   bodyFormData.append("email", email);
-              //   axios({
-              //     method: "put",
-              //     url: IP+"//water/users/updateEmail",
-              //     headers: {
-              //       "Content-Type": "multipart/form-data",
-              //     },
-              //     data: bodyFormData,
-              //   })
-              //     .then((response) => {
-              //       if (response.data === "Updated") {
-              //         document.getElementById("email").placeholder = email;
-              //       }
-              //     })
-              //     .catch((error) => {
-              //       console.log(error);
-              //     });
-              // }}
+                if (email === undefined)
+                  email = document.getElementById("email").placeholder;
+                const bodyFormData = new FormData();
+                bodyFormData.append(
+                  "username",
+                  localStorage.getItem("username")
+                );
+                bodyFormData.append("email", email);
+                axios({
+                  method: "put",
+                  url: IP + "/water/employeeAccount/update_email",
+                  headers: {
+                    "Content-Type": "multipart/form-data",
+                  },
+                  data: bodyFormData,
+                })
+                  .then((response) => {
+                    if (response.data === "Updated") {
+                      document.getElementById("email").placeholder = email;
+                    }
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                  });
+              }}
               onFinishFailed={onFinishFailed}
               autoComplete="off"
             >
-              <Form.Item label="رقم الهوية(اسم المستخدم)">
+              <Form.Item label="اسم المستخدم">
                 <Input id="idNumber" disabled />
               </Form.Item>
               <Form.Item
@@ -290,24 +290,21 @@ export default function Profile() {
               remember: false,
             }}
             onFinish={(values) => {
-              let old_pass = values.old_pass;
               let new_pass = values.new_pass;
 
               const bodyFormData = new FormData();
               bodyFormData.append("username", localStorage.getItem("username"));
-              bodyFormData.append("newPassword", new_pass);
-              bodyFormData.append("oldPassword", old_pass);
+              bodyFormData.append("password", new_pass);
               axios({
                 method: "put",
-                url: IP + "//water/users/changePass",
+                url: IP + "/water/employeeAccount/update_password",
                 headers: {
                   "Content-Type": "multipart/form-data",
                 },
                 data: bodyFormData,
               })
                 .then((response) => {
-                  if (response.data === "password changed") success();
-                  else if (response.data === "wrong password") error();
+                  if (response.data === "updated") success();
                 })
                 .catch((error) => {
                   console.log(error);
@@ -317,18 +314,7 @@ export default function Profile() {
             autoComplete="off"
           >
             <div className="t">تغيير كلمة المرور</div>
-            <Form.Item
-              label="كلمة المرور القديمة"
-              name="old_pass"
-              rules={[
-                {
-                  required: true,
-                  message: "أدخل كلمة المرور",
-                },
-              ]}
-            >
-              <Input.Password id="old_pass" />
-            </Form.Item>
+
             <Form.Item
               label="كلمة المرور الجديدة"
               name="new_pass"

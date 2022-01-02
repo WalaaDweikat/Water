@@ -11,7 +11,6 @@ export default function HelpUs() {
   const [value, setValue] = useState(0);
   const [firstReading, setFirstReading] = useState(false);
   const [secondReading, setSecondReading] = useState(false);
-  const [feedBack, setFeedBack] = useState(true);
   const [services, setServices] = useState([]);
   const getServices = async () => {
     const axios = require("axios");
@@ -61,14 +60,14 @@ export default function HelpUs() {
     setValue(value);
   };
   const onFinish = async (values) => {
-    if (feedBack && values.service_number !== undefined && value !== 0) {
+    if (values.service_number !== undefined && value !== 0) {
       const bodyFormData = new FormData();
       bodyFormData.append("service_number", parseInt(values.service_number));
       bodyFormData.append("value", value);
       console.log(value);
       axios({
         method: "post",
-        url: IP + "//water/user_feed_back/add",
+        url: IP + "/water/user_feed_back/add",
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -79,7 +78,6 @@ export default function HelpUs() {
           if (response.data === "added") {
             success();
             document.getElementById("form").reset();
-            setFeedBack(false);
             setValue(0);
           }
         })
@@ -115,12 +113,9 @@ export default function HelpUs() {
         >
           <Form.Item label="رقم الخدمة" name="service_number">
             <Select>
-              {services.map((option) => {
+              {services.map((option, index) => {
                 return (
-                  <Option
-                    key={option.service_number}
-                    value={option.service_number}
-                  >
+                  <Option key={index} value={option.service_number}>
                     {option.service_number}
                   </Option>
                 );

@@ -1,58 +1,45 @@
 import { Collapse } from "antd";
 import { useEffect, useState } from "react";
-import { Button, Form, Select, Input } from "antd";
+import { Button, Form, Select, Input, Image, message } from "antd";
 import { Modal } from "react-responsive-modal";
 import IP from "../../ip.js";
+import axios from "axios";
 const { Option } = Select;
 const { Panel } = Collapse;
 const { TextArea } = Input;
 
 export default function WaterTechCom() {
   const [com, setCom] = useState([]);
-  const [image, setImage] = useState([]);
   const [open, setOpen] = useState(false);
-  const getComplaints = async () => {
+  const [messageres, setMessage] = useState("");
+  const [status, setStatus] = useState(-1);
+  const [order_number, setOrder_number] = useState(-1);
+  const getComplaints = () => {
     const axios = require("axios");
-    return await axios.get(IP + "/water/complaints/getAll");
-  };
-
-  // const getComplaintImage = async (order_number) => {
-  //   const axios = require("axios");
-  //   return await axios.get(IP + "/water/OrderStatus/getByorder_number", {
-  //     params: { order_number: order_number },
-  //   });
-  // };
-
-  useEffect(() => {
-    getComplaints().then((res) => {
+    return axios.get(IP + "/water/ComplaintsAndImages/all").then((res) => {
       setCom(res.data);
     });
-    // getComplaintImage().then((res) => {
-    //   console.log(res.data);
-    //   setImage(res.data);
-    // });
+  };
+
+  useEffect(() => {
+    getComplaints();
   }, []);
+
   return (
     <div className="transContainer">
       <div className="space">
         <Collapse className="collapse">
           {com.map((option) => {
-            const a =
-              " شكوى رقم " + option.complaints_number + " : " + option.subject;
+            const a = " شكوى رقم " + option.com_number + " : " + option.subject;
+            const imgSrc = `data:image/jpeg;base64,${option.com_path}`;
             return (
-              <Panel
-                header={a}
-                key={option.complaints_number}
-                className="panel"
-              >
-                {/* <Image
-                  width={100}
-                  src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-                /> */}
+              <Panel header={a} key={option.com_number} className="panel">
+                <Image width={100} src={imgSrc} />
                 <p>الوصف: {option.message}</p>
 
                 <Button
                   onClick={() => {
+                    setOrder_number(option.com_number);
                     setOpen(true);
                   }}
                 >
@@ -83,7 +70,37 @@ export default function WaterTechCom() {
             initialValues={{
               remember: false,
             }}
-            onFinish={(values) => {}}
+            onFinish={(values) => {
+              setStatus(values.complaintStatus);
+              setMessage(values.desc);
+
+              const employee_id = localStorage.getItem("username");
+              console.log(status, messageres, order_number);
+              if (status !== -1 && messageres !== "" && order_number !== -1) {
+                const bodyFormData = new FormData();
+                bodyFormData.append("employee_id", employee_id);
+                bodyFormData.append("status", status);
+                bodyFormData.append("message", messageres);
+                bodyFormData.append("complaints_number", order_number);
+                axios({
+                  method: "post",
+                  url: IP + "/water/complaints_status/newcomplaintStatus",
+                  data: bodyFormData,
+                  headers: {
+                    "Content-Type": "multipart/form-data",
+                  },
+                })
+                  .then((response) => {
+                    if (response.data === "new complaints status added")
+                      message.success("تم إضافة رد");
+                    if (response.data === "already complaint has status")
+                      message.error("تم إضافة رد مسبقا");
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                  });
+              }
+            }}
             onFinishFailed={(error) => {
               console.log(error);
             }}
@@ -100,8 +117,8 @@ export default function WaterTechCom() {
               ]}
             >
               <Select>
-                <Option value="0">مرفوضة</Option>
-                <Option value="1">مقبولة</Option>
+                <Option value="1">مرفوضة</Option>
+                <Option value="2">مقبولة</Option>
               </Select>
             </Form.Item>
 

@@ -3,6 +3,7 @@ import Footer from "../../components/Footer/footer.js";
 import Logo from "../../img/256888_109854515773613_2567514_o.jpg";
 import WaterPlansEngineer from "../../components/WaterPlansEngineer/plans.js";
 import EmployeeProfile from "../../components/EmployeeProfile/profile.js";
+import Rating from "../../components/Rating/rate.js";
 import {
   BrowserRouter as Router,
   Route,
@@ -46,6 +47,10 @@ function WaterEngineer(props) {
               <Link to="/water/water_engineer/water_plans">شبكات المياه</Link>
             </Menu.Item>
 
+            <Menu.Item className="item" key="/water/water_engineer/rate_us">
+              <Link to="/water/water_engineer/rate_us">تقييم الموقع</Link>
+            </Menu.Item>
+
             <Menu.Item key="out" className="out">
               <Button type="primary" onClick={singout}>
                 تسجيل الخروج
@@ -61,6 +66,9 @@ function WaterEngineer(props) {
 
             <Route path="/water/water_engineer/profile">
               <EmployeeProfile />
+            </Route>
+            <Route path="/water/water_engineer/rate_us">
+              <Rating />
             </Route>
           </Switch>
         </Content>

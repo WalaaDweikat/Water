@@ -1,6 +1,7 @@
 import "./plans.css";
-import { useEffect, useRef } from "react";
 import L from "leaflet";
+import { Form, Input, Button } from "antd";
+import { useState, useEffect, useRef } from "react";
 import Tank from "../../img/tank.png";
 import Mahbes from "../../img/mahbes.png";
 import Service from "../../img/serviceIcon.png";
@@ -8,8 +9,10 @@ import Complaint from "../../img/complaint.png";
 import IP from "../../ip.js";
 import "leaflet-routing-machine";
 
-export default function WaterPlans() {
+export default function WaterPlansEngineer() {
+  const [display, setDisplay] = useState("flex");
   const mapRef = useRef(null);
+
   const tankIcon = L.icon({
     iconSize: [35, 35],
     iconAnchor: [5, 5],
@@ -56,7 +59,19 @@ export default function WaterPlans() {
       params: { tank_number: tank_number },
     });
   };
-  const colors = ["yellow", "red", "green"];
+
+  const getDApoints = async () => {
+    const axios = require("axios");
+    return await axios.get(IP + "/water/distribution_areas/all");
+  };
+  const getPumpingBYStopcockId = async (id) => {
+    const axios = require("axios");
+    console.log(id);
+    return await axios.get(IP + "/water/PumpingTime/getBymabes_number", {
+      params: { mabes_number: id },
+    });
+  };
+  const colors = ["yellow", "magenta", "red"];
   useEffect(() => {
     mapRef.current = L.map("map", {
       center: [32.131596, 35.205],
@@ -70,29 +85,76 @@ export default function WaterPlans() {
       ],
     });
 
+    getDApoints().then((res) => {
+      let points = [];
+      let order = 0;
+      for (let i = 0; i < res.data.length; i++) {
+        const index = res.data[i].distributionAreaIndex;
+
+        for (let j = 0; j < res.data.length; j++) {
+          const a = [];
+          if (
+            index === res.data[j].distributionAreaIndex &&
+            res.data[j].order_ === order
+          ) {
+            a.push(res.data[j].latitude);
+            a.push(res.data[j].Longitude);
+            points.push(a);
+            order += 1;
+            points.push(a);
+          }
+        }
+        const polygon = L.polygon(points, {
+          color: "red",
+          fillColor: "transparent",
+          weight: 1,
+        });
+        polygon.addTo(mapRef.current);
+        L.marker(points[0], {
+          icon: L.divIcon({
+            className: "text-labels", // Set class for CSS styling
+            html: res.data[i].name,
+          }),
+          zIndexOffset: 1000, // Make appear above other map features
+        }).addTo(mapRef.current);
+        points = [];
+        order = 0;
+      }
+    });
+
     getTanks().then((res) => {
       for (let i = 0; i < res.data.length; i++) {
         getStopcocks(res.data[i].tank_number).then((res2) => {
           for (let j = 0; j < res2.data.length; j++) {
-            L.Routing.control({
-              waypoints: [
-                L.latLng(res.data[i].latitude, res.data[i].longitude),
-                L.latLng(res2.data[j].latitude, res2.data[j].longitude),
-              ],
-              collapsible: false,
-              lineOptions: {
-                styles: [{ color: colors[i], weight: 3 }],
-              },
-              show: false,
-              addWaypoints: false,
-              routeWhileDragging: false,
-              draggableWaypoints: false,
-              fitSelectedRoutes: false,
-              showAlternatives: false,
-              createMarker: function () {
-                return null;
-              },
-            }).addTo(mapRef.current);
+            getPumpingBYStopcockId(res2.data[j].mahbes_number).then((res3) => {
+              console.log(res3);
+              let c = "";
+              if (
+                res3.data.length &&
+                !res3.data[res3.data.length - 1].closing_date
+              )
+                c = "blue";
+              else c = colors[i];
+              L.Routing.control({
+                waypoints: [
+                  L.latLng(res.data[i].latitude, res.data[i].longitude),
+                  L.latLng(res2.data[j].latitude, res2.data[j].longitude),
+                ],
+                collapsible: false,
+                lineOptions: {
+                  styles: [{ color: c, weight: 3 }],
+                },
+                show: false,
+                addWaypoints: false,
+                routeWhileDragging: false,
+                draggableWaypoints: false,
+                fitSelectedRoutes: false,
+                showAlternatives: false,
+                createMarker: function () {
+                  return null;
+                },
+              }).addTo(mapRef.current);
+            });
             L.marker(
               [res2.data[j].latitude, res2.data[j].longitude],
               {
@@ -102,14 +164,16 @@ export default function WaterPlans() {
                 icon: mahbesIcon,
                 color: colors[i],
               } // Adjust the opacity
-            ).addTo(mapRef.current);
+            )
+              .addTo(mapRef.current)
+              .bindPopup(`<b> محبس رقم ${res2.data[j].mahbes_number}</b>`);
           }
         });
-        const tank = L.marker(
+        L.marker(
           [res.data[i].latitude, res.data[i].longitude],
           {
-            draggable: false, // Make the icon dragable
-            title: "خزان", // Add a title
+            draggable: false,
+            title: "خزان",
             opacity: 1,
             icon: tankIcon,
           } // Adjust the opacity
@@ -139,6 +203,7 @@ export default function WaterPlans() {
       }
     });
     getComplaints().then((res) => {
+      console.log(res);
       for (let i = 0; i < res.data.length; i++) {
         L.marker(
           [res.data[i].latitude, res.data[i].longitude],
@@ -156,5 +221,82 @@ export default function WaterPlans() {
       }
     });
   }, []);
-  return <div className="map" id="map"></div>;
+
+  return (
+    <div>
+      <Button
+        type="primary"
+        htmlType="submit"
+        style={{ marginTop: "64px", width: "100vw" }}
+        onClick={() => {
+          document.getElementById("newDA").style.display = display;
+          if (display === "none") setDisplay("flex");
+          else setDisplay("none");
+        }}
+      >
+        اضغط هنا لتحديد دورة المياه
+      </Button>
+      <div className="newDA" id="newDA">
+        <Form
+          id="form1"
+          className="form"
+          layout="vertical"
+          name="basic"
+          labelCol={{
+            span: 100,
+          }}
+          wrapperCol={{
+            span: 100,
+          }}
+          initialValues={{
+            remember: false,
+          }}
+          onFinish={(values) => {
+            const axios = require("axios");
+            axios
+              .get(IP + "/water/DistributionSystem_algo/initialSol", {
+                params: { p: values.per },
+              })
+              .then((response) => {
+                console.log(response);
+              });
+          }}
+          onFinishFailed={(values) => {}}
+          autoComplete="off"
+        >
+          <Form.Item
+            label="حدد مدة دورة ضخ المياه"
+            name="period"
+            rules={[
+              {
+                required: true,
+                message: "أدخل اسم المنطقة التوزيعية",
+              },
+            ]}
+          >
+            <Input id="period" />
+          </Form.Item>
+          <div className="buttons">
+            <Form.Item
+              wrapperCol={{
+                offset: 0,
+              }}
+            >
+              <Button
+                type="primary"
+                htmlType="submit"
+                style={{
+                  marginTop: "5px",
+                }}
+              >
+                إرسال
+              </Button>
+            </Form.Item>
+          </div>
+        </Form>
+      </div>
+
+      <div id="map" className="map_A"></div>
+    </div>
+  );
 }

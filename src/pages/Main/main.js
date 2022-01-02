@@ -192,6 +192,9 @@ export default function Main() {
             <Route path="/water/admin/tanks">
               <Admin />
             </Route>
+            <Route path="/water/admin/rate_us">
+              <Admin />
+            </Route>
             <Route path="/water/admin/water_plans">
               <Admin />
             </Route>
@@ -216,6 +219,9 @@ export default function Main() {
             <Route path="/water/water_technician/complaints">
               <WaterTechnician />
             </Route>
+            <Route path="/water/water_technician/rate_us">
+              <WaterTechnician />
+            </Route>
             <Route path="/water/water_technician/profile">
               <WaterTechnician />
             </Route>
@@ -228,14 +234,23 @@ export default function Main() {
             <Route path="/water/water_engineer/water_plans">
               <WaterEngineer />
             </Route>
+            <Route path="/water/water_engineer/rate_us">
+              <WaterEngineer />
+            </Route>
             <Route path="/water/water_engineer/profile">
               <WaterEngineer />
             </Route>
             <Route path="/water/Services_employee/profile">
               <ServicesEmployee />
             </Route>
+            <Route path="/water/Services_employee/rate_us">
+              <ServicesEmployee />
+            </Route>
             <Route path="/water/Services_employee/services">
               <ServicesEmployee />
+            </Route>
+            <Route path="/water/user/rate_us">
+              <User />
             </Route>
           </Switch>
         </Content>

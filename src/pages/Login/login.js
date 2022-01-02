@@ -30,32 +30,29 @@ export default function Login() {
     const res = await axios.get(IP + "/water/login", {
       params: { username: username, password: password },
     });
+    localStorage.setItem("username", username);
+    localStorage.setItem("type", res.data);
 
     if (res.data === 0) {
       //admin
-      localStorage.setItem("username", username);
       history.push("/water/admin/home");
     } else if (res.data === -1) {
       //user
-      localStorage.setItem("username", username);
-
       history.push("/water/user/home");
     } else if (res.data === 1) {
       //water_engineer
-      localStorage.setItem("username", username);
-      history.push("/water/water_engineer/home");
+      history.push("/water/water_engineer/profile");
     } else if (res.data === 2) {
       //water_Technician
-      localStorage.setItem("username", username);
-      history.push("/water/water_technician/home");
+      history.push("/water/water_technician/profile");
     } else if (res.data === 3) {
       // "موظف الخدمات";
-
-      localStorage.setItem("username", username);
+      history.push("/water/Services_employee/profile");
+    } else if (res.data === 5) {
+      //موظف الشحن";
       history.push("/water/");
     } else if (res.data === 4) {
-      //موظف العدادات والشحن";
-      localStorage.setItem("username", username);
+      //موظف العدادات";
       history.push("/water/");
     } else error();
   };
@@ -157,7 +154,7 @@ export default function Login() {
                     id="password"
                   />
                 </Form.Item>
-                <a href="https://www.google.com"> هل نسيت كلمة السر؟</a>
+                {/* <a href="https://www.google.com"> هل نسيت كلمة السر؟</a> */}
 
                 <Form.Item
                   wrapperCol={{

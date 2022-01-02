@@ -115,38 +115,28 @@ class ComAdmin extends React.Component {
     };
   }
 
-  async getServiceName(id) {
-    const axios = require("axios");
-    return await axios.get(IP + "/water/citizens/search_id_number", {
-      params: { id_number: id },
-    });
-  }
-
   componentDidMount() {
     const axios = require("axios");
-    axios.get(IP + "/water/services").then((res) => {
+    axios.get(IP + "/water/services1").then((res) => {
       const data = [];
-
       let i = 0;
       for (; i < res.data.length; i++) {
         const a = {
           key: i,
           id: res.data[i].id_number,
           number: res.data[i].service_number,
-          name: "",
+          name:
+            res.data[i].first_name +
+            " " +
+            res.data[i].middle_name +
+            " " +
+            res.data[i].last_name,
           members: res.data[i].family_number,
         };
-        this.getServiceName(res.data[i].id_number).then((res2) => {
-          a["name"] =
-            res2.data[0].first_name +
-            " " +
-            res2.data[0].middle_name +
-            " " +
-            res2.data[0].last_name;
-          data.push(a);
-          this.setState({ dataSource: data });
-        });
+
+        data.push(a);
       }
+      this.setState({ dataSource: data });
     });
   }
   render() {
@@ -173,7 +163,6 @@ class ComAdmin extends React.Component {
         }),
       };
     });
-    const onSearch = (value) => console.log(value);
 
     return (
       <div className="newTank">

@@ -158,34 +158,38 @@ class Mhbes extends React.Component {
   }
   static getDerivedStateFromProps(nextProps, prevState) {
     if (nextProps.tank_number !== prevState.tank_number) {
+      console.log(nextProps.tank_number);
+
       return { tank_number: nextProps.tank_number };
     } else return null;
   }
 
   componentDidUpdate(prevProps, prevState) {
+    console.log("Yes");
     if (prevProps.tank_number !== this.props.tank_number) {
       this.setState({ tank_number: this.props.tank_number });
-      this.getStopcocks(this.state.tank_number).then((res) => {
-        let i = 0;
-        const data = [];
-        for (; i < res.data.length; i++) {
-          const a = {
-            id: res.data[i].mahbes_number,
-            index: i + 1,
-            key: i,
-            address: res.data[i].latitude + " , " + res.data[i].longitude,
-          };
-          data.push(a);
-        }
-        this.setState({
-          dataSource: data,
-          count: i,
-        });
-      });
     }
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.getStopcocks(this.state.tank_number).then((res) => {
+      let i = 0;
+      const data = [];
+      for (; i < res.data.length; i++) {
+        const a = {
+          id: res.data[i].mahbes_number,
+          index: res.data[i].mahbes_number,
+          key: i,
+          address: res.data[i].latitude + " , " + res.data[i].longitude,
+        };
+        data.push(a);
+      }
+      this.setState({
+        dataSource: data,
+        count: i,
+      });
+    });
+  }
   async updateMahbesLocation(lat, lng, id) {
     const bodyFormData = new FormData();
     bodyFormData.append("mahbes_number", parseInt(id));
@@ -358,7 +362,7 @@ class Mhbes extends React.Component {
                           const a = {
                             id: res.data[i].mahbes_number,
                             key: i,
-                            index: i + 1,
+                            index: res.data[i].mahbes_number,
                             address:
                               res.data[i].latitude +
                               " , " +

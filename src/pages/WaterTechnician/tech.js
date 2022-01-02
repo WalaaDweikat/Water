@@ -3,8 +3,9 @@ import Footer from "../../components/Footer/footer.js";
 import Logo from "../../img/256888_109854515773613_2567514_o.jpg";
 import EmployeeProfile from "../../components/EmployeeProfile/profile.js";
 import Complaints from "../../components/WaterTechCom/waterTechCom.js";
-import ComplaintsPlans from "../../components/ComplaintsPlans/plans.js";
+import WaterPlans from "../../components/WaterPlans/plans.js";
 import Stopcocks from "../../components/Stopcocks/stop.js";
+import Rating from "../../components/Rating/rate.js";
 import {
   BrowserRouter as Router,
   Route,
@@ -60,6 +61,10 @@ function WaterTech(props) {
               <Link to="/water/water_technician/plans">توزيع الشكاوي</Link>
             </Menu.Item>
 
+            <Menu.Item className="item" key="/water/water_technician/rate_us">
+              <Link to="/water/water_technician/rate_us">قيمنا</Link>
+            </Menu.Item>
+
             <Menu.Item key="out" className="out">
               <Button type="primary" onClick={singout}>
                 تسجيل الخروج
@@ -74,7 +79,7 @@ function WaterTech(props) {
             </Route>
 
             <Route path="/water/water_technician/plans">
-              <ComplaintsPlans />
+              <WaterPlans />
             </Route>
 
             <Route path="/water/water_technician/stopcocks">
@@ -83,6 +88,9 @@ function WaterTech(props) {
 
             <Route path="/water/water_technician/profile">
               <EmployeeProfile />
+            </Route>
+            <Route path="/water/water_technician/rate_us">
+              <Rating />
             </Route>
           </Switch>
         </Content>

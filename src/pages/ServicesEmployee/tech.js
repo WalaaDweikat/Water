@@ -3,6 +3,7 @@ import Footer from "../../components/Footer/footer.js";
 import Logo from "../../img/256888_109854515773613_2567514_o.jpg";
 import EmployeeProfile from "../../components/EmployeeProfile/profile.js";
 import ServicesRequests from "../../components/ServicesRequests/services.js";
+import Rating from "../../components/Rating/rate.js";
 import {
   BrowserRouter as Router,
   Route,
@@ -46,6 +47,9 @@ function ServicesEmployee() {
             <Menu.Item className="item" key="/water/Services_employee/services">
               <Link to="/water/Services_employee/services">الخدمات</Link>
             </Menu.Item>
+            <Menu.Item className="item" key="/water/Services_employee/rate_us">
+              <Link to="/water/Services_employee/rate_us">تقييم الموقع</Link>
+            </Menu.Item>
 
             <Menu.Item key="out" className="out">
               <Button type="primary" onClick={singout}>
@@ -61,6 +65,9 @@ function ServicesEmployee() {
             </Route>
             <Route path="/water/Services_employee/profile">
               <EmployeeProfile />
+            </Route>
+            <Route path="/water/Services_employee/rate_us">
+              <Rating />
             </Route>
           </Switch>
         </Content>

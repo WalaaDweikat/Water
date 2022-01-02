@@ -226,7 +226,7 @@ class Tanks extends React.Component {
         const a = {
           id: res.data[i].tank_number,
           key: i,
-          index: i + 1,
+          index: res.data[i].tank_number,
           capacity: res.data[i].capacity,
           address: res.data[i].latitude + " , " + res.data[i].longitude,
         };
@@ -418,7 +418,7 @@ class Tanks extends React.Component {
                           const a = {
                             id: res.data[i].tank_number,
                             key: i,
-                            index: i + 1,
+                            index: res.data[i].tank_number,
                             capacity: res.data[i].capacity,
                             address:
                               res.data[i].latitude +
@@ -541,7 +541,7 @@ class Tanks extends React.Component {
           }}
           center
         >
-          <LocationMap />
+          <LocationMap lat="jn" lng="ljn" />
         </Modal>
       </div>
     );

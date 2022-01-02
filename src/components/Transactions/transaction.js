@@ -86,6 +86,18 @@ export default function Transactions() {
             if (status.length !== 0) {
               orderMessage = status[0].orderMessage;
               orderStatus = status[0].orderStatus;
+              if (status[0].orderStatus === 0) {
+                orderStatus = "غير معروف";
+              }
+              if (status[0].orderStatus === 1) {
+                orderStatus = "غير معروف";
+              }
+              if (status[0].orderStatus === 2) {
+                orderStatus = "تم النقل";
+              }
+              if (status[0].orderStatus === 3) {
+                orderStatus = "مرفوض";
+              }
             }
             const a =
               " شكوى رقم " + option.complaints_number + " : " + option.subject;
