@@ -21,7 +21,7 @@ function WaterEngineer(props) {
   const history = useHistory();
 
   const singout = () => {
-    history.push("/water/login");
+    history.push("/water_service/login");
     window.location.reload();
   };
 
@@ -39,16 +39,31 @@ function WaterEngineer(props) {
             <img src={Logo} alt="logo" className="logoHeader" />
           </div>
           <Menu theme="dark" mode="horizontal" selectedKeys={[Id]}>
-            <Menu.Item className="item" key="/water/water_engineer/profile">
-              <Link to="/water/water_engineer/profile">الملف الشخصي </Link>
+            <Menu.Item
+              className="item"
+              key="/water_service/water_engineer/profile"
+            >
+              <Link to="/water_service/water_engineer/profile">
+                الملف الشخصي{" "}
+              </Link>
             </Menu.Item>
 
-            <Menu.Item className="item" key="/water/water_engineer/water_plans">
-              <Link to="/water/water_engineer/water_plans">شبكات المياه</Link>
+            <Menu.Item
+              className="item"
+              key="/water_service/water_engineer/water_plans"
+            >
+              <Link to="/water_service/water_engineer/water_plans">
+                شبكات المياه
+              </Link>
             </Menu.Item>
 
-            <Menu.Item className="item" key="/water/water_engineer/rate_us">
-              <Link to="/water/water_engineer/rate_us">تقييم الموقع</Link>
+            <Menu.Item
+              className="item"
+              key="/water_service/water_engineer/rate_us"
+            >
+              <Link to="/water_service/water_engineer/rate_us">
+                تقييم الموقع
+              </Link>
             </Menu.Item>
 
             <Menu.Item key="out" className="out">
@@ -60,14 +75,14 @@ function WaterEngineer(props) {
         </Header>
         <Content>
           <Switch>
-            <Route path="/water/water_engineer/water_plans">
+            <Route path="/water_service/water_engineer/water_plans">
               <WaterPlansEngineer />
             </Route>
 
-            <Route path="/water/water_engineer/profile">
+            <Route path="/water_service/water_engineer/profile">
               <EmployeeProfile />
             </Route>
-            <Route path="/water/water_engineer/rate_us">
+            <Route path="/water_service/water_engineer/rate_us">
               <Rating />
             </Route>
           </Switch>

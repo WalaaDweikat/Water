@@ -28,6 +28,7 @@ export default function Profile() {
 
   useEffect(() => {
     getAccountInfo().then((res) => {
+      console.log(res);
       document.getElementById("email").placeholder = res.data.email;
     });
 
@@ -45,16 +46,6 @@ export default function Profile() {
   const success = () => {
     message.success({
       content: "تم تغيير كلمة المرور بنجاح ",
-      style: {
-        marginTop: "30vh",
-      },
-      duration: 1,
-    });
-  };
-
-  const error = () => {
-    message.error({
-      content: "كلمة مرور خاطئة",
       style: {
         marginTop: "30vh",
       },

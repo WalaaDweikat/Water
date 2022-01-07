@@ -30,7 +30,7 @@ export default function Main() {
       <Layout className="userContainer">
         <Content>
           <Switch>
-            <Route path="/water/" exact>
+            <Route path="/water_service/" exact>
               <Header
                 className="header"
                 style={{ position: "fixed", zIndex: 1, width: "100%" }}
@@ -40,10 +40,10 @@ export default function Main() {
                 </div>
                 <Menu theme="dark" mode="horizontal" defaultSelectedKeys={[1]}>
                   <Menu.Item key="out" className="out">
-                    <a href="/water/login">تسجيل الدخول</a>
+                    <a href="/water_service/login">تسجيل الدخول</a>
                   </Menu.Item>
                   <Menu.Item key="in" className="out">
-                    <a href="/water/signup">إنشاء حساب</a>
+                    <a href="/water_service/signup">إنشاء حساب</a>
                   </Menu.Item>
                 </Menu>
               </Header>
@@ -159,97 +159,97 @@ export default function Main() {
               </div>
               <Footer />
             </Route>
-            <Route path="/water/login">
+            <Route path="/water_service/login">
               <Login />
             </Route>
-            <Route path="/water/signup">
+            <Route path="/water_service/signup">
               <NewAccount />
             </Route>
-            <Route path="/water/user/home">
+            <Route path="/water_service/user/home">
               <User />
             </Route>
-            <Route path="/water/admin/home">
+            <Route path="/water_service/admin/home">
               <Admin />
             </Route>
-            <Route path="/water/user/services">
+            <Route path="/water_service/user/services">
               <User />
             </Route>
-            <Route path="/water/user/profile">
+            <Route path="/water_service/user/profile">
               <User />
             </Route>
-            <Route path="/water/user/complaints">
+            <Route path="/water_service/user/complaints">
               <User />
             </Route>
-            <Route path="/water/user/delete_service">
+            <Route path="/water_service/user/delete_service">
               <User />
             </Route>
-            <Route path="/water/user/service_transfer">
+            <Route path="/water_service/user/service_transfer">
               <User />
             </Route>
-            <Route path="/water/user/new_service">
+            <Route path="/water_service/user/new_service">
               <User />
             </Route>
-            <Route path="/water/admin/tanks">
+            <Route path="/water_service/admin/tanks">
               <Admin />
             </Route>
-            <Route path="/water/admin/rate_us">
+            <Route path="/water_service/admin/rate_us">
               <Admin />
             </Route>
-            <Route path="/water/admin/water_plans">
+            <Route path="/water_service/admin/water_plans">
               <Admin />
             </Route>
-            <Route path="/water/admin/services">
+            <Route path="/water_service/admin/services">
               <Admin />
             </Route>
-            <Route path="/water/admin/employees">
+            <Route path="/water_service/admin/employees">
               <Admin />
             </Route>
-            <Route path="/water/admin/mhbes">
+            <Route path="/water_service/admin/mhbes">
               <Admin />
             </Route>
-            <Route path="/water/user/bills">
+            <Route path="/water_service/user/bills">
               <User />
             </Route>
-            <Route path="/water/user/transactions">
+            <Route path="/water_service/user/transactions">
               <User />
             </Route>
-            <Route path="/water/user/points">
+            <Route path="/water_service/user/points">
               <User />
             </Route>
-            <Route path="/water/water_technician/complaints">
+            <Route path="/water_service/water_technician/complaints">
               <WaterTechnician />
             </Route>
-            <Route path="/water/water_technician/rate_us">
+            <Route path="/water_service/water_technician/rate_us">
               <WaterTechnician />
             </Route>
-            <Route path="/water/water_technician/profile">
+            <Route path="/water_service/water_technician/profile">
               <WaterTechnician />
             </Route>
-            <Route path="/water/water_technician/stopcocks">
+            <Route path="/water_service/water_technician/stopcocks">
               <WaterTechnician />
             </Route>
-            <Route path="/water/water_technician/plans">
+            <Route path="/water_service/water_technician/plans">
               <WaterTechnician />
             </Route>
-            <Route path="/water/water_engineer/water_plans">
+            <Route path="/water_service/water_engineer/water_plans">
               <WaterEngineer />
             </Route>
-            <Route path="/water/water_engineer/rate_us">
+            <Route path="/water_service/water_engineer/rate_us">
               <WaterEngineer />
             </Route>
-            <Route path="/water/water_engineer/profile">
+            <Route path="/water_service/water_engineer/profile">
               <WaterEngineer />
             </Route>
-            <Route path="/water/Services_employee/profile">
+            <Route path="/water_service/Services_employee/profile">
               <ServicesEmployee />
             </Route>
-            <Route path="/water/Services_employee/rate_us">
+            <Route path="/water_service/Services_employee/rate_us">
               <ServicesEmployee />
             </Route>
-            <Route path="/water/Services_employee/services">
+            <Route path="/water_service/Services_employee/services">
               <ServicesEmployee />
             </Route>
-            <Route path="/water/user/rate_us">
+            <Route path="/water_service/user/rate_us">
               <User />
             </Route>
           </Switch>

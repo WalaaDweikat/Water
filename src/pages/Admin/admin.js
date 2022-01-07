@@ -32,7 +32,7 @@ function Admin() {
   const history = useHistory();
   const singout = () => {
     localStorage.removeItem("username");
-    history.push("/water/login");
+    history.push("/water_service/login");
   };
 
   window.addEventListener("click", () => {
@@ -49,20 +49,20 @@ function Admin() {
             <img src={Logo} alt="logo" className="logoHeader" />
           </div>
           <Menu theme="dark" mode="horizontal" selectedKeys={[Id]}>
-            <Menu.Item className="item" key="/water/admin/home">
-              <Link to="/water/admin/home">الرئيسية</Link>
+            <Menu.Item className="item" key="/water_service/admin/home">
+              <Link to="/water_service/admin/home">الرئيسية</Link>
             </Menu.Item>
-            <Menu.Item className="item" key="/water/admin/tanks">
-              <Link to="/water/admin/tanks">الخزانات والمحابس</Link>
+            <Menu.Item className="item" key="/water_service/admin/tanks">
+              <Link to="/water_service/admin/tanks">الخزانات والمحابس</Link>
             </Menu.Item>
-            <Menu.Item className="item" key="/water/admin/water_plans">
-              <Link to="/water/admin/water_plans">شبكات المياه</Link>
+            <Menu.Item className="item" key="/water_service/admin/water_plans">
+              <Link to="/water_service/admin/water_plans">شبكات المياه</Link>
             </Menu.Item>
-            <Menu.Item className="item" key="/water/admin/services">
-              <Link to="/water/admin/services"> الاشتراكات</Link>
+            <Menu.Item className="item" key="/water_service/admin/services">
+              <Link to="/water_service/admin/services"> الاشتراكات</Link>
             </Menu.Item>
-            <Menu.Item className="item" key="/water/admin/employees">
-              <Link to="/water/admin/employees"> الموظفيين</Link>
+            <Menu.Item className="item" key="/water_service/admin/employees">
+              <Link to="/water_service/admin/employees"> الموظفيين</Link>
             </Menu.Item>
             <Menu.Item key="out" className="out">
               <Button type="primary" onClick={singout}>
@@ -73,7 +73,7 @@ function Admin() {
         </Header>
         <Content>
           <Switch>
-            <Route path="/water/admin/tanks">
+            <Route path="/water_service/admin/tanks">
               <div className="tanksContainer">
                 <h2
                   style={{
@@ -89,9 +89,9 @@ function Admin() {
                 <Tanks />
               </div>
             </Route>
-            <Route path="/water/admin/home">
+            <Route path="/water_service/admin/home">
               <div className="userHomeContainer">
-                <Link to="/water/admin/employees">
+                <Link to="/water_service/admin/employees">
                   <Button
                     type="primary"
                     id="employees"
@@ -100,7 +100,7 @@ function Admin() {
                     الموظفيين
                   </Button>
                 </Link>
-                <Link to="/water/admin/services">
+                <Link to="/water_service/admin/services">
                   <Button
                     type="primary"
                     id="complaints"
@@ -109,7 +109,7 @@ function Admin() {
                     الاشتراكات
                   </Button>
                 </Link>
-                <Link to="/water/admin/water_plans">
+                <Link to="/water_service/admin/water_plans">
                   <Button
                     type="primary"
                     id="water_plans"
@@ -120,7 +120,7 @@ function Admin() {
                     شبكات المياه
                   </Button>
                 </Link>
-                <Link to="/water/admin/tanks">
+                <Link to="/water_service/admin/tanks">
                   <Button
                     type="primary"
                     id="tanks"
@@ -131,7 +131,7 @@ function Admin() {
                 </Link>
               </div>
             </Route>
-            <Route path="/water/admin/employees">
+            <Route path="/water_service/admin/employees">
               <div className="tanksContainer">
                 <h2
                   style={{
@@ -147,7 +147,7 @@ function Admin() {
                 <Employees />
               </div>
             </Route>
-            <Route path="/water/admin/services">
+            <Route path="/water_service/admin/services">
               <div className="tanksContainer">
                 <h2
                   style={{
@@ -163,10 +163,10 @@ function Admin() {
                 <WaterServices />
               </div>
             </Route>
-            <Route path="/water/admin/water_plans">
+            <Route path="/water_service/admin/water_plans">
               <WaterPlans />
             </Route>
-            <Route path="/water/admin/login">
+            <Route path="/water_service/admin/login">
               <Login />
             </Route>
           </Switch>

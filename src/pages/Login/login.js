@@ -35,26 +35,28 @@ export default function Login() {
 
     if (res.data === 0) {
       //admin
-      history.push("/water/admin/home");
+      history.push("/water_service/admin/home");
     } else if (res.data === -1) {
       //user
-      history.push("/water/user/home");
+      history.push("/water_service/user/home");
     } else if (res.data === 1) {
       //water_engineer
-      history.push("/water/water_engineer/profile");
+      history.push("/water_service/water_engineer/profile");
     } else if (res.data === 2) {
       //water_Technician
-      history.push("/water/water_technician/profile");
+      history.push("/water_service/water_technician/profile");
     } else if (res.data === 3) {
       // "موظف الخدمات";
-      history.push("/water/Services_employee/profile");
-    } else if (res.data === 5) {
-      //موظف الشحن";
-      history.push("/water/");
-    } else if (res.data === 4) {
-      //موظف العدادات";
-      history.push("/water/");
-    } else error();
+      history.push("/water_service/Services_employee/profile");
+    }
+    //  else if (res.data === 5) {
+    //   //موظف الشحن";
+    //   history.push("/water_service/");
+    // } else if (res.data === 4) {
+    //   //موظف العدادات";
+    //   history.push("/water_service/");
+    // }
+    else error();
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -64,7 +66,7 @@ export default function Login() {
   return (
     <Router>
       <Switch>
-        <Route path="/water/login" exact>
+        <Route path="/water_service/login" exact>
           <div className="login">
             <div className="loginform">
               <svg
@@ -179,28 +181,28 @@ export default function Login() {
                   </Button>
                 </Form.Item>
               </Form>
-              <Link to="/water/signup" className="createAcount">
+              <Link to="/water_service/signup" className="createAcount">
                 إنشاء حساب؟
               </Link>
             </div>
           </div>
         </Route>
-        <Route path="/water/user">
+        <Route path="/water_service/user">
           <User />
         </Route>
-        <Route path="/water/admin">
+        <Route path="/water_service/admin">
           <Admin />
         </Route>
-        <Route path="/water/water_technician">
+        <Route path="/water_service/water_technician">
           <WaterTech />
         </Route>
-        <Route path="/water/water_engineer">
+        <Route path="/water_service/water_engineer">
           <User />
         </Route>
-        <Route path="/water/signup" exact>
+        <Route path="/water_service/signup" exact>
           <NewAccount />
         </Route>
-        <Route path="/water/" exact>
+        <Route path="/water_service/" exact>
           <Main />
         </Route>
       </Switch>

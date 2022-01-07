@@ -14,7 +14,6 @@ export default function Register() {
   const [match, setMatch] = useState(false);
   const [pass, setPass] = useState();
   const [confirmPass, setConfirmPass] = useState();
-
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
@@ -27,7 +26,7 @@ export default function Register() {
   return (
     <Router>
       <Switch>
-        <Route path="/water/signup/" exact>
+        <Route path="/water_service/signup/" exact>
           <div className="register">
             <div className="rr">
               <div className="newUser">تسـجـيـل مـشـتـرك جـديـد</div>
@@ -49,21 +48,13 @@ export default function Register() {
               }}
               onFinish={(values) => {
                 const bodyFormData = new FormData();
-                bodyFormData.append("username", values["0"]);
-                bodyFormData.append("password", values["1"]);
-                bodyFormData.append("email", values["2"]);
-                bodyFormData.append(
-                  "userId",
-                  parseInt(localStorage.getItem("username"))
-                );
-                bodyFormData.append(
-                  "userType",
-                  parseInt(localStorage.getItem("type"))
-                );
+                bodyFormData.append("username", values.id);
+                bodyFormData.append("password", values.password);
+                bodyFormData.append("email", values.email);
 
                 axios({
                   method: "post",
-                  url: IP + "/water/ratingApp/withnote",
+                  url: IP + "/water/users/add",
                   headers: {
                     "Content-Type": "multipart/form-data",
                   },
@@ -71,14 +62,25 @@ export default function Register() {
                 })
                   .then((response) => {
                     console.log(response.data);
-                    if (response.data === "added") {
-                      message.success("نم اضافة مشترك جدد");
-                      document.getElementById("form").reset();
+                    if (response.data === "no citizen with this ID") {
+                      message.error("الرجاء التسجيل بخدمة المياه اولا");
+                    } else if (response.data === "this user has an account") {
+                      message.error(
+                        "الرجاء استخدام رقم هوية اخر، رقم الهوية هذا مستخدم "
+                      );
+                    } else if (response.data === "this user has an account") {
+                      message.error(
+                        "الجاء استخدام رقم هوية اخر، رقم الهوية هذا مستخدم "
+                      );
+                    } else if (response.data === "new user added") {
+                      localStorage.setItem("username", values.id);
+                      history.push("/water/signup/cont");
+                      window.location.reload();
                     }
                   })
                   .catch((error) => {
                     console.log(error);
-                    error();
+                    message.error("حصل خطأ ما , اعد المجاولة");
                   });
               }}
               onFinishFailed={onFinishFailed}
@@ -192,7 +194,7 @@ export default function Register() {
             </Form>
           </div>
         </Route>
-        <Route path="/water/signup/cont">
+        <Route path="/water_service/signup/cont">
           <Register2 />
         </Route>
       </Switch>

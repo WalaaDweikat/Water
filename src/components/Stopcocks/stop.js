@@ -36,15 +36,11 @@ export default function Stopcocks() {
           console.log(values.stopcock_number);
           let url = "";
           let method = "";
-          let m = "";
           if (process === 0) {
             url = IP + "/water/PumpingTime/endPumping";
-            m =
-              "تم الآن إغلاق المحبس الرجاء تزويدنا بقراءة العداد الحالية بالإضافة إلى تقييم وضع الخزان الحالي";
             method = "put";
           } else if (process === 1) {
-            url = IP + "/water/PumpingTime/newPumpingTime";
-            m = "تم الآن فتح المحبس الرجاء تزويدنا بقراءة العداد";
+            url = IP + "water/PumpingTime/newPumpingTimeDA";
             method = "post";
           }
 
@@ -53,7 +49,6 @@ export default function Stopcocks() {
               params: { mahbes_number: values.stopcock_number },
             })
             .then((res) => {
-              console.log("DA", res.data[0].DA);
               const bodyFormData = new FormData();
               bodyFormData.append("DA", res.data[0].DA);
               bodyFormData.append("username", localStorage.getItem("username"));
@@ -68,24 +63,6 @@ export default function Stopcocks() {
                 .then((response) => {
                   console.log("pumping", response);
                   message.success("تم");
-                })
-                .catch((error) => {
-                  console.log(error);
-                });
-
-              document.getElementById("form1").reset();
-              const bodyFormData1 = new FormData();
-              bodyFormData1.append("message", m);
-              axios({
-                method: "post",
-                url: IP + "/water/notifications/add",
-                data: bodyFormData1,
-                headers: {
-                  "Content-Type": "multipart/form-data",
-                },
-              })
-                .then((response) => {
-                  console.log("notification", response);
                 })
                 .catch((error) => {
                   console.log(error);

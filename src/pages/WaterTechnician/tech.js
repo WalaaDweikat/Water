@@ -24,7 +24,7 @@ function WaterTech(props) {
 
   const singout = () => {
     localStorage.removeItem("username");
-    history.push("/water/login");
+    history.push("/water_service/login");
     window.location.reload();
   };
 
@@ -42,27 +42,47 @@ function WaterTech(props) {
             <img src={Logo} alt="logo" className="logoHeader" />
           </div>
           <Menu theme="dark" mode="horizontal" selectedKeys={[Id]}>
-            <Menu.Item className="item" key="/water/water_technician/profile">
-              <Link to="/water/water_technician/profile">الملف الشخصي </Link>
-            </Menu.Item>
-
-            <Menu.Item className="item" key="/water/water_technician/stopcocks">
-              <Link to="/water/water_technician/stopcocks">المحابس</Link>
+            <Menu.Item
+              className="item"
+              key="/water_service/water_technician/profile"
+            >
+              <Link to="/water_service/water_technician/profile">
+                الملف الشخصي{" "}
+              </Link>
             </Menu.Item>
 
             <Menu.Item
               className="item"
-              key="/water/water_technician/complaints"
+              key="/water_service/water_technician/stopcocks"
             >
-              <Link to="/water/water_technician/complaints">الشكاوي</Link>
+              <Link to="/water_service/water_technician/stopcocks">
+                المحابس
+              </Link>
             </Menu.Item>
 
-            <Menu.Item className="item" key="/water/water_technician/plans">
-              <Link to="/water/water_technician/plans">توزيع الشكاوي</Link>
+            <Menu.Item
+              className="item"
+              key="/water_service/water_technician/complaints"
+            >
+              <Link to="/water_service/water_technician/complaints">
+                الشكاوي
+              </Link>
             </Menu.Item>
 
-            <Menu.Item className="item" key="/water/water_technician/rate_us">
-              <Link to="/water/water_technician/rate_us">قيمنا</Link>
+            <Menu.Item
+              className="item"
+              key="/water_service/water_technician/plans"
+            >
+              <Link to="/water_service/water_technician/plans">
+                توزيع الشكاوي
+              </Link>
+            </Menu.Item>
+
+            <Menu.Item
+              className="item"
+              key="/water_service/water_technician/rate_us"
+            >
+              <Link to="/water_service/water_technician/rate_us">قيمنا</Link>
             </Menu.Item>
 
             <Menu.Item key="out" className="out">
@@ -74,22 +94,22 @@ function WaterTech(props) {
         </Header>
         <Content>
           <Switch>
-            <Route path="/water/water_technician/complaints">
+            <Route path="/water_service/water_technician/complaints">
               <Complaints />
             </Route>
 
-            <Route path="/water/water_technician/plans">
+            <Route path="/water_service/water_technician/plans">
               <ComplaintsPlans />
             </Route>
 
-            <Route path="/water/water_technician/stopcocks">
+            <Route path="/water_service/water_technician/stopcocks">
               <Stopcocks />
             </Route>
 
-            <Route path="/water/water_technician/profile">
+            <Route path="/water_service/water_technician/profile">
               <EmployeeProfile />
             </Route>
-            <Route path="/water/water_technician/rate_us">
+            <Route path="/water_service/water_technician/rate_us">
               <Rating />
             </Route>
           </Switch>

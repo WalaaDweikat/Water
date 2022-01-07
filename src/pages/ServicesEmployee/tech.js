@@ -40,15 +40,30 @@ function ServicesEmployee() {
             <img src={Logo} alt="logo" className="logoHeader" />
           </div>
           <Menu theme="dark" mode="horizontal" selectedKeys={[Id]}>
-            <Menu.Item className="item" key="/water/Services_employee/profile">
-              <Link to="/water/Services_employee/profile">الملف الشخصي </Link>
+            <Menu.Item
+              className="item"
+              key="/water_service/Services_employee/profile"
+            >
+              <Link to="/water_service/Services_employee/profile">
+                الملف الشخصي{" "}
+              </Link>
             </Menu.Item>
 
-            <Menu.Item className="item" key="/water/Services_employee/services">
-              <Link to="/water/Services_employee/services">الخدمات</Link>
+            <Menu.Item
+              className="item"
+              key="/water_service/Services_employee/services"
+            >
+              <Link to="/water_service/Services_employee/services">
+                الخدمات
+              </Link>
             </Menu.Item>
-            <Menu.Item className="item" key="/water/Services_employee/rate_us">
-              <Link to="/water/Services_employee/rate_us">تقييم الموقع</Link>
+            <Menu.Item
+              className="item"
+              key="/water_service/Services_employee/rate_us"
+            >
+              <Link to="/water_service/Services_employee/rate_us">
+                تقييم الموقع
+              </Link>
             </Menu.Item>
 
             <Menu.Item key="out" className="out">
@@ -60,13 +75,13 @@ function ServicesEmployee() {
         </Header>
         <Content>
           <Switch>
-            <Route path="/water/Services_employee/services">
+            <Route path="/water_service/Services_employee/services">
               <ServicesRequests />
             </Route>
-            <Route path="/water/Services_employee/profile">
+            <Route path="/water_service/Services_employee/profile">
               <EmployeeProfile />
             </Route>
-            <Route path="/water/Services_employee/rate_us">
+            <Route path="/water_service/Services_employee/rate_us">
               <Rating />
             </Route>
           </Switch>

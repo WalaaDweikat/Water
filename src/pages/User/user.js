@@ -23,8 +23,10 @@ import {
   useHistory,
 } from "react-router-dom";
 import { useState, useEffect } from "react";
+import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Layout, Menu, Button, Dropdown } from "antd";
+import { Layout, Menu, Button, Dropdown, notification } from "antd";
+
 import {
   faComment,
   faUser,
@@ -42,14 +44,50 @@ function User() {
   const [notifications, setNotifications] = useState([]);
   const getNotifications = async () => {
     const axios = require("axios");
-    await axios.get(IP + "/water/notifications/getAll").then((res) => {
-      console.log(res);
-      setNotifications(res.data);
+    await axios
+      .get(IP + "/water/notifications/getAll", {
+        params: { username: localStorage.getItem("username") },
+      })
+      .then((res) => {
+        console.log(res);
+        setNotifications(res.data);
+      });
+  };
+  const openNotification = (m) => {
+    notification.open({
+      message: "تنبيه",
+      description: m,
     });
   };
-
   useEffect(() => {
-    getNotifications();
+    const axios = require("axios");
+    axios
+      .get(IP + "/water/notificationUserType", {
+        params: { username: localStorage.getItem("username"), type: -1 },
+      })
+      .then((res) => {
+        for (let i = 0; i < res.data.length; i++) {
+          openNotification(res.data[i].msg);
+          const bodyFormData = new FormData();
+          bodyFormData.append("type", -1);
+          bodyFormData.append("username", localStorage.getItem("username"));
+          bodyFormData.append("id", res.data[i].notificationId);
+          axios({
+            method: "put",
+            url: IP + "/water/notification/markAsSent",
+            data: bodyFormData,
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          })
+            .then((response) => {
+              console.log(response);
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        }
+      });
   }, []);
 
   const menu = (
@@ -71,7 +109,7 @@ function User() {
   const history = useHistory();
   const singout = () => {
     localStorage.removeItem("username");
-    history.push("/water/login");
+    history.push("/water_service/login");
   };
   window.addEventListener("click", () => {
     setId(window.location.pathname);
@@ -89,41 +127,54 @@ function User() {
           </div>
 
           <Menu theme="dark" mode="horizontal" selectedKeys={[Id]} id="menu">
-            <Menu.Item className="item" key="/water/user/home">
-              <Link to="/water/user/home">الرئيسية</Link>
+            <Menu.Item className="item" key="/water_service/user/home">
+              <Link to="/water_service/user/home">الرئيسية</Link>
             </Menu.Item>
-            <Menu.Item className="item" key="/water/user/profile">
-              <Link to="/water/user/profile">الملف الشخصي</Link>
+            <Menu.Item className="item" key="/water_service/user/profile">
+              <Link to="/water_service/user/profile">الملف الشخصي</Link>
             </Menu.Item>
-            <Menu.Item className="item" key="/water/user/transactions">
-              <Link to="/water/user/transactions">معاملاتي</Link>
+            <Menu.Item className="item" key="/water_service/user/transactions">
+              <Link to="/water_service/user/transactions">معاملاتي</Link>
             </Menu.Item>
-            <SubMenu key="water/user/services" className="item" title="خدماتي">
-              <Menu.Item key="/water/user/new_service">
-                <Link to="/water/user/new_service">طلب اشتراك</Link>
+            <SubMenu
+              key="water_service/user/services"
+              className="item"
+              title="خدماتي"
+            >
+              <Menu.Item key="/water_service/user/new_service">
+                <Link to="/water_service/user/new_service">طلب اشتراك</Link>
               </Menu.Item>
-              <Menu.Item key="/water/user/service_transfer">
-                <Link to="/water/user/service_transfer">نقل اشتراك</Link>
+              <Menu.Item key="/water_service/user/service_transfer">
+                <Link to="/water_service/user/service_transfer">
+                  نقل اشتراك
+                </Link>
               </Menu.Item>
-              <Menu.Item key="/water/user/delete_service">
-                <Link to="/water/user/delete_service">إزالة اشتراك</Link>
+              <Menu.Item key="/water_service/user/delete_service">
+                <Link to="/water_service/user/delete_service">
+                  إزالة اشتراك
+                </Link>
               </Menu.Item>
             </SubMenu>
-            <Menu.Item className="item" key="/water/user/complaints">
-              <Link to="/water/user/complaints"> الشكاوي</Link>
+            <Menu.Item className="item" key="/water_service/user/complaints">
+              <Link to="/water_service/user/complaints"> الشكاوي</Link>
             </Menu.Item>
             {/* <Menu.Item className="item" key="/water/user/bills">
               <Link to="/water/user/bills"> الفواتير</Link>
             </Menu.Item> */}
-            <Menu.Item className="item" key="/water/user/points">
-              <Link to="/water/user/points"> ساعدنا</Link>
+            <Menu.Item className="item" key="/water_service/user/points">
+              <Link to="/water_service/user/points"> ساعدنا</Link>
             </Menu.Item>
-            <Menu.Item key="/water/user/rate_us" className="out">
-              <a href="/water/user/rate_us">تقييم التطبيق</a>
+            <Menu.Item key="/water_service/user/rate_us" className="out">
+              <a href="/water_service/user/rate_us">تقييم التطبيق</a>
             </Menu.Item>
-            <Menu.Item className="item" key="/water/user/points" disabled>
+            <Menu.Item className="item" key={"8"} disabled>
               <Dropdown overlay={menu} placement={"bottomCenter"} arrow>
-                <Button icon={<NotificationOutlined />}></Button>
+                <Button
+                  icon={<NotificationOutlined />}
+                  onMouseEnter={() => {
+                    getNotifications();
+                  }}
+                ></Button>
               </Dropdown>
             </Menu.Item>
 
@@ -136,73 +187,79 @@ function User() {
         </Header>
         <Content>
           <Switch>
-            <Route path="/water/user/services">
+            <Route path="/water_service/user/services">
               <div className="userServicesContainer ">
-                <Link to="/water/user/new_service">
-                  <Button type="primary" id="/water/user/new_service">
+                <Link to="/water_service/user/new_service">
+                  <Button type="primary" id="/water_service/user/new_service">
                     <FontAwesomeIcon icon={faPlus} className="icon" />
                     طلب اشتراك
                   </Button>
                 </Link>
-                <Link to="/water/user/service_transfer">
-                  <Button type="primary" id="/water/user/service_transfer">
+                <Link to="/water_service/user/service_transfer">
+                  <Button
+                    type="primary"
+                    id="/water_service/user/service_transfer"
+                  >
                     <FontAwesomeIcon icon={faRetweet} className="icon" />
                     نقل اشتراك
                   </Button>
                 </Link>
-                <Link to="/water/user/delete_service">
-                  <Button type="primary" id="/water/user/delete_service">
+                <Link to="/water_service/user/delete_service">
+                  <Button
+                    type="primary"
+                    id="/water_service/user/delete_service"
+                  >
                     <FontAwesomeIcon icon={faTimesCircle} className="icon" />
                     حذف اشتراك
                   </Button>
                 </Link>
               </div>
             </Route>
-            <Route path="/water/user/service_transfer">
+            <Route path="/water_service/user/service_transfer">
               <div className="services">
                 <div className="headerServices">نقل اشتراك</div>
                 <TransferService />
               </div>
             </Route>
-            <Route path="/water/user/new_service">
+            <Route path="/water_service/user/new_service">
               <div className="services">
                 <div className="headerServices">طلب اشتراك جديد</div>
                 <NewService />
               </div>
             </Route>
-            <Route path="/water/user/delete_service">
+            <Route path="/water_service/user/delete_service">
               <div className="services">
                 <div className="headerServices">حذف اشتراك </div>
                 <DeleteService />
               </div>
             </Route>
-            <Route path="/water/user/transactions">
+            <Route path="/water_service/user/transactions">
               <Transactions />
             </Route>
-            <Route path="/water/user/home">
+            <Route path="/water_service/user/home">
               <div className="userHomeContainer ">
-                <Link to="/water/user/profile">
+                <Link to="/water_service/user/profile">
                   <Button
                     type="primary"
-                    id="/water/user/profile"
+                    id="/water_service/user/profile"
                     icon={<FontAwesomeIcon icon={faUser} className="icon" />}
                   >
                     الملف الشخصي
                   </Button>
                 </Link>
-                <Link to="/water/user/complaints">
+                <Link to="/water_service/user/complaints">
                   <Button
                     type="primary"
-                    id="/water/user/complaints"
+                    id="/water_service/user/complaints"
                     icon={<FontAwesomeIcon icon={faComment} className="icon" />}
                   >
                     الشكاوي
                   </Button>
                 </Link>
-                <Link to="/water/user/transactions">
+                <Link to="/water_service/user/transactions">
                   <Button
                     type="primary"
-                    id="/water/user/transactions"
+                    id="/water_service/user/transactions"
                     icon={
                       <FontAwesomeIcon
                         icon={faClipboardList}
@@ -213,10 +270,10 @@ function User() {
                     معاملاتي
                   </Button>
                 </Link>
-                <Link to="/water/user/services">
+                <Link to="/water_service/user/services">
                   <Button
                     type="primary"
-                    id="/water/user/services"
+                    id="/water_service/user/services"
                     icon={<FontAwesomeIcon icon={faClone} className="icon" />}
                   >
                     خدماتي
@@ -236,10 +293,10 @@ function User() {
                     الفواتير
                   </Button>
                 </Link> */}
-                <Link to="/water/user/points">
+                <Link to="/water_service/user/points">
                   <Button
                     type="primary"
-                    id="/water/user/points"
+                    id="/water_service/user/points"
                     icon={
                       <FontAwesomeIcon icon={faDollarSign} className="icon" />
                     }
@@ -249,16 +306,16 @@ function User() {
                 </Link>
               </div>
             </Route>
-            <Route path="/water/user/complaints">
+            <Route path="/water_service/user/complaints">
               <div className="services">
                 <div className="headerServices">إدراج شكوى </div>
                 <Complaints />
               </div>
             </Route>
-            <Route path="/water/user/profile">
+            <Route path="/water_service/user/profile">
               <Profile />
             </Route>
-            <Route path="/water/user/login">
+            <Route path="/water_service/user/login">
               <Login />
             </Route>
             {/* <Route path="/water/user/bills">
@@ -267,10 +324,10 @@ function User() {
                 <Bills />
               </div>
             </Route> */}
-            <Route path="/water/user/points">
+            <Route path="/water_service/user/points">
               <Points />
             </Route>
-            <Route path="/water/user/rate_us">
+            <Route path="/water_service/user/rate_us">
               <Rating />
             </Route>
           </Switch>
