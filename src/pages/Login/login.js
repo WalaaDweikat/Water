@@ -4,12 +4,20 @@ import IP from "../../ip.js";
 import profile from "../../img/Profile.jpg";
 import User from "../User/user.js";
 import Admin from "../Admin/admin.js";
+import WaterEngineer from "../WaterEngineer/tech.js";
 import NewAccount from "../NewAccount/newAccount.js";
+import ServicesEmployee from "../ServicesEmployee/tech.js";
 import Main from "../Main/main.js";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { Form, Input, Button, message } from "antd";
 import { useHistory } from "react-router-dom";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  Redirect,
+} from "react-router-dom";
 import { useState } from "react";
 import WaterTech from "../WaterTechnician/tech.js";
 export default function Login() {
@@ -35,28 +43,36 @@ export default function Login() {
 
     if (res.data === 0) {
       //admin
-      history.push("/water_service/admin/home");
+      localStorage.setItem("flag", "1");
+      history.push("/admin/home");
     } else if (res.data === -1) {
       //user
-      history.push("/water_service/user/home");
+      localStorage.setItem("flag", "1");
+      history.push("/user/home");
     } else if (res.data === 1) {
       //water_engineer
-      history.push("/water_service/water_engineer/profile");
+      localStorage.setItem("flag", "1");
+      history.push("/water_engineer/profile");
     } else if (res.data === 2) {
       //water_Technician
-      history.push("/water_service/water_technician/profile");
+      localStorage.setItem("flag", "1");
+      history.push("/water_technician/profile");
     } else if (res.data === 3) {
       // "موظف الخدمات";
-      history.push("/water_service/Services_employee/profile");
+      localStorage.setItem("flag", "1");
+      history.push("/Services_employee/profile");
     }
     //  else if (res.data === 5) {
     //   //موظف الشحن";
-    //   history.push("/water_service/");
+    //   history.push("/");
     // } else if (res.data === 4) {
     //   //موظف العدادات";
-    //   history.push("/water_service/");
+    //   history.push("/");
     // }
-    else error();
+    else {
+      localStorage.setItem("flag", 0);
+      error();
+    }
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -66,7 +82,7 @@ export default function Login() {
   return (
     <Router>
       <Switch>
-        <Route path="/water_service/login" exact>
+        <Route path="/login" exact>
           <div className="login">
             <div className="loginform">
               <svg
@@ -181,28 +197,58 @@ export default function Login() {
                   </Button>
                 </Form.Item>
               </Form>
-              <Link to="/water_service/signup" className="createAcount">
+              <Link to="/signup" className="createAcount">
                 إنشاء حساب؟
               </Link>
             </div>
           </div>
         </Route>
-        <Route path="/water_service/user">
-          <User />
+        <Route path="/user">
+          {localStorage.getItem("flag") === "1" ? (
+            <User />
+          ) : (
+            <Redirect to="/login" />
+          )}
         </Route>
-        <Route path="/water_service/admin">
-          <Admin />
+        <Route path="/admin">
+          {localStorage.getItem("flag") === "1" ? (
+            <Admin />
+          ) : (
+            <Redirect to="/login" />
+          )}
         </Route>
-        <Route path="/water_service/water_technician">
-          <WaterTech />
+        <Route path="/water_technician">
+          {localStorage.getItem("flag") === "1" ? (
+            <WaterTech />
+          ) : (
+            <Redirect to="/login" />
+          )}
         </Route>
-        <Route path="/water_service/water_engineer">
-          <User />
+        <Route path="/water_engineer">
+          {localStorage.getItem("flag") === "1" ? (
+            <WaterEngineer />
+          ) : (
+            <Redirect to="/login" />
+          )}
         </Route>
-        <Route path="/water_service/signup" exact>
+        <Route path="/water_engineer">
+          {localStorage.getItem("flag") === "1" ? (
+            <WaterEngineer />
+          ) : (
+            <Redirect to="/login" />
+          )}
+        </Route>
+        <Route path="/Services_employee">
+          {localStorage.getItem("flag") === "1" ? (
+            <ServicesEmployee />
+          ) : (
+            <Redirect to="/login" />
+          )}
+        </Route>
+        <Route path="/signup" exact>
           <NewAccount />
         </Route>
-        <Route path="/water_service/" exact>
+        <Route path="/" exact>
           <Main />
         </Route>
       </Switch>

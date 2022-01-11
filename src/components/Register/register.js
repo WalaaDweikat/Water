@@ -26,7 +26,7 @@ export default function Register() {
   return (
     <Router>
       <Switch>
-        <Route path="/water_service/signup/" exact>
+        <Route path="/signup/" exact>
           <div className="register">
             <div className="rr">
               <div className="newUser">تسـجـيـل مـشـتـرك جـديـد</div>
@@ -194,7 +194,7 @@ export default function Register() {
             </Form>
           </div>
         </Route>
-        <Route path="/water_service/signup/cont">
+        <Route path="/signup/cont">
           <Register2 />
         </Route>
       </Switch>

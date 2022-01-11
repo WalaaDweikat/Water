@@ -57,8 +57,8 @@ export default function Transactions() {
             let orderStatus = "غير معروف";
             let orderMessage = "لم يتم النظر في الطلب حتى الان";
             if (status.length !== 0) {
-              orderMessage = status[0].orderMessage;
-              orderStatus = status[0].orderStatus;
+              orderMessage = status[0].message;
+              orderStatus = status[0].status;
             }
             let a = "";
             if (option.order_type === 0)

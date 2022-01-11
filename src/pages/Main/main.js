@@ -10,7 +10,12 @@ import Footer from "../../components/Footer/footer.js";
 import img1 from "../../img/loginImage.jpg";
 import img2 from "../../img/893647_441162895976105_631260900_o.jpg";
 import img3 from "../../img/154889906_3768521463227511_155617644466092987_n.jpg";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom";
 import WaterTechnician from "../WaterTechnician/tech.js";
 import WaterEngineer from "../WaterEngineer/tech.js";
 import ServicesEmployee from "../ServicesEmployee/tech.js";
@@ -30,7 +35,7 @@ export default function Main() {
       <Layout className="userContainer">
         <Content>
           <Switch>
-            <Route path="/water_service/" exact>
+            <Route path="/" exact>
               <Header
                 className="header"
                 style={{ position: "fixed", zIndex: 1, width: "100%" }}
@@ -40,10 +45,10 @@ export default function Main() {
                 </div>
                 <Menu theme="dark" mode="horizontal" defaultSelectedKeys={[1]}>
                   <Menu.Item key="out" className="out">
-                    <a href="/water_service/login">تسجيل الدخول</a>
+                    <a href="/login">تسجيل الدخول</a>
                   </Menu.Item>
                   <Menu.Item key="in" className="out">
-                    <a href="/water_service/signup">إنشاء حساب</a>
+                    <a href="/signup">إنشاء حساب</a>
                   </Menu.Item>
                 </Menu>
               </Header>
@@ -159,98 +164,143 @@ export default function Main() {
               </div>
               <Footer />
             </Route>
-            <Route path="/water_service/login">
+            <Route path="/login">
               <Login />
             </Route>
-            <Route path="/water_service/signup">
+            <Route path="/signup">
               <NewAccount />
             </Route>
-            <Route path="/water_service/user/home">
+            <Route path="/user/home">
+              {localStorage.getItem("flag") === "1" ? <User /> : <Login />}
+            </Route>
+            <Route path="/user/services">
+              {localStorage.getItem("flag") === "1" ? <User /> : <Login />}
+            </Route>
+            <Route path="/user/profile">
+              {localStorage.getItem("flag") === "1" ? <User /> : <Login />}
+            </Route>
+            <Route path="/user/complaints">
+              {localStorage.getItem("flag") === "1" ? <User /> : <Login />}
+            </Route>
+            <Route path="/user/delete_service">
+              {localStorage.getItem("flag") === "1" ? <User /> : <Login />}
+            </Route>
+            <Route path="/user/service_transfer">
+              {localStorage.getItem("flag") === "1" ? <User /> : <Login />}
+            </Route>
+            <Route path="/user/new_service">
+              {localStorage.getItem("flag") === "1" ? <User /> : <Login />}
+            </Route>
+            <Route path="/user/rate_us">
+              {localStorage.getItem("flag") === "1" ? <User /> : <Login />}
+            </Route>
+            {/* <Route path="/user/bills">
               <User />
+            </Route> */}
+            <Route path="/user/transactions">
+              {localStorage.getItem("flag") === "1" ? <User /> : <Login />}
             </Route>
-            <Route path="/water_service/admin/home">
-              <Admin />
+            <Route path="/user/points">
+              {localStorage.getItem("flag") === "1" ? <User /> : <Login />}
             </Route>
-            <Route path="/water_service/user/services">
-              <User />
+            <Route path="/admin/home">
+              {localStorage.getItem("flag") === "1" ? <Admin /> : <Login />}
             </Route>
-            <Route path="/water_service/user/profile">
-              <User />
+            <Route path="/admin/tanks">
+              {localStorage.getItem("flag") === "1" ? <Admin /> : <Login />}
             </Route>
-            <Route path="/water_service/user/complaints">
-              <User />
+            <Route path="/admin/rate_us">
+              {localStorage.getItem("flag") === "1" ? <Admin /> : <Login />}
             </Route>
-            <Route path="/water_service/user/delete_service">
-              <User />
+            <Route path="/admin/water_plans">
+              {localStorage.getItem("flag") === "1" ? <Admin /> : <Login />}
             </Route>
-            <Route path="/water_service/user/service_transfer">
-              <User />
+            <Route path="/admin/services">
+              {localStorage.getItem("flag") === "1" ? <Admin /> : <Login />}
             </Route>
-            <Route path="/water_service/user/new_service">
-              <User />
+            <Route path="/admin/employees">
+              {localStorage.getItem("flag") === "1" ? <Admin /> : <Login />}
             </Route>
-            <Route path="/water_service/admin/tanks">
-              <Admin />
+            <Route path="/admin/mhbes">
+              {localStorage.getItem("flag") === "1" ? <Admin /> : <Login />}
             </Route>
-            <Route path="/water_service/admin/rate_us">
-              <Admin />
+            <Route path="/water_technician/complaints">
+              {localStorage.getItem("flag") === "1" ? (
+                <WaterTechnician />
+              ) : (
+                <Redirect to="/login" />
+              )}
             </Route>
-            <Route path="/water_service/admin/water_plans">
-              <Admin />
+            <Route path="/water_technician/rate_us">
+              {localStorage.getItem("flag") === "1" ? (
+                <WaterTechnician />
+              ) : (
+                <Redirect to="/login" />
+              )}
             </Route>
-            <Route path="/water_service/admin/services">
-              <Admin />
+            <Route path="/water_technician/profile">
+              {localStorage.getItem("flag") === "1" ? (
+                <WaterTechnician />
+              ) : (
+                <Redirect to="/login" />
+              )}
             </Route>
-            <Route path="/water_service/admin/employees">
-              <Admin />
+            <Route path="/water_technician/stopcocks">
+              {localStorage.getItem("flag") === "1" ? (
+                <WaterTechnician />
+              ) : (
+                <Redirect to="/login" />
+              )}
             </Route>
-            <Route path="/water_service/admin/mhbes">
-              <Admin />
+            <Route path="/water_technician/plans">
+              {localStorage.getItem("flag") === "1" ? (
+                <WaterTechnician />
+              ) : (
+                <Redirect to="/login" />
+              )}
             </Route>
-            <Route path="/water_service/user/bills">
-              <User />
+            <Route path="/water_engineer/water_plans">
+              {localStorage.getItem("flag") === "1" ? (
+                <WaterEngineer />
+              ) : (
+                <Redirect to="/login" />
+              )}
             </Route>
-            <Route path="/water_service/user/transactions">
-              <User />
+            <Route path="/water_engineer/rate_us">
+              {localStorage.getItem("flag") === "1" ? (
+                <WaterEngineer />
+              ) : (
+                <Redirect to="/login" />
+              )}
             </Route>
-            <Route path="/water_service/user/points">
-              <User />
+            <Route path="/water_engineer/profile">
+              {localStorage.getItem("flag") === "1" ? (
+                <WaterEngineer />
+              ) : (
+                <Redirect to="/login" />
+              )}
             </Route>
-            <Route path="/water_service/water_technician/complaints">
-              <WaterTechnician />
-            </Route>
-            <Route path="/water_service/water_technician/rate_us">
-              <WaterTechnician />
-            </Route>
-            <Route path="/water_service/water_technician/profile">
-              <WaterTechnician />
-            </Route>
-            <Route path="/water_service/water_technician/stopcocks">
-              <WaterTechnician />
-            </Route>
-            <Route path="/water_service/water_technician/plans">
-              <WaterTechnician />
-            </Route>
-            <Route path="/water_service/water_engineer/water_plans">
-              <WaterEngineer />
-            </Route>
-            <Route path="/water_service/water_engineer/rate_us">
-              <WaterEngineer />
-            </Route>
-            <Route path="/water_service/water_engineer/profile">
-              <WaterEngineer />
-            </Route>
-            <Route path="/water_service/Services_employee/profile">
+            <Route path="/Services_employee/profile">
+              {localStorage.getItem("flag") === "1" ? (
+                <ServicesEmployee />
+              ) : (
+                <Redirect to="/login" />
+              )}
               <ServicesEmployee />
             </Route>
-            <Route path="/water_service/Services_employee/rate_us">
-              <ServicesEmployee />
+            <Route path="/Services_employee/rate_us">
+              {localStorage.getItem("flag") === "1" ? (
+                <ServicesEmployee />
+              ) : (
+                <Redirect to="/login" />
+              )}
             </Route>
-            <Route path="/water_service/Services_employee/services">
-              <ServicesEmployee />
-            </Route>
-            <Route path="/water_service/user/rate_us">
-              <User />
+            <Route path="/Services_employee/services">
+              {localStorage.getItem("flag") === "1" ? (
+                <ServicesEmployee />
+              ) : (
+                <Redirect to="/login" />
+              )}
             </Route>
           </Switch>
         </Content>

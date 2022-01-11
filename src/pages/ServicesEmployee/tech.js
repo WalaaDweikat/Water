@@ -10,6 +10,7 @@ import {
   Link,
   Switch,
   useHistory,
+  Redirect,
 } from "react-router-dom";
 import { Layout, Menu, Button } from "antd";
 import { useState } from "react";
@@ -22,6 +23,7 @@ function ServicesEmployee() {
 
   const singout = () => {
     localStorage.removeItem("username");
+    localStorage.setItem("flag", "0");
     history.push("/water/login");
     window.location.reload();
   };
@@ -40,30 +42,15 @@ function ServicesEmployee() {
             <img src={Logo} alt="logo" className="logoHeader" />
           </div>
           <Menu theme="dark" mode="horizontal" selectedKeys={[Id]}>
-            <Menu.Item
-              className="item"
-              key="/water_service/Services_employee/profile"
-            >
-              <Link to="/water_service/Services_employee/profile">
-                الملف الشخصي{" "}
-              </Link>
+            <Menu.Item className="item" key="/Services_employee/profile">
+              <Link to="/Services_employee/profile">الملف الشخصي </Link>
             </Menu.Item>
 
-            <Menu.Item
-              className="item"
-              key="/water_service/Services_employee/services"
-            >
-              <Link to="/water_service/Services_employee/services">
-                الخدمات
-              </Link>
+            <Menu.Item className="item" key="/Services_employee/services">
+              <Link to="/Services_employee/services">الخدمات</Link>
             </Menu.Item>
-            <Menu.Item
-              className="item"
-              key="/water_service/Services_employee/rate_us"
-            >
-              <Link to="/water_service/Services_employee/rate_us">
-                تقييم الموقع
-              </Link>
+            <Menu.Item className="item" key="/Services_employee/rate_us">
+              <Link to="/Services_employee/rate_us">تقييم الموقع</Link>
             </Menu.Item>
 
             <Menu.Item key="out" className="out">
@@ -75,14 +62,26 @@ function ServicesEmployee() {
         </Header>
         <Content>
           <Switch>
-            <Route path="/water_service/Services_employee/services">
-              <ServicesRequests />
+            <Route path="/Services_employee/services">
+              {localStorage.getItem("flag") === "1" ? (
+                <ServicesRequests />
+              ) : (
+                <Redirect to="/login" />
+              )}
             </Route>
-            <Route path="/water_service/Services_employee/profile">
-              <EmployeeProfile />
+            <Route path="/Services_employee/profile">
+              {localStorage.getItem("flag") === "1" ? (
+                <EmployeeProfile />
+              ) : (
+                <Redirect to="/login" />
+              )}
             </Route>
-            <Route path="/water_service/Services_employee/rate_us">
-              <Rating />
+            <Route path="/Services_employee/rate_us">
+              {localStorage.getItem("flag") === "1" ? (
+                <Rating />
+              ) : (
+                <Redirect to="/login" />
+              )}
             </Route>
           </Switch>
         </Content>

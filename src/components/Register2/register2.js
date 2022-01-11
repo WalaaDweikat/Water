@@ -77,7 +77,7 @@ export default function Register2() {
               .catch((error) => {
                 console.log(error);
               });
-            history.push("/water_service/login");
+            history.push("/login");
             window.location.reload();
           }}
           onFinishFailed={onFinishFailed}

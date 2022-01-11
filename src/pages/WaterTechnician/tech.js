@@ -12,6 +12,7 @@ import {
   Link,
   Switch,
   useHistory,
+  Redirect,
 } from "react-router-dom";
 import { Layout, Menu, Button } from "antd";
 import { useState } from "react";
@@ -24,7 +25,7 @@ function WaterTech(props) {
 
   const singout = () => {
     localStorage.removeItem("username");
-    history.push("/water_service/login");
+    history.push("/login");
     window.location.reload();
   };
 
@@ -42,47 +43,24 @@ function WaterTech(props) {
             <img src={Logo} alt="logo" className="logoHeader" />
           </div>
           <Menu theme="dark" mode="horizontal" selectedKeys={[Id]}>
-            <Menu.Item
-              className="item"
-              key="/water_service/water_technician/profile"
-            >
-              <Link to="/water_service/water_technician/profile">
-                الملف الشخصي{" "}
-              </Link>
+            <Menu.Item className="item" key="/water_technician/profile">
+              <Link to="/water_technician/profile">الملف الشخصي </Link>
             </Menu.Item>
 
-            <Menu.Item
-              className="item"
-              key="/water_service/water_technician/stopcocks"
-            >
-              <Link to="/water_service/water_technician/stopcocks">
-                المحابس
-              </Link>
+            <Menu.Item className="item" key="/water_technician/stopcocks">
+              <Link to="/water_technician/stopcocks">المحابس</Link>
             </Menu.Item>
 
-            <Menu.Item
-              className="item"
-              key="/water_service/water_technician/complaints"
-            >
-              <Link to="/water_service/water_technician/complaints">
-                الشكاوي
-              </Link>
+            <Menu.Item className="item" key="/water_technician/complaints">
+              <Link to="/water_technician/complaints">الشكاوي</Link>
             </Menu.Item>
 
-            <Menu.Item
-              className="item"
-              key="/water_service/water_technician/plans"
-            >
-              <Link to="/water_service/water_technician/plans">
-                توزيع الشكاوي
-              </Link>
+            <Menu.Item className="item" key="/water_technician/plans">
+              <Link to="/water_technician/plans">توزيع الشكاوي</Link>
             </Menu.Item>
 
-            <Menu.Item
-              className="item"
-              key="/water_service/water_technician/rate_us"
-            >
-              <Link to="/water_service/water_technician/rate_us">قيمنا</Link>
+            <Menu.Item className="item" key="/water_technician/rate_us">
+              <Link to="/water_technician/rate_us">قيمنا</Link>
             </Menu.Item>
 
             <Menu.Item key="out" className="out">
@@ -94,23 +72,43 @@ function WaterTech(props) {
         </Header>
         <Content>
           <Switch>
-            <Route path="/water_service/water_technician/complaints">
-              <Complaints />
+            <Route path="/water_technician/complaints">
+              {localStorage.getItem("flag") === "1" ? (
+                <Complaints />
+              ) : (
+                <Redirect to="/login" />
+              )}
             </Route>
 
-            <Route path="/water_service/water_technician/plans">
-              <ComplaintsPlans />
+            <Route path="/water_technician/plans">
+              {localStorage.getItem("flag") === "1" ? (
+                <ComplaintsPlans />
+              ) : (
+                <Redirect to="/login" />
+              )}
             </Route>
 
-            <Route path="/water_service/water_technician/stopcocks">
-              <Stopcocks />
+            <Route path="/water_technician/stopcocks">
+              {localStorage.getItem("flag") === "1" ? (
+                <Stopcocks />
+              ) : (
+                <Redirect to="/login" />
+              )}
             </Route>
 
-            <Route path="/water_service/water_technician/profile">
-              <EmployeeProfile />
+            <Route path="/water_technician/profile">
+              {localStorage.getItem("flag") === "1" ? (
+                <EmployeeProfile />
+              ) : (
+                <Redirect to="/login" />
+              )}
             </Route>
-            <Route path="/water_service/water_technician/rate_us">
-              <Rating />
+            <Route path="/water_technician/rate_us">
+              {localStorage.getItem("flag") === "1" ? (
+                <Rating />
+              ) : (
+                <Redirect to="/login" />
+              )}
             </Route>
           </Switch>
         </Content>

@@ -21,6 +21,7 @@ import {
   Link,
   Switch,
   useHistory,
+  Redirect,
 } from "react-router-dom";
 import { useState, useEffect } from "react";
 import React from "react";
@@ -109,7 +110,8 @@ function User() {
   const history = useHistory();
   const singout = () => {
     localStorage.removeItem("username");
-    history.push("/water_service/login");
+    localStorage.setItem("flag", 0);
+    history.push("/login");
   };
   window.addEventListener("click", () => {
     setId(window.location.pathname);
@@ -127,45 +129,37 @@ function User() {
           </div>
 
           <Menu theme="dark" mode="horizontal" selectedKeys={[Id]} id="menu">
-            <Menu.Item className="item" key="/water_service/user/home">
-              <Link to="/water_service/user/home">الرئيسية</Link>
+            <Menu.Item className="item" key="/user/home">
+              <Link to="/user/home">الرئيسية</Link>
             </Menu.Item>
-            <Menu.Item className="item" key="/water_service/user/profile">
-              <Link to="/water_service/user/profile">الملف الشخصي</Link>
+            <Menu.Item className="item" key="/user/profile">
+              <Link to="/user/profile">الملف الشخصي</Link>
             </Menu.Item>
-            <Menu.Item className="item" key="/water_service/user/transactions">
-              <Link to="/water_service/user/transactions">معاملاتي</Link>
+            <Menu.Item className="item" key="/user/transactions">
+              <Link to="/user/transactions">معاملاتي</Link>
             </Menu.Item>
-            <SubMenu
-              key="water_service/user/services"
-              className="item"
-              title="خدماتي"
-            >
-              <Menu.Item key="/water_service/user/new_service">
-                <Link to="/water_service/user/new_service">طلب اشتراك</Link>
+            <SubMenu key="user/services" className="item" title="خدماتي">
+              <Menu.Item key="/user/new_service">
+                <Link to="/user/new_service">طلب اشتراك</Link>
               </Menu.Item>
-              <Menu.Item key="/water_service/user/service_transfer">
-                <Link to="/water_service/user/service_transfer">
-                  نقل اشتراك
-                </Link>
+              <Menu.Item key="/user/service_transfer">
+                <Link to="/user/service_transfer">نقل اشتراك</Link>
               </Menu.Item>
-              <Menu.Item key="/water_service/user/delete_service">
-                <Link to="/water_service/user/delete_service">
-                  إزالة اشتراك
-                </Link>
+              <Menu.Item key="/user/delete_service">
+                <Link to="/user/delete_service">إزالة اشتراك</Link>
               </Menu.Item>
             </SubMenu>
-            <Menu.Item className="item" key="/water_service/user/complaints">
-              <Link to="/water_service/user/complaints"> الشكاوي</Link>
+            <Menu.Item className="item" key="/user/complaints">
+              <Link to="/user/complaints"> الشكاوي</Link>
             </Menu.Item>
             {/* <Menu.Item className="item" key="/water/user/bills">
               <Link to="/water/user/bills"> الفواتير</Link>
             </Menu.Item> */}
-            <Menu.Item className="item" key="/water_service/user/points">
-              <Link to="/water_service/user/points"> ساعدنا</Link>
+            <Menu.Item className="item" key="/user/points">
+              <Link to="/user/points"> ساعدنا</Link>
             </Menu.Item>
-            <Menu.Item key="/water_service/user/rate_us" className="out">
-              <a href="/water_service/user/rate_us">تقييم التطبيق</a>
+            <Menu.Item key="/user/rate_us" className="out">
+              <a href="/user/rate_us">تقييم التطبيق</a>
             </Menu.Item>
             <Menu.Item className="item" key={"8"} disabled>
               <Dropdown overlay={menu} placement={"bottomCenter"} arrow>
@@ -187,135 +181,164 @@ function User() {
         </Header>
         <Content>
           <Switch>
-            <Route path="/water_service/user/services">
-              <div className="userServicesContainer ">
-                <Link to="/water_service/user/new_service">
-                  <Button type="primary" id="/water_service/user/new_service">
-                    <FontAwesomeIcon icon={faPlus} className="icon" />
-                    طلب اشتراك
-                  </Button>
-                </Link>
-                <Link to="/water_service/user/service_transfer">
-                  <Button
-                    type="primary"
-                    id="/water_service/user/service_transfer"
-                  >
-                    <FontAwesomeIcon icon={faRetweet} className="icon" />
-                    نقل اشتراك
-                  </Button>
-                </Link>
-                <Link to="/water_service/user/delete_service">
-                  <Button
-                    type="primary"
-                    id="/water_service/user/delete_service"
-                  >
-                    <FontAwesomeIcon icon={faTimesCircle} className="icon" />
-                    حذف اشتراك
-                  </Button>
-                </Link>
-              </div>
+            <Route path="/user/services">
+              {localStorage.getItem("flag") === "1" ? (
+                <div className="userServicesContainer ">
+                  <Link to="/user/new_service">
+                    <Button type="primary" id="/user/new_service">
+                      <FontAwesomeIcon icon={faPlus} className="icon" />
+                      طلب اشتراك
+                    </Button>
+                  </Link>
+                  <Link to="/user/service_transfer">
+                    <Button type="primary" id="/user/service_transfer">
+                      <FontAwesomeIcon icon={faRetweet} className="icon" />
+                      نقل اشتراك
+                    </Button>
+                  </Link>
+                  <Link to="/user/delete_service">
+                    <Button type="primary" id="/user/delete_service">
+                      <FontAwesomeIcon icon={faTimesCircle} className="icon" />
+                      حذف اشتراك
+                    </Button>
+                  </Link>
+                </div>
+              ) : (
+                <Redirect to="/login" />
+              )}
             </Route>
-            <Route path="/water_service/user/service_transfer">
-              <div className="services">
-                <div className="headerServices">نقل اشتراك</div>
-                <TransferService />
-              </div>
+            <Route path="/user/service_transfer">
+              {localStorage.getItem("flag") === "1" ? (
+                <div className="services">
+                  <div className="headerServices">نقل اشتراك</div>
+                  <TransferService />
+                </div>
+              ) : (
+                <Redirect to="/login" />
+              )}
             </Route>
-            <Route path="/water_service/user/new_service">
-              <div className="services">
-                <div className="headerServices">طلب اشتراك جديد</div>
-                <NewService />
-              </div>
+            <Route path="/user/new_service">
+              {localStorage.getItem("flag") === "1" ? (
+                <div className="services">
+                  <div className="headerServices">طلب اشتراك جديد</div>
+                  <NewService />
+                </div>
+              ) : (
+                <Redirect to="/login" />
+              )}
             </Route>
-            <Route path="/water_service/user/delete_service">
-              <div className="services">
-                <div className="headerServices">حذف اشتراك </div>
-                <DeleteService />
-              </div>
+            <Route path="/user/delete_service">
+              {localStorage.getItem("flag") === "1" ? (
+                <div className="services">
+                  <div className="headerServices">حذف اشتراك </div>
+                  <DeleteService />
+                </div>
+              ) : (
+                <Redirect to="/login" />
+              )}
             </Route>
-            <Route path="/water_service/user/transactions">
-              <Transactions />
+            <Route path="/user/transactions">
+              {localStorage.getItem("flag") === "1" ? (
+                <Transactions />
+              ) : (
+                <Redirect to="/login" />
+              )}
             </Route>
-            <Route path="/water_service/user/home">
-              <div className="userHomeContainer ">
-                <Link to="/water_service/user/profile">
-                  <Button
-                    type="primary"
-                    id="/water_service/user/profile"
-                    icon={<FontAwesomeIcon icon={faUser} className="icon" />}
-                  >
-                    الملف الشخصي
-                  </Button>
-                </Link>
-                <Link to="/water_service/user/complaints">
-                  <Button
-                    type="primary"
-                    id="/water_service/user/complaints"
-                    icon={<FontAwesomeIcon icon={faComment} className="icon" />}
-                  >
-                    الشكاوي
-                  </Button>
-                </Link>
-                <Link to="/water_service/user/transactions">
-                  <Button
-                    type="primary"
-                    id="/water_service/user/transactions"
-                    icon={
-                      <FontAwesomeIcon
-                        icon={faClipboardList}
-                        className="icon"
-                      />
-                    }
-                  >
-                    معاملاتي
-                  </Button>
-                </Link>
-                <Link to="/water_service/user/services">
-                  <Button
-                    type="primary"
-                    id="/water_service/user/services"
-                    icon={<FontAwesomeIcon icon={faClone} className="icon" />}
-                  >
-                    خدماتي
-                  </Button>
-                </Link>
-                {/* <Link to="/water/user/bills">
-                  <Button
-                    type="primary"
-                    id="/water/user/bills"
-                    icon={
-                      <FontAwesomeIcon
-                        icon={faFileInvoiceDollar}
-                        className="icon"
-                      />
-                    }
-                  >
-                    الفواتير
-                  </Button>
-                </Link> */}
-                <Link to="/water_service/user/points">
-                  <Button
-                    type="primary"
-                    id="/water_service/user/points"
-                    icon={
-                      <FontAwesomeIcon icon={faDollarSign} className="icon" />
-                    }
-                  >
-                    ساعدنا
-                  </Button>
-                </Link>
-              </div>
+            <Route path="/user/home">
+              {localStorage.getItem("flag") === "1" ? (
+                <div className="userHomeContainer ">
+                  <Link to="/user/profile">
+                    <Button
+                      type="primary"
+                      id="/user/profile"
+                      icon={<FontAwesomeIcon icon={faUser} className="icon" />}
+                    >
+                      الملف الشخصي
+                    </Button>
+                  </Link>
+                  <Link to="/user/complaints">
+                    <Button
+                      type="primary"
+                      id="/user/complaints"
+                      icon={
+                        <FontAwesomeIcon icon={faComment} className="icon" />
+                      }
+                    >
+                      الشكاوي
+                    </Button>
+                  </Link>
+                  <Link to="/user/transactions">
+                    <Button
+                      type="primary"
+                      id="/user/transactions"
+                      icon={
+                        <FontAwesomeIcon
+                          icon={faClipboardList}
+                          className="icon"
+                        />
+                      }
+                    >
+                      معاملاتي
+                    </Button>
+                  </Link>
+                  <Link to="/user/services">
+                    <Button
+                      type="primary"
+                      id="/user/services"
+                      icon={<FontAwesomeIcon icon={faClone} className="icon" />}
+                    >
+                      خدماتي
+                    </Button>
+                  </Link>
+                  {/* <Link to="/water/user/bills">
+                    <Button
+                      type="primary"
+                      id="/water/user/bills"
+                      icon={
+                        <FontAwesomeIcon
+                          icon={faFileInvoiceDollar}
+                          className="icon"
+                        />
+                      }
+                    >
+                      الفواتير
+                    </Button>
+                  </Link> */}
+                  <Link to="/user/points">
+                    <Button
+                      type="primary"
+                      id="/user/points"
+                      icon={
+                        <FontAwesomeIcon icon={faDollarSign} className="icon" />
+                      }
+                    >
+                      ساعدنا
+                    </Button>
+                  </Link>
+                </div>
+              ) : (
+                <Redirect to="/login" />
+              )}
             </Route>
-            <Route path="/water_service/user/complaints">
-              <div className="services">
-                <div className="headerServices">إدراج شكوى </div>
-                <Complaints />
-              </div>
+            <Route path="/user/complaints">
+              {localStorage.getItem("flag") === "1" ? (
+                <div className="services">
+                  <div className="headerServices">إدراج شكوى </div>
+                  <Complaints />
+                </div>
+              ) : (
+                <Redirect to="/login" />
+              )}
             </Route>
-            <Route path="/water_service/user/profile">
+            <Route path="/user/profile">
+              {localStorage.getItem("flag") === "1" ? (
+                <Profile />
+              ) : (
+                <Redirect to="/login" />
+              )}
               <Profile />
             </Route>
-            <Route path="/water_service/user/login">
+            <Route path="/user/login">
               <Login />
             </Route>
             {/* <Route path="/water/user/bills">
@@ -324,11 +347,19 @@ function User() {
                 <Bills />
               </div>
             </Route> */}
-            <Route path="/water_service/user/points">
-              <Points />
+            <Route path="/user/points">
+              {localStorage.getItem("flag") === "1" ? (
+                <Points />
+              ) : (
+                <Redirect to="/login" />
+              )}
             </Route>
-            <Route path="/water_service/user/rate_us">
-              <Rating />
+            <Route path="/user/rate_us">
+              {localStorage.getItem("flag") === "1" ? (
+                <Rating />
+              ) : (
+                <Redirect to="/login" />
+              )}
             </Route>
           </Switch>
         </Content>
