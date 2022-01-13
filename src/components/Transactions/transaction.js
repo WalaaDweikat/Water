@@ -4,40 +4,40 @@ import { useEffect, useState } from "react";
 import IP from "../../ip.js";
 const { Panel } = Collapse;
 export default function Transactions() {
+  const [status, setStatus] = useState([]);
+  const [status2, setStatus2] = useState([]);
   const [trans, setTrans] = useState([]);
   const [complaints, setComplaints] = useState([]);
-  const getTransactions = async () => {
+  const getTransactions = () => {
     const axios = require("axios");
-    return await axios.get(IP + "/water/transactionsIdNum", {
+    return axios.get(IP + "/water/transactionsIdNum", {
       params: { id_number: localStorage.getItem("username") },
     });
   };
 
-  const getComplaints = async () => {
+  const getComplaints = () => {
     const axios = require("axios");
-    return await axios.get(IP + "/water/complaints/getComplaintsByid_number", {
+    return axios.get(IP + "/water/complaints/getComplaintsByid_number", {
       params: { id_number: localStorage.getItem("username") },
     });
   };
 
-  const getOrderStatus = async (order_number) => {
+  const getComplaintStatus = () => {
     const axios = require("axios");
-    return await axios.get(IP + "/water/OrderStatus/getByorder_number", {
-      params: { order_number: order_number },
-    });
+    return axios.get(IP + "/water/complaints_status");
   };
 
-  const getComplaintStatus = async (com_number) => {
+  const getOrderStatus = () => {
     const axios = require("axios");
-    return await axios.get(
-      IP + "/water/complaints_status/getBycomplaints_number",
-      {
-        params: { complaints_number: com_number },
-      }
-    );
+    return axios.get(IP + "/water/OrderStatus");
   };
-
   useEffect(() => {
+    getOrderStatus().then((res) => {
+      setStatus(res.data);
+    });
+    getComplaintStatus().then((res) => {
+      setStatus2(res.data);
+    });
     getTransactions().then((res) => {
       setTrans(res.data);
     });
@@ -50,16 +50,9 @@ export default function Transactions() {
       <div className="space">
         <Collapse className="collapse">
           {trans.map((option, index) => {
-            let status = [];
-            getOrderStatus(option.order_number).then((res) => {
-              status = res.data;
-            });
             let orderStatus = "غير معروف";
             let orderMessage = "لم يتم النظر في الطلب حتى الان";
-            if (status.length !== 0) {
-              orderMessage = status[0].message;
-              orderStatus = status[0].status;
-            }
+
             let a = "";
             if (option.order_type === 0)
               a = " طلب رقم " + option.order_number + " : اشتراك خدمة جديدة ";
@@ -67,9 +60,20 @@ export default function Transactions() {
               a = " طلب رقم " + option.order_number + " : تحويل خدمة  ";
             else if (option.order_type === 2)
               a = " طلب رقم " + option.order_number + " : حذف خدمة  ";
+
+            for (let i = 0; i < status.length; i++) {
+              if (status[i].order_number === option.order_number) {
+                orderMessage = status[i].message;
+                if (status[i].status === 0) orderStatus = "غير مقروءة";
+                else if (status[i].status === 1) orderStatus = "مرفوضة";
+                else if (status[i].status === 2) orderStatus = "يتم النظر فيها";
+                else if (status[i].status === 3)
+                  orderStatus = "تم الانتهاء منها";
+                break;
+              }
+            }
             return (
               <Panel header={a} key={index} className="panel">
-                <p> رقم الطلب {option.order_number}</p>
                 <p> حالة الطلب: {orderStatus}</p>
                 <p> توضيح: {orderMessage} </p>
               </Panel>
@@ -77,28 +81,22 @@ export default function Transactions() {
           })}
 
           {complaints.map((option, index) => {
-            let status = [];
-            getComplaintStatus(option.complaints_number).then((res) => {
-              status = res.data;
-            });
             let orderStatus = "غير معروف";
             let orderMessage = "لم يتم النظر في الشكوى حتى الان";
-            if (status.length !== 0) {
-              orderMessage = status[0].orderMessage;
-              orderStatus = status[0].orderStatus;
-              if (status[0].orderStatus === 0) {
-                orderStatus = "غير معروف";
-              }
-              if (status[0].orderStatus === 1) {
-                orderStatus = "غير معروف";
-              }
-              if (status[0].orderStatus === 2) {
-                orderStatus = "تم النقل";
-              }
-              if (status[0].orderStatus === 3) {
-                orderStatus = "مرفوض";
+            for (let i = 0; i < status2.length; i++) {
+              if (status2[i].complaints_number === option.order_number) {
+                orderMessage = status2[i].message;
+
+                if (status2[i].status === 0) orderStatus = "غير مقروءة";
+                else if (status2[i].status === 1) orderStatus = "مرفوضة";
+                else if (status2[i].status === 2)
+                  orderStatus = "يتم النظر فيها";
+                else if (status2[i].status === 3)
+                  orderStatus = "تم الانتهاء منها";
+                break;
               }
             }
+
             const a =
               " شكوى رقم " + option.complaints_number + " : " + option.subject;
             return (

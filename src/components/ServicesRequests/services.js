@@ -49,11 +49,6 @@ export default function WaterTechCom() {
     getOrderImage();
   }, []);
 
-  const findImage = (order_number) => {
-    for (let i = 0; i < image.length; i++) {
-      if (image[i].order_number === order_number) return i;
-    }
-  };
   return (
     <div className="transContainer">
       <div className="space">
@@ -105,7 +100,7 @@ export default function WaterTechCom() {
                 <p>رقم الهوية: {option.id_number}</p>
                 <p>رقم الخدمة : {option.service_number}</p>
                 {location}
-                <Button
+                {/* <Button
                   onClick={() => {
                     setOrder_number(option.order_number);
                     setOpen(true);
@@ -113,7 +108,7 @@ export default function WaterTechCom() {
                 >
                   إضافة رد
                 </Button>
-                {operation}
+                {operation} */}
               </Panel>
             );
           })}
@@ -143,7 +138,7 @@ export default function WaterTechCom() {
                 >
                   عرض موقع الخدمة
                 </Button>
-                <Button
+                {/* <Button
                   onClick={() => {
                     setOrder_number(option.order_number);
                     setOpen(true);
@@ -153,7 +148,7 @@ export default function WaterTechCom() {
                 </Button>
                 <Button style={{ color: "red" }}>
                   اضغط هنا لإضافة الخدمة الجديدة
-                </Button>
+                </Button> */}
               </Panel>
             );
           })}
